@@ -3,13 +3,20 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class HexCell : MonoBehaviour {
-
   public HexCoordinates coordinates;
+
+  /**
+   * The grid that contains this cell.
+   */
+  public HexGrid grid;
 
   Mesh mesh;
 
   List<Vector3> vertices;
   List<int> triangles;
+
+  [SerializeField]
+  HexCell[] neighbours;
 
   void Awake () {
     // add our mesh to the meshfilter in this object
@@ -17,6 +24,7 @@ public class HexCell : MonoBehaviour {
     mesh.name = "Hex Mesh";
     vertices = new List<Vector3>();
     triangles = new List<int>();
+    Triangulate();
   }
 
 	// Use this for initialization
@@ -28,7 +36,7 @@ public class HexCell : MonoBehaviour {
 		
 	}
 
-  public void Triangulate() {
+  void Triangulate() {
     mesh.Clear();
     vertices.Clear();
     triangles.Clear();

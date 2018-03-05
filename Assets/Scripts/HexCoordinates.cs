@@ -25,6 +25,9 @@ public struct HexCoordinates {
   public static HexCoordinates FromOffsetCoordinates(int x, int y)
   => new HexCoordinates(x, y + x / 2);
 
+  public Tuple<int, int> ToOffsetCoordinates()
+  => Tuple.Create(x, y - x/2);
+
   public HexCoordinates TransformX(Transformation f)
   => new HexCoordinates(f(X), Y);
 
@@ -44,14 +47,22 @@ public struct HexCoordinates {
   => Transform(x => x - z, y => y + z);
 
   public HexCoordinates[] Neighbours
+  // WARNING: the order of elements in this array matches the order of
+  // the directions in the HexDirections.
   => new [] {
-    TranslateX(1),
-    TranslateX(-1),
     TranslateY(1),
+    TranslateZ(-1),
+    TranslateX(1),
     TranslateY(-1),
     TranslateZ(1),
-    TranslateZ(-1),
+    TranslateX(-1),
   };
+
+  /**
+   * To allow writing @coord[North]@ to access the coordinates of the
+   * northern neighbour.
+   */
+  public HexCoordinates this[HexDirection d] => Neighbours[(int)d];
 
   /**
    * The math here is pretty hairy, but the derivation is not too bad.

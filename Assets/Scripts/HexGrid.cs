@@ -20,9 +20,6 @@ public class HexGrid : MonoBehaviour {
 
   HexCell[] cells;
 
-  void Start () {
-  }
-
   void Awake () {
     gridCanvas = GetComponentInChildren<Canvas>();
 
@@ -52,12 +49,19 @@ public class HexGrid : MonoBehaviour {
     cell.transform.SetParent(transform, false);
     cell.transform.localPosition = position.Upgrade();
     cell.coordinates = coordinates;
-    cell.Triangulate();
+    cell.grid = this;
 
     Text label = Instantiate<Text>(cellLabelPrefab);
     label.rectTransform.SetParent(gridCanvas.transform, false);
     label.rectTransform.anchoredPosition = position;
     label.text = cell.coordinates.ToStringMultiline();
+  }
+
+  public HexCell this[HexCoordinates p] {
+    get {
+      var oc = p.ToOffsetCoordinates();
+      return cells[oc.Item1 + oc.Item2 * width];
+    }
   }
 
   void Update() {
