@@ -22,6 +22,8 @@ public struct HexCoordinates {
     this.y = y;
   }
 
+  public static HexCoordinates Zero => new HexCoordinates(0, 0);
+
   public static HexCoordinates FromOffsetCoordinates(int x, int y)
   => new HexCoordinates(x, y + x / 2);
 
@@ -46,23 +48,30 @@ public struct HexCoordinates {
   public HexCoordinates TranslateZ(int z)
   => Transform(x => x - z, y => y + z);
 
-  public HexCoordinates[] Neighbours
+  private static Func<HexCoordinates, HexCoordinates>[] NeighbourFunctions
   // WARNING: the order of elements in this array matches the order of
   // the directions in the HexDirections.
-  => new [] {
-    TranslateY(1),
-    TranslateZ(-1),
-    TranslateX(1),
-    TranslateY(-1),
-    TranslateZ(1),
-    TranslateX(-1),
+  => new Func<HexCoordinates, HexCoordinates>[] {
+    o => o.TranslateY(1),
+    o => o.TranslateZ(-1),
+    o => o.TranslateX(1),
+    o => o.TranslateY(-1),
+    o => o.TranslateZ(1),
+    o => o.TranslateX(-1),
   };
+
+  public IEnumerable<HexCoordinates> Neighbours {
+    get {
+      var self = this;
+      return HexCoordinates.NeighbourFunctions.Select(f => f(self));
+    }
+  }
 
   /**
    * To allow writing @coord[North]@ to access the coordinates of the
    * northern neighbour.
    */
-  public HexCoordinates this[HexDirection d] => Neighbours[(int)d];
+  public HexCoordinates this[HexDirection d] => HexCoordinates.NeighbourFunctions[(int)d](this);
 
   /**
    * The math here is pretty hairy, but the derivation is not too bad.

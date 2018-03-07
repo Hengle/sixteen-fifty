@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /**
- * Singleton class that holds the currently running state.
+ * Singleton class used to store runtime-persistent state.
  */
 public class StateManager : MonoBehaviour {
   private static StateManager instance = null;
@@ -34,6 +34,8 @@ public class StateManager : MonoBehaviour {
     // DontDestroyOnLoad, we can persist the state manager even
     // through scene changes.
     DontDestroyOnLoad(gameObject);
+
+    Debug.Log("Initialized StateManager.");
   }
 
 	// Use this for initialization

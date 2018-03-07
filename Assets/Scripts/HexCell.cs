@@ -5,18 +5,10 @@ using UnityEngine;
 public class HexCell : MonoBehaviour {
   public HexCoordinates coordinates;
 
-  /**
-   * The grid that contains this cell.
-   */
-  public HexGrid grid;
-
   Mesh mesh;
 
   List<Vector3> vertices;
   List<int> triangles;
-
-  [SerializeField]
-  HexCell[] neighbours;
 
   void Awake () {
     // add our mesh to the meshfilter in this object
