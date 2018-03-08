@@ -4,6 +4,7 @@ using System;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Assertions;
 
 public class HexGrid : MonoBehaviour {
   public int width = 10;
@@ -25,61 +26,64 @@ public class HexGrid : MonoBehaviour {
    * Generates a sequence of cells (excluding the cell at the source
    * position) that goes from the source coordinates to the
    * destination coordinates.
+   * Returns null if no path could be found.
    */
-  public IEnumerator<HexCell> FindPath(HexCoordinates source, HexCoordinates destination) {
+  public IEnumerable<HexCell> FindPath(HexCoordinates source, HexCoordinates destination) {
     // the queue that stores the frontier to explore
     var q = new Queue<HexCell>();
     // we associate each cell we traverse with the cell we came to it from.
     var cameFrom = new Dictionary<HexCell, HexCell>();
-    // the coordinates we've visited already
-    var visited = new HashSet<HexCoordinates>();
-
-    var self = this;
-    // gets a cell and throws if we get nothing.
-    Func<HexCoordinates, HexCell> at = coords => {
-      var cell = self[coords];
-      if(null == cell)
-        throw new NullReferenceException();
-      return cell;
-    };
 
     var start = at(source);
+
     q.Enqueue(start);
-    visited.Add(source);
     cameFrom.Add(start, null);
 
+    // the current cell we're working on.
+    HexCell cell = null;
+    var reachedDestination = false;
+
     while(q.Count > 0) {
-      var cell = q.Dequeue();
+      cell = q.Dequeue();
       // once we hit our destination, we can construct the path back.
-      if(cell.coordinates.Equals(destination))
-        return ConstructPath(cell, cameFrom);
+      if(cell.coordinates.Equals(destination)) {
+        reachedDestination = true;
+        break;
+      }
 
-      visited.Add(cell.coordinates);
-
-      // loop over all hex directions
-      IEnumerable<HexCell> ds = Enum.GetValues(typeof(HexDirection))
-        // get the coordinates of those neighbours
-        .Select<HexDirection, HexCoordinates>(d => cell.coordinates[d])
-        // remove the ones we've already visited
-        .Where(c => !visited.Contains(c))
-        // convert the coordinates to cells by looking up
+      IEnumerable<HexCell> ds =
+        // get the coordinate neighbours of this cell
+        cell.coordinates.Neighbours
+        // convert the coordinates to cells by looking up, getting
+        // nulls for the out-of-bounds coordinates
         .Select(c => this[c])
         // remove the ones that are out of bounds
-        .Where(t => null != t.Item2);
+        .Where(t => null != t)
+        // remove the ones we've already visited
+        .Where(c => !cameFrom.ContainsKey(c));
+
       // associate with each of these cells the current cell,
       // and enqueue them to be explored later.
       foreach(var d in ds) {
-        cameFrom.Add(d.Item2, cell);
-        q.Enqueue(d.Item2);
+        // we say that we arrived at cell `d` from `cell`.
+        Debug.Log(cell.ToString() + " -> " + d.ToString());
+        cameFrom.Add(d, cell);
+        // we add these new cells to our frontier.
+        q.Enqueue(d);
       }
     }
-  }
 
-  private IEnumerator<HexCell> ConstructPath(HexCell destination, Dictionary<HexCell, HexCell> breadcrumbs) {
-    var current = destination;
-    while(null != breadcrumbs[current]) {
-      yield return breadcrumbs[current];
-      current = breadcrumbs[current];
+    if(reachedDestination) {
+      // then cell refers to the destination.
+      Assert.IsNotNull(cell);
+      // we construct the path from the destination to the source, but
+      // this is in reverse order! So we reverse the list.
+      var l = new TrivialEnumerable<HexCell>(Path.Construct<HexCell>(cell, cameFrom)).ToList();
+      l.Reverse();
+      return l;
+    }
+    else {
+      return null;
     }
   }
 
@@ -118,7 +122,6 @@ public class HexGrid : MonoBehaviour {
     cell.transform.SetParent(transform, false);
     cell.transform.localPosition = position.Upgrade();
     cell.coordinates = coordinates;
-    cell.grid = this;
 
     Text label = Instantiate<Text>(cellLabelPrefab);
     label.rectTransform.SetParent(gridCanvas.transform, false);
@@ -137,6 +140,17 @@ public class HexGrid : MonoBehaviour {
       var i = oc.Item1 + oc.Item2 * width;
       return i >= 0 && i < cells.Length ? cells[i] : null;
     }
+  }
+
+  /**
+   * An exception-throwing variant of this[p].
+   * If the identified cell does not exist, throws a NullReferenceException.
+   */
+  public HexCell at(HexCoordinates p) {
+    var cell = this[p];
+    if(null == cell)
+      throw new NullReferenceException("No such cell at " + p.ToString());
+    return cell;
   }
 
   private IEnumerator CoroCellSelected() {

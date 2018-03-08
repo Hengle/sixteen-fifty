@@ -46,7 +46,7 @@ public struct HexCoordinates {
   => TransformY(y_ => y_ + y);
 
   public HexCoordinates TranslateZ(int z)
-  => Transform(x => x - z, y => y + z);
+  => Transform(x => x - z, y => y - z);
 
   private static Func<HexCoordinates, HexCoordinates>[] NeighbourFunctions
   // WARNING: the order of elements in this array matches the order of

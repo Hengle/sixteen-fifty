@@ -58,4 +58,8 @@ public class HexCell : MonoBehaviour {
     triangles.Add(vertexIndex + 1);
     triangles.Add(vertexIndex + 2);
   }
+
+  public override string ToString() {
+    return "(Cell " + coordinates.ToString() + ")";
+  }
 }

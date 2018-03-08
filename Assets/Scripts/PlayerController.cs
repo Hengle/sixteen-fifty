@@ -7,7 +7,7 @@ public class PlayerController : MonoBehaviour {
   /**
    * How fast the player moves, in units per seconds.
    */
-  public const float MOVE_SPEED = 12f;
+  public const float MOVE_SPEED = 16f;
 
   // set in inspector
   new public PlayerRenderer renderer;
@@ -115,7 +115,7 @@ public class PlayerController : MonoBehaviour {
    */
   void OnCellDown(HexCell cell) {
     if(cell == CurrentCell) {
-      Debug.Log("clicked on the player's cell!");
+      Debug.Log("clicked on the player's cell! Nothing to do!");
     }
     else {
       if(movement != null) {
@@ -123,6 +123,10 @@ public class PlayerController : MonoBehaviour {
         return;
       }
       var path = grid.FindPath(CurrentCell.coordinates, cell.coordinates);
+      if(null == path) {
+        Debug.Log("No path can be found.");
+        return;
+      }
       movement = StartCoroutine(MoveFollowingPath(path));
     }
   }
@@ -131,15 +135,15 @@ public class PlayerController : MonoBehaviour {
    * A coroutine that moves the player through a list of cells.
    * The cells should each be sequentially adjacent.
    */
-  IEnumerator MoveFollowingPath(IEnumerator<HexCell> path) {
+  IEnumerator MoveFollowingPath(IEnumerable<HexCell> path) {
+    Debug.Assert(null != path);
     DisableClickToMove();
     movementCancelled = false;
 
-    // 4 units per second.
     var speed = MOVE_SPEED * Time.deltaTime;
 
     try {
-      foreach(var cell in new TrivialEnumerable<HexCell>(path)) {
+      foreach(var cell in path) {
         if(movementCancelled) {
           Debug.Log("Movement cancelled!");
           yield break;
