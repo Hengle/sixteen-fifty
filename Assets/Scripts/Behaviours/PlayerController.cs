@@ -9,9 +9,6 @@ public class PlayerController : MonoBehaviour {
    */
   public const float MOVE_SPEED = 16f;
 
-  // set in inspector
-  new public PlayerRenderer renderer;
-
   // set by Construct
   public HexGrid grid;
 

@@ -5,6 +5,24 @@ using UnityEngine.EventSystems;
 
 public class HexCell : MonoBehaviour {
   public HexCoordinates coordinates;
+  public HexTile tile;
+
+  public int SortingOrder {
+    get {
+      return GetComponent<SpriteRenderer>().sortingOrder;
+    }
+    set {
+      GetComponent<SpriteRenderer>().sortingOrder = value;
+    }
+  }
+
+  public static HexCell Construct(GameObject prefab, HexTile tile) {
+    var self = prefab.GetComponent<HexCell>();
+    self.tile = tile;
+    var instance = Instantiate(prefab).GetComponent<HexCell>();
+    self.tile = null;
+    return instance;
+  }
 
   Mesh mesh;
 
@@ -13,21 +31,18 @@ public class HexCell : MonoBehaviour {
 
   void Awake () {
     // add our mesh to the meshfilter in this object
-    GetComponent<MeshFilter>().mesh = mesh = new Mesh();
-    mesh.name = "Hex Mesh";
     vertices = new List<Vector3>();
     triangles = new List<int>();
-    Triangulate();
+
+    Debug.Assert(null != tile);
+
+    SetupRenderer();
   }
 
-	// Use this for initialization
-	void Start () {
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+  void SetupRenderer() {
+    var renderer = GetComponent<SpriteRenderer>();
+    renderer.sprite = tile.sprite;
+  }
 
   void Triangulate() {
     mesh.Clear();

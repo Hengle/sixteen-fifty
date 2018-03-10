@@ -254,10 +254,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 193d6c3d1ddea41049d40627d98b2ccd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  width: 10
-  height: 10
-  cellPrefab: {fileID: 114359681018801630, guid: 6aa64d2ada5b24037a39e2a775752d3b,
-    type: 2}
+  cellPrefab: {fileID: 1898474504515082, guid: 6aa64d2ada5b24037a39e2a775752d3b, type: 2}
+  map: {fileID: 11400000, guid: 5b2eb575dc91a466a838fb65ad69e970, type: 2}
   collider: {fileID: 201364432}
   cellLabelPrefab: {fileID: 114231914529618660, guid: 5dfc54bebf90c4a5eb0cb094f9ab4ce7,
     type: 2}

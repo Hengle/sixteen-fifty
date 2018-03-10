@@ -8,10 +8,9 @@ using UnityEngine.Assertions;
 using UnityEngine.EventSystems;
 
 public class HexGrid : MonoBehaviour, IPointerClickHandler {
-  public int width = 10;
-  public int height = 10;
+  public GameObject cellPrefab;
 
-  public HexCell cellPrefab;
+  public HexMap map;
 
   new public BoxCollider collider;
   
@@ -94,15 +93,18 @@ public class HexGrid : MonoBehaviour, IPointerClickHandler {
   }
 
   void SetupGrid() {
-    cells = new HexCell[height * width];
+    // our cell grid is as big as the map
+    cells = new HexCell[map.tiles.Length];
 
-    for (int y = 0, i = 0; y < height; y++) {
-      for(int x = 0; x < width; x++) {
-        CreateCell(x, y, i++);
-      }
+    for(int i = 0; i < map.tiles.Length; i++) {
+      var x = i % map.width;
+      var y = i / map.width;
+      var tile = map.tiles[i];
+      cells[i] = CreateCell(x, y, tile);
+      cells[i].SortingOrder = map.tiles.Length - i;
     }
 
-    var bounds = HexMetrics.Bounds(width, height);
+    var bounds = HexMetrics.Bounds(map.width, map.height);
 
     // compute the bounding box of our hex-map
     collider.size = bounds;
@@ -110,21 +112,23 @@ public class HexGrid : MonoBehaviour, IPointerClickHandler {
     collider.center = bounds * (1/2f) - new Vector2(HexMetrics.OUTER_WIDTH, HexMetrics.FULL_HEIGHT);
   }
 
-  void CreateCell (int x , int y, int i) {
+  HexCell CreateCell (int x , int y, HexTile tile) {
     // define the position for our tile
     HexCoordinates coordinates = HexCoordinates.FromOffsetCoordinates(x, y);
     Vector2 position = coordinates.ToPosition();
 
-    var cell = cells[i] = Instantiate<HexCell>(cellPrefab);
+    var cell = HexCell.Construct(cellPrefab, tile);
     // make the cell belong to the grid, by reparenting its transform
+    cell.coordinates = coordinates;
     cell.transform.SetParent(transform, false);
     cell.transform.localPosition = position.Upgrade();
-    cell.coordinates = coordinates;
 
     Text label = Instantiate<Text>(cellLabelPrefab);
     label.rectTransform.SetParent(gridCanvas.transform, false);
     label.rectTransform.anchoredPosition = position;
     label.text = cell.coordinates.ToStringMultiline();
+
+    return cell;
   }
 
   /**
@@ -135,7 +139,7 @@ public class HexGrid : MonoBehaviour, IPointerClickHandler {
   public HexCell this[HexCoordinates p] {
     get {
       var oc = p.ToOffsetCoordinates();
-      var i = oc.Item1 + oc.Item2 * width;
+      var i = oc.Item1 + oc.Item2 * map.width;
       return i >= 0 && i < cells.Length ? cells[i] : null;
     }
   }
