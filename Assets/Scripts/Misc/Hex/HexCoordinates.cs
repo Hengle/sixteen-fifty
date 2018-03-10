@@ -95,9 +95,9 @@ public struct HexCoordinates {
   public Vector2 ToPosition()
   => new Vector2(
     // X * HexMetrics.OUTER_WIDTH * (1 + Math.Cos(-Math.PI / 3)),
-    X * (HexMetrics.OUTER_WIDTH + (float) HexMetrics.Ecos(-Math.PI / 3)),
+    X * (HexMetrics.OUTER_WIDTH + HexMetrics.Ecos(-Mathf.PI / 3)),
     // X * HexMetrics.OUTER_HEIGHT * Math.Sin(-Math.PI / 3) + Y * 2 * HexMetrics.OUTER_HEIGHT,
-    X * (float) HexMetrics.Esin(-Math.PI/3) + 2 * Y * HexMetrics.INNER_HEIGHT);
+    X * HexMetrics.Esin(-Mathf.PI/3) + 2 * Y * HexMetrics.INNER_HEIGHT);
 
   /**
    * By inverting H, we can convert from pixel-space into a fractional hex-coordinate.
@@ -111,8 +111,8 @@ public struct HexCoordinates {
     var guess = new HexCoordinates(
       (int)Math.Round(p.x * 2 * HexMetrics.INNER_HEIGHT),
       (int)Math.Round(
-        - p.x * (float) HexMetrics.Esin(-Math.PI/3)
-        + p.y * HexMetrics.INNER_WIDTH * (1 + (float) Math.Cos(-Math.PI/3))));
+        - p.x * HexMetrics.Esin(-Mathf.PI/3)
+        + p.y * HexMetrics.INNER_WIDTH * (1 + Mathf.Cos(-Mathf.PI/3))));
 
     // to resolve the off-by-one error, it seems to be a standard
     // practice to refine this guess by looking at its neighbouring

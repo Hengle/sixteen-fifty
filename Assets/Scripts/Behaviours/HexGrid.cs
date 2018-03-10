@@ -14,10 +14,6 @@ public class HexGrid : MonoBehaviour, IPointerClickHandler {
 
   new public BoxCollider collider;
   
-  public Text cellLabelPrefab;
-
-  Canvas gridCanvas;
-
   HexCell[] cells;
 
   public event Action<HexCell> CellDown;
@@ -88,7 +84,6 @@ public class HexGrid : MonoBehaviour, IPointerClickHandler {
   }
 
   void Awake () {
-    gridCanvas = GetComponentInChildren<Canvas>();
     SetupGrid();
   }
 
@@ -130,11 +125,6 @@ public class HexGrid : MonoBehaviour, IPointerClickHandler {
     cell.coordinates = coordinates;
     cell.transform.SetParent(transform, false);
     cell.transform.localPosition = position.Upgrade();
-
-    Text label = Instantiate<Text>(cellLabelPrefab);
-    label.rectTransform.SetParent(gridCanvas.transform, false);
-    label.rectTransform.anchoredPosition = position;
-    label.text = cell.coordinates.ToStringMultiline();
 
     return cell;
   }

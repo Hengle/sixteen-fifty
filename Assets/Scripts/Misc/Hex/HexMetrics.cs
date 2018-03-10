@@ -8,23 +8,23 @@ public static class HexMetrics {
    * The half-width of the ellipse into which we inscribe our hexagon.
    * Mathematically, this is paramater _a_ of the ellipse.
    */
-  public const float OUTER_WIDTH = 16;
+  public const float OUTER_WIDTH = 1f;
+
+  /**
+   * The half-height of the hexagon.
+   */
+  public const float INNER_HEIGHT = 0.5f;
 
   /**
    * The half-height of the ellipse into which we inscribe our hexagon.
    * Mathematically, this is parameter _b_ of the ellipse.
    */
-  public const float OUTER_HEIGHT = 8;
+  public static readonly float OUTER_HEIGHT = INNER_HEIGHT / Mathf.Sin(Mathf.PI/3);
 
   /**
    * The width of a hexagon.
    */
   public const float FULL_WIDTH = OUTER_WIDTH * 2;
-
-  /**
-   * The half-height of the hexagon.
-   */
-  public static readonly float INNER_HEIGHT = (float) Esin(Math.PI / 3);
 
   /**
    * The height of a hexagon.
@@ -40,7 +40,7 @@ public static class HexMetrics {
   /**
    * The half-width of the top edge of the hexagon.
    */
-  public static readonly float TOP_WIDTH = (float) Ecos(Math.PI / 3);
+  public static readonly float TOP_WIDTH = (float) Ecos(Mathf.PI / 3);
 
   /**
    * The x-distance between two adjacent (on the x-axis) hexes.
@@ -57,13 +57,13 @@ public static class HexMetrics {
   public static Vector2[] corners;
 
   /** Compute an elliptic sine. */
-  public static double Esin(double theta) {
-    return Math.Sin(theta) * OUTER_HEIGHT;
+  public static float Esin(float theta) {
+    return Mathf.Sin(theta) * OUTER_HEIGHT;
   }
 
   /** Compute an elliptic cos. */
-  public static double Ecos(double theta) {
-    return Math.Cos(theta) * OUTER_WIDTH;
+  public static float Ecos(float theta) {
+    return Mathf.Cos(theta) * OUTER_WIDTH;
   }
 
   /**
@@ -131,11 +131,8 @@ public static class HexMetrics {
 
   static HexMetrics() {
     corners = Enumerable.Range(0, 6)
-      .Select(i => -i * Math.PI / 3)
-      .Select(
-        t => new Vector2(
-          (float) Ecos(t),
-          (float) Esin(t)))
+      .Select(i => -i * Mathf.PI / 3)
+      .Select(t => new Vector2(Ecos(t), Esin(t)))
       .ToArray();
 
     Debug.Log("Initialized hex metrics.");
