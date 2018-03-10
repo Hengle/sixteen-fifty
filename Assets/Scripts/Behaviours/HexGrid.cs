@@ -5,8 +5,9 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Assertions;
+using UnityEngine.EventSystems;
 
-public class HexGrid : MonoBehaviour {
+public class HexGrid : MonoBehaviour, IPointerClickHandler {
   public int width = 10;
   public int height = 10;
 
@@ -90,9 +91,6 @@ public class HexGrid : MonoBehaviour {
   void Awake () {
     gridCanvas = GetComponentInChildren<Canvas>();
     SetupGrid();
-
-    // now that everything is set up, we can start some coroutines that manage events in the hexgrid
-    StartCoroutine("CoroCellSelected");
   }
 
   void SetupGrid() {
@@ -179,6 +177,13 @@ public class HexGrid : MonoBehaviour {
     RaycastHit hit;
     if(Physics.Raycast(inputRay, out hit)) {
       TouchCell(hit.point);
+    }
+  }
+
+  public void OnPointerClick(PointerEventData data) {
+    Debug.Log("Clicked on grid!");
+    if(data.button == 0) {
+      TouchCell(data.pointerPressRaycast.worldPosition);
     }
   }
 

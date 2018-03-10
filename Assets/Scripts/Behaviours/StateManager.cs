@@ -7,12 +7,10 @@ using UnityEngine;
  */
 public class StateManager : MonoBehaviour {
   private static StateManager instance = null;
+  public static StateManager Instance => instance;
 
-  public static StateManager Instance {
-    get {
-      return instance;
-    }
-  }
+  public EventManager eventManager;
+  public PlayerController playerController;
 
   private StateManager() {
     

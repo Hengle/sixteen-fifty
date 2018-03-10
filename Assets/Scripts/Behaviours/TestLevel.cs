@@ -15,10 +15,10 @@ public class TestLevel : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
     grid = GetComponentInChildren<HexGrid>();
-    player = PlayerController.Construct(playerPrefab, grid).GetComponent<PlayerController>();
+    player = PlayerController.Construct(playerPrefab, grid);
     outline = Outline.Construct(outlinePrefab, grid);
 	}
-	
+
 	// Update is called once per frame
 	void Update () {
 		

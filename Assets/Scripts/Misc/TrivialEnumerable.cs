@@ -13,3 +13,13 @@ public class TrivialEnumerable<T> : IEnumerable<T> {
 
   IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 }
+
+public class TrivialEnumerable : IEnumerable {
+  private IEnumerator enumerator;
+
+  public TrivialEnumerable(IEnumerator enumerator) {
+    this.enumerator = enumerator;
+  }
+
+  public IEnumerator GetEnumerator() => enumerator;
+}

@@ -84,8 +84,6 @@ MonoBehaviour:
   coordinates:
     x: 0
     y: 0
-  grid: {fileID: 0}
-  neighbours: []
 --- !u!224 &224911846599050078
 RectTransform:
   m_ObjectHideFlags: 1

@@ -96,6 +96,7 @@ public class PlayerController : MonoBehaviour {
 
   void OnEnable() {
     EnableClickToMove();
+    StateManager.Instance.playerController = this;
   }
 
   void EnableClickToMove() {
@@ -104,6 +105,7 @@ public class PlayerController : MonoBehaviour {
 
   void OnDisable() {
     DisableClickToMove();
+    StateManager.Instance.playerController = null;
   }
 
   void DisableClickToMove() {
@@ -115,7 +117,8 @@ public class PlayerController : MonoBehaviour {
    */
   void OnCellDown(HexCell cell) {
     if(cell == CurrentCell) {
-      Debug.Log("clicked on the player's cell! Nothing to do!");
+      StateManager.Instance.eventManager.BeginScript(
+        new ExampleEventScript());
     }
     else {
       if(movement != null) {
