@@ -41,3 +41,12 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Map
+    uniqueID: 3874206795
+    locked: 0
+  - name: Player
+    uniqueID: 608742245
+    locked: 0
+  - name: Dialogue
+    uniqueID: 504553401
+    locked: 0

@@ -101,7 +101,15 @@ public class HexGrid : MonoBehaviour, IPointerClickHandler {
       var y = i / map.width;
       var tile = map.tiles[i];
       cells[i] = CreateCell(x, y, tile);
-      cells[i].SortingOrder = map.tiles.Length - i;
+      cells[i].SortingOrder = (map.height - y - 1) * 4 + (x % 2) * 2;
+      // we set the sorting order to 0 for the top row,
+      // 2 for the offset row, 4 for the next row, and so on.
+      // The idea is to put the player on the odd-numbered orders in
+      // between, so that the player can appear *behind* parts of the
+      // map.
+      // This is easy, when a player enters a cell, we set the
+      // player's sorting order to be one greater than the cell
+      // they're on.
     }
 
     var bounds = HexMetrics.Bounds(map.width, map.height);
