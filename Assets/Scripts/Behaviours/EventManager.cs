@@ -22,6 +22,8 @@ public class EventManager : MonoBehaviour {
   private CanvasGroup canvasGroup;
   public CanvasGroup CanvasGroup => canvasGroup;
 
+  public GameObject speakerPrefab;
+
   /**
    * Used by the dialogue system.
    * The main blocking panel raises this event when it receives a

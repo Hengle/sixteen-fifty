@@ -87,6 +87,10 @@ public class HexGrid : MonoBehaviour, IPointerClickHandler {
     SetupGrid();
   }
 
+  void Start() {
+    StateManager.Instance.eventManager.BeginScript(map.mapLoad);
+  }
+
   void SetupGrid() {
     // our cell grid is as big as the map
     cells = new HexCell[map.tiles.Length];
@@ -151,35 +155,6 @@ public class HexGrid : MonoBehaviour, IPointerClickHandler {
     if(null == cell)
       throw new NullReferenceException("No such cell at " + p.ToString());
     return cell;
-  }
-
-  private IEnumerator CoroCellSelected() {
-    bool up = true;
-    Func<bool> IsPressed = () => Input.GetMouseButton(0);
-    
-    while(true) {
-      // if the mouse was previously up and now it's pressed, then an
-      // event might be happening!
-      if(IsPressed() && up) {
-        up = false;
-        HandleCellClick();
-      }
-      // if the mouse was previously down and now it's lifted, then we
-      // reset our boolean.
-      else if(!IsPressed() && !up) {
-        up = true;
-      }
-
-      yield return null;
-    }
-  }
-
-  void HandleCellClick() {
-    Ray inputRay = Camera.main.ScreenPointToRay(Input.mousePosition);
-    RaycastHit hit;
-    if(Physics.Raycast(inputRay, out hit)) {
-      TouchCell(hit.point);
-    }
   }
 
   public void OnPointerClick(PointerEventData data) {

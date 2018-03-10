@@ -22,6 +22,10 @@ namespace Commands {
     public Command<R> Then<R>(Func<T, Command<R>> continuation) {
       return new BindCommand<T, R>(this, continuation);
     }
+
+    public Command<R> ThenPure<R>(Func<T, R> continuation) {
+      return Then(t => Command<R>.Pure(() => continuation(t)));
+    }
   
     public Command<Either<T, S>> And<S>(Command<S> that) {
       return new Race<T, S>(this, that);
@@ -31,11 +35,15 @@ namespace Commands {
       return new InventedCommand<T>(invention);
     }
 
-    public static Command<T> Action(Action action) {
-      return new ActionCommand<T>(action);
+    public static Command<object> Action(Action action) {
+      return new ActionCommand(action);
     }
 
-    public static Command<T> Empty => new ActionCommand<T>(() => { return; });
+    public static Command<T> Pure(Func<T> f) {
+      return new PureCommand<T>(f);
+    }
+
+    public static Command<object> Empty => new ActionCommand(() => { return; });
   }
   
   /**
@@ -52,13 +60,27 @@ namespace Commands {
     }
   }
 
-  class ActionCommand<T> : Command<T> {
+  class ActionCommand : Command<object> {
     private Action action;
     public ActionCommand(Action action) {
       this.action = action;
     }
+
     public override IEnumerator GetCoroutine() {
       action();
+      result = null;
+      yield break;
+    }
+  }
+
+  class PureCommand<T> : Command<T> {
+    private Func<T> f;
+    public PureCommand(Func<T> f) {
+      this.f = f;
+    }
+
+    public override IEnumerator GetCoroutine() {
+      result = f();
       yield break;
     }
   }
@@ -87,6 +109,7 @@ namespace Commands {
       foreach(var obj in new TrivialEnumerable(next.GetCoroutine())) {
         yield return obj;
       }
+      result = next.Result;
     }
   }
   

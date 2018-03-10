@@ -8,6 +8,8 @@ public struct HexCoordinates {
 
   public delegate int Transformation(int coord);
 
+  public const float Y_FUDGE_FACTOR = 0.015f;
+
   [SerializeField]
   private int x, y;
   
@@ -97,7 +99,8 @@ public struct HexCoordinates {
     // X * HexMetrics.OUTER_WIDTH * (1 + Math.Cos(-Math.PI / 3)),
     X * (HexMetrics.OUTER_WIDTH + HexMetrics.Ecos(-Mathf.PI / 3)),
     // X * HexMetrics.OUTER_HEIGHT * Math.Sin(-Math.PI / 3) + Y * 2 * HexMetrics.OUTER_HEIGHT,
-    X * HexMetrics.Esin(-Mathf.PI/3) + 2 * Y * HexMetrics.INNER_HEIGHT);
+    X * HexMetrics.Esin(-Mathf.PI/3) + 2 * Y * HexMetrics.INNER_HEIGHT)
+    - new Vector2(0, Y_FUDGE_FACTOR);
 
   /**
    * By inverting H, we can convert from pixel-space into a fractional hex-coordinate.

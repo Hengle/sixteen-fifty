@@ -4,8 +4,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace Commands {
-  public enum FadeDirection { IN, OUT }
-  
   public class FadeTextBox : Command<object> {
     public const float DEFAULT_FADE_TIME = 0.25f;
     
@@ -19,27 +17,13 @@ namespace Commands {
       this.direction = direction;
     }
 
-    private Tuple<float, int> InitialAlphaAndMultiplier {
-      get {
-        if(direction == FadeDirection.IN) {
-          return Tuple.Create(0f, 1);
-        }
-        else if(direction == FadeDirection.OUT) {
-          return Tuple.Create(1f, -1);
-        }
-        else {
-          throw new Exception("FadeDirection exhaustively analyzed");
-        }
-      }
-    }
-  
     public override IEnumerator GetCoroutine() {
       EventManager emgr = runner.Manager;
 
       emgr.TextBox.gameObject.SetActive(true);
       var renderer = emgr.TextBox.GetComponent<CanvasRenderer>();
 
-      var t = InitialAlphaAndMultiplier;
+      var t = direction.GetInitialValueAndMultiplier();
       var initialAlpha = t.Item1;
       var multiplier = t.Item2;
       
