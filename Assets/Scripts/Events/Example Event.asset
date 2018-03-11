@@ -11,3 +11,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 774108ffb97454cbaba19f0ebba5f9eb, type: 3}
   m_Name: Example Event
   m_EditorClassIdentifier: 
+  talkingDude: {fileID: 11400000, guid: d1554879e3a6344c2864abe8c5c7a03a, type: 2}

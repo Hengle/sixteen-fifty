@@ -19,12 +19,19 @@ namespace Commands {
     public T Result => result;
     public abstract IEnumerator GetCoroutine();
   
-    public Command<R> Then<R>(Func<T, Command<R>> continuation) {
+    public virtual Command<R> Then<R>(Func<T, Command<R>> continuation) {
       return new BindCommand<T, R>(this, continuation);
     }
 
+    /**
+     * Actually, this is fmap.
+     */
     public Command<R> ThenPure<R>(Func<T, R> continuation) {
       return Then(t => Command<R>.Pure(() => continuation(t)));
+    }
+
+    public Command<object> ThenAction(Action<T> continuation) {
+      return Then(t => Command<object>.Action(() => continuation(t)));
     }
   
     public Command<Either<T, S>> And<S>(Command<S> that) {
@@ -35,13 +42,9 @@ namespace Commands {
       return new InventedCommand<T>(invention);
     }
 
-    public static Command<object> Action(Action action) {
-      return new ActionCommand(action);
-    }
+    public static Command<object> Action(Action action) => new ActionCommand(action);
 
-    public static Command<T> Pure(Func<T> f) {
-      return new PureCommand<T>(f);
-    }
+    public static Command<T> Pure(Func<T> f) => new PureCommand<T>(f);
 
     public static Command<object> Empty => new ActionCommand(() => { return; });
   }

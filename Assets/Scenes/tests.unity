@@ -499,6 +499,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 97dc73863494d4ec39c2f72451c76e52, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  speakerPrefab: {fileID: 1224226905831530, guid: 15d687b6cb42c48bb82f2580436bc77c,
+    type: 2}
 --- !u!114 &1138619148
 MonoBehaviour:
   m_ObjectHideFlags: 0
