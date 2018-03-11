@@ -66,9 +66,9 @@ public class EventManager : MonoBehaviour {
 		
 	}
 
-  public void BeginScript(EventScript e) {
+  public void BeginScript(HexGrid map, EventScript e) {
     Debug.Assert(null == currentEvent);
-    currentEvent = new EventRunner(this, e);
+    currentEvent = new EventRunner(this, map, e);
     StartCoroutine(currentEvent.Coroutine);
   }
 

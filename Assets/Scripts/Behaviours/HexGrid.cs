@@ -88,7 +88,7 @@ public class HexGrid : MonoBehaviour, IPointerClickHandler {
   }
 
   void Start() {
-    StateManager.Instance.eventManager.BeginScript(map.mapLoad);
+    StateManager.Instance.eventManager.BeginScript(this, map.mapLoad);
   }
 
   void SetupGrid() {

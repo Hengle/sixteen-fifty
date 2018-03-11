@@ -28,18 +28,32 @@ public class PlayerController : MonoBehaviour {
     return instance;
   }
 
+  void OnBeginMove(MapEntity me) {
+    Debug.Assert(me == mapEntity);
+    DisableClickToMove();
+  }
+
+  void OnEndMove(MapEntity me) {
+    Debug.Assert(me == mapEntity);
+    EnableClickToMove();
+  }
+
   void OnEnable() {
     EnableClickToMove();
     StateManager.Instance.playerController = this;
-  }
-
-  void EnableClickToMove() {
-    grid.CellDown += OnCellDown;
+    mapEntity.BeginMove += OnBeginMove;
+    mapEntity.EndMove += OnEndMove;
   }
 
   void OnDisable() {
     DisableClickToMove();
     StateManager.Instance.playerController = null;
+    mapEntity.BeginMove -= OnBeginMove;
+    mapEntity.EndMove -= OnEndMove;
+  }
+
+  void EnableClickToMove() {
+    grid.CellDown += OnCellDown;
   }
 
   void DisableClickToMove() {
@@ -50,34 +64,23 @@ public class PlayerController : MonoBehaviour {
    * Event handler for cell clicks.
    */
   void OnCellDown(HexCell cell) {
-    if(cell == mapEntity.CurrentCell) {
-      StateManager.Instance.eventManager.BeginScript(
-        new ExampleEventScript());
+    if(cell == mapEntity.CurrentCell)
+      return;
+    
+    var path = grid.FindPath(mapEntity.CurrentCell.coordinates, cell.coordinates);
+    if(null == path) {
+      Debug.LogError("No path can be found.");
+      return;
     }
-    else {
-      if(mapEntity.IsMoving) {
-        Debug.LogError("tried to start moving, but we're already moving.");
-        return;
-      }
-      var path = grid.FindPath(mapEntity.CurrentCell.coordinates, cell.coordinates);
-      if(null == path) {
-        Debug.LogError("No path can be found.");
-        return;
-      }
 
-      StartCoroutine(
-        Command<object>.Action(() => { DisableClickToMove(); })
-        .Then(_ => mapEntity.MoveFollowingPath(path))
-        .ThenAction(_ => { EnableClickToMove(); })
-        .GetCoroutine());
-    }
+    mapEntity.MoveFollowingPath(path);
   }
 
 	// Use this for initialization
 	void Awake() {
     mapEntity = this.GetComponentNotNull<MapEntity>();
 	}
-	
+
 	// Update is called once per frame
 	void Update () {
 		

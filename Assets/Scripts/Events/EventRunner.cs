@@ -4,13 +4,20 @@ using UnityEngine;
 
 public class EventRunner {
   private readonly EventScript e;
+
   public EventManager Manager {
     get;
     private set;
   }
 
-  public EventRunner(EventManager manager, EventScript e) {
+  public HexGrid Map {
+    get;
+    private set;
+  }
+
+  public EventRunner(EventManager manager, HexGrid map, EventScript e) {
     this.e = e;
+    Map = map;
     Manager = manager;
   }
 

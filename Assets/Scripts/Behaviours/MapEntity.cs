@@ -28,13 +28,16 @@ public class MapEntity : MonoBehaviour {
     private set;
   }
 
-  public event Action<HexCell> LeaveCell;
-  public event Action<HexCell> EnterCell;
+  public event Action<MapEntity> LeaveCell;
+  public event Action<MapEntity> EnterCell;
 
+  public event Action<MapEntity> BeginMove;
   /**
-   * Holds the coroutine responsible for moving the entity if it is in
-   * movement.
+   * Note that when this is fired, MovementCancelled will be false if
+   * the move was cancelled.
    */
+  public event Action<MapEntity> EndMove;
+
   private Coroutine movement;
 
   public bool IsMoving => movement != null;
@@ -44,14 +47,20 @@ public class MapEntity : MonoBehaviour {
    * moving when it arrives at its next intermediate destination,
    * after raising the EnterCell event.
    */
-  private bool movementCancelled;
+  public bool MovementCancelled {
+    get;
+    private set;
+  }
 
   /**
    * Teleports the entity instantly to the given cell.
    */
   public void Warp(HexCell cell) {
     if(null != cell) {
+      if(null != CurrentCell)
+        CurrentCell.RemoveEntity(this);
       CurrentCell = cell;
+      CurrentCell.AddEntity(this);
     }
     else {
       Debug.LogError("refusing to warp to null!");
@@ -71,14 +80,33 @@ public class MapEntity : MonoBehaviour {
       return;
     }
 
-    movementCancelled = true;
+    MovementCancelled = true;
   }
 
   void Awake () {
   }
 
-  public Command<object> MoveFollowingPath(IEnumerable<HexCell> path, float moveSpeed = DoMoveFollowingPath.DEFAULT_MOVE_SPEED) {
-    return new DoMoveFollowingPath(this, path, moveSpeed);
+  public void MoveFollowingPath(IEnumerable<HexCell> path, float moveSpeed = DoMoveFollowingPath.DEFAULT_MOVE_SPEED) {
+    if(null != movement) {
+      Debug.LogError(name + " tried to start moving when already moving!");
+      return;
+    }
+    
+    movement = StartCoroutine(
+      Command<object>.Action(
+        () => {
+          if(null != BeginMove)
+            BeginMove(this);
+        })
+      .Then(_ => new DoMoveFollowingPath(this, path, moveSpeed))
+      .ThenAction(
+        _ => {
+          if(null != EndMove)
+            EndMove(this);
+          movement = null;
+          MovementCancelled = false;
+        })
+      .GetCoroutine());
   }
 
   class DoMoveFollowingPath : Command<object> {
@@ -99,7 +127,7 @@ public class MapEntity : MonoBehaviour {
 
     public override IEnumerator GetCoroutine() {
       foreach(var cell in path) {
-        if(self.movementCancelled) {
+        if(self.MovementCancelled) {
           Debug.Log("Movement cancelled!");
           yield break;
         }
@@ -108,7 +136,7 @@ public class MapEntity : MonoBehaviour {
 
         // raise an event saying that we're leaving the current cell.
         if(null != self.LeaveCell) {
-            self.LeaveCell(self.CurrentCell);
+            self.LeaveCell(self);
         }
         Vector3 target = cell.coordinates.ToPosition();
         float remaining = 0;
@@ -121,7 +149,7 @@ public class MapEntity : MonoBehaviour {
 
         self.CurrentCell = cell;
         if(null != self.EnterCell) {
-            self.EnterCell(cell);
+            self.EnterCell(self);
         }
       }
     }

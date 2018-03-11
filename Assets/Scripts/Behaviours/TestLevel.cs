@@ -3,22 +3,21 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class TestLevel : MonoBehaviour {
-
   public GameObject playerPrefab;
-  public GameObject outlinePrefab;
 
-  private HexGrid grid;
+  public HexGrid grid {
+    get;
+    private set;
+  }
 
-  private PlayerController player;
+  public PlayerController player {
+    get;
+    private set;
+  }
 
 	// Use this for initialization
 	void Start () {
     grid = GetComponentInChildren<HexGrid>();
     player = PlayerController.Construct(playerPrefab, grid);
-	}
-
-	// Update is called once per frame
-	void Update () {
-		
 	}
 }
