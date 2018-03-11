@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "1650/Interaction")]
-public class Interaction : ScriptableObject {
+[System.Serializable]
+public struct Interaction {
   /**
    * Gets the name of the interaction (shown in menus).
    */

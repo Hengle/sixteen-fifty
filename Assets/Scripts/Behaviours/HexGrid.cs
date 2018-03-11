@@ -7,8 +7,9 @@ using UnityEngine.UI;
 using UnityEngine.Assertions;
 using UnityEngine.EventSystems;
 
-public class HexGrid : MonoBehaviour, IPointerClickHandler {
+public class HexGrid : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHandler, IPointerClickHandler {
   public GameObject cellPrefab;
+  public GameObject npcPrefab;
 
   public HexMap map;
 
@@ -85,10 +86,17 @@ public class HexGrid : MonoBehaviour, IPointerClickHandler {
 
   void Awake () {
     SetupGrid();
+    SetupNPCs();
   }
 
   void Start() {
     StateManager.Instance.eventManager.BeginScript(this, map.mapLoad);
+  }
+
+  void SetupNPCs() {
+    foreach(var npc in map.npcs) {
+      npc.Construct(npcPrefab, this, transform);
+    }
   }
 
   void SetupGrid() {

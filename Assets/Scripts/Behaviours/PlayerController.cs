@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -30,42 +31,70 @@ public class PlayerController : MonoBehaviour {
 
   void OnBeginMove(MapEntity me) {
     Debug.Assert(me == mapEntity);
-    DisableClickToMove();
+    DisableInteractions();
   }
 
   void OnEndMove(MapEntity me) {
     Debug.Assert(me == mapEntity);
-    EnableClickToMove();
+    EnableInteractions();
   }
 
   void OnEnable() {
-    EnableClickToMove();
+    EnableInteractions();
     StateManager.Instance.playerController = this;
     mapEntity.BeginMove += OnBeginMove;
     mapEntity.EndMove += OnEndMove;
   }
 
   void OnDisable() {
-    DisableClickToMove();
+    DisableInteractions();
     StateManager.Instance.playerController = null;
     mapEntity.BeginMove -= OnBeginMove;
     mapEntity.EndMove -= OnEndMove;
   }
 
-  void EnableClickToMove() {
+  void EnableInteractions() {
     grid.CellDown += OnCellDown;
   }
 
-  void DisableClickToMove() {
+  void DisableInteractions() {
     grid.CellDown -= OnCellDown;
+  }
+
+  /**
+   * This is actually an event script.
+   */
+  void PresentInteractionsMenu() {
+    var interactions =
+      mapEntity.CurrentCell.Neighbours
+      // get every map entity on every neighbouring cell, and ourselves
+      .SelectMany(cell => cell.EntitiesHere)
+      .Concat(new [] { mapEntity })
+      // get the interactable component of each mapentity and throw
+      // out the non-interactable ones
+      .Select(me => me.GetComponent<Interactable>())
+      .Where(ictb => null != ictb)
+      // fish out the interactions from each interactable
+      .SelectMany(ictb => ictb.npcData.interactions);
+
+    StateManager.Instance.eventManager.BeginScript(
+      grid,
+      new ControlInteractionMenu(interactions));
   }
 
   /**
    * Event handler for cell clicks.
    */
   void OnCellDown(HexCell cell) {
-    if(cell == mapEntity.CurrentCell)
+    if(cell == mapEntity.CurrentCell) {
+      PresentInteractionsMenu();
       return;
+    }
+
+    if(cell.EntitiesHere.Count > 0) {
+      Debug.Log("Can't move into a cell with something else on it!");
+      return;
+    }
     
     var path = grid.FindPath(mapEntity.CurrentCell.coordinates, cell.coordinates);
     if(null == path) {

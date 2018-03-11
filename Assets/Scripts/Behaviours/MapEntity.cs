@@ -15,7 +15,6 @@ public class MapEntity : MonoBehaviour {
    */
   public const float MOVE_SPEED = 8f;
 
-
   /**
    * The cell the entity is currently occupying.
    * Note: while the player is in motion, this value becomes stale
@@ -23,9 +22,17 @@ public class MapEntity : MonoBehaviour {
    * Every time the player passes through a cell, this value gets
    * updated.
    */
+  private HexCell currentCell;
   public HexCell CurrentCell {
-    get;
-    private set;
+    get {
+      return currentCell;
+    }
+    private set {
+      if(null != currentCell)
+        currentCell.RemoveEntity(this);
+      currentCell = value;
+      currentCell.AddEntity(this);
+    }
   }
 
   public event Action<MapEntity> LeaveCell;
@@ -52,21 +59,19 @@ public class MapEntity : MonoBehaviour {
     private set;
   }
 
+  public HexGrid grid;
+
   /**
    * Teleports the entity instantly to the given cell.
    */
   public void Warp(HexCell cell) {
-    if(null != cell) {
-      if(null != CurrentCell)
-        CurrentCell.RemoveEntity(this);
-      CurrentCell = cell;
-      CurrentCell.AddEntity(this);
-    }
-    else {
-      Debug.LogError("refusing to warp to null!");
-    }
-
+    Debug.Assert(null != cell);
+    CurrentCell = cell;
     transform.localPosition = cell.coordinates.ToPosition();
+  }
+
+  public void Warp(HexCoordinates coords) {
+    Warp(grid[coords]);
   }
 
   /**
@@ -86,6 +91,22 @@ public class MapEntity : MonoBehaviour {
   void Awake () {
   }
 
+  /**
+   * Asynchronously begins moving the entity along the given path.
+   * The path's cells should all be sequentially adjacent.
+   * The path should not include the cell that the entity is currently
+   * on.
+   * Fires BeginMove when the move actually starts and fires EndMove
+   * when the movement ends.
+   * Fires LeaveCell and EnterCell as the player traverses various
+   * cells.
+   * It's only possible to cancel a move before any cells have been
+   * traversed from BeginMove.
+   * LeaveCell is raised too late (after checking MovementCancelled).
+   * Note that EndMove will be called even when a move is cancelled,
+   * and that MovementCancelled will be `true` during the call to the
+   * handler.
+   */
   public void MoveFollowingPath(IEnumerable<HexCell> path, float moveSpeed = DoMoveFollowingPath.DEFAULT_MOVE_SPEED) {
     if(null != movement) {
       Debug.LogError(name + " tried to start moving when already moving!");

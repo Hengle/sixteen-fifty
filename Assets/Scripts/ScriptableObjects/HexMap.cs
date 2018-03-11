@@ -12,5 +12,6 @@ public class HexMap : ScriptableObject {
   public EventScript mapLoad;
   public int width;
   public HexTile[] tiles;
+  public NPCSettings[] npcs;
   public int height => tiles.Length / width;
 }

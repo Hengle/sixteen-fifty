@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,11 +10,19 @@ public class HexCell : MonoBehaviour {
   public HexCoordinates coordinates;
   public HexTile tile;
 
+  public HexGrid grid;
+
   private ISet<MapEntity> entitiesHere;
-  public IEnumerable<MapEntity> EntitiesHere => entitiesHere;
+  public ISet<MapEntity> EntitiesHere => entitiesHere;
 
   public event Action<MapEntity> EntityAdded;
   public event Action<MapEntity> EntityRemoved;
+
+  public IEnumerable<HexCell> Neighbours =>
+    coordinates
+    .Neighbours
+    .Select(i => grid[i])
+    .Where(o => null != o);
 
   public void AddEntity(MapEntity e) {
     entitiesHere.Add(e);
@@ -48,6 +57,11 @@ public class HexCell : MonoBehaviour {
     Debug.Assert(null != tile);
     entitiesHere = new HashSet<MapEntity>();
     SetupRenderer();
+  }
+
+  void Start () {
+    grid = GetComponentInParent<HexGrid>();
+    Debug.Assert(null != grid, "owning grid of cell is not null");
   }
 
   void SetupRenderer() {

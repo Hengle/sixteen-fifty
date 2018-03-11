@@ -9,18 +9,29 @@ using UnityEngine.EventSystems;
  * Handler for scripted events such as dialogue.
  */
 public class EventManager : MonoBehaviour {
+
   private EventRunner currentEvent;
-  private Canvas canvas;
-  public Canvas Canvas => canvas;
+  public Canvas Canvas {
+    get;
+    private set;
+  }
 
-  private Image textBox;
-  public Image TextBox => textBox;
+  public InteractionMenu interactionMenu;
 
-  private Text text;
-  public Text Text => text;
+  public Image TextBox {
+    get;
+    private set;
+  }
 
-  private CanvasGroup canvasGroup;
-  public CanvasGroup CanvasGroup => canvasGroup;
+  public Text Text {
+    get;
+    private set;
+  }
+
+  public CanvasGroup CanvasGroup {
+    get;
+    private set;
+  }
 
   public GameObject speakerPrefab;
 
@@ -40,10 +51,10 @@ public class EventManager : MonoBehaviour {
    */
   public bool BlocksRaycasts {
     get {
-      return canvasGroup.blocksRaycasts;
+      return CanvasGroup.blocksRaycasts;
     }
     set {
-      canvasGroup.blocksRaycasts = value;
+      CanvasGroup.blocksRaycasts = value;
     }
   }
 
@@ -51,12 +62,10 @@ public class EventManager : MonoBehaviour {
 	void Awake () {
     // we become the current event manager upon initialization;
     StateManager.Instance.eventManager = this;
-    canvas = this.GetComponentNotNull<Canvas>();
-    textBox = this.GetComponentInChildrenNotNull<Image>();
-    text = this.GetComponentInChildrenNotNull<Text>();
-    canvasGroup = this.GetComponentInChildrenNotNull<CanvasGroup>();
-
-    textBox.gameObject.SetActive(false);
+    Canvas = this.GetComponentNotNull<Canvas>();
+    TextBox = this.GetComponentInChildrenNotNull<Image>();
+    Text = this.GetComponentInChildrenNotNull<Text>();
+    CanvasGroup = this.GetComponentInChildrenNotNull<CanvasGroup>();
 
     BlocksRaycasts = false;
 	}
@@ -66,10 +75,19 @@ public class EventManager : MonoBehaviour {
 		
 	}
 
-  public void BeginScript(HexGrid map, EventScript e) {
-    Debug.Assert(null == currentEvent);
+  public void BeginScript(HexGrid map, IScript e) {
+    // eventrunners null themselves out of the manager when they
+    // finish executing script, so if currentEvent is not null,
+    // there's already an event running.
+    Debug.Assert(null == currentEvent, "Only one event can be running at once.");
     currentEvent = new EventRunner(this, map, e);
+    currentEvent.EventComplete += OnEventComplete;
     StartCoroutine(currentEvent.Coroutine);
+  }
+
+  void OnEventComplete(IScript e) {
+    currentEvent.EventComplete -= OnEventComplete;
+    currentEvent = null;
   }
 
   public void RaiseMainPanelClicked(PointerEventData data) {

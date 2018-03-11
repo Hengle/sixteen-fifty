@@ -21,7 +21,7 @@ namespace Commands {
           .Then(_ => new ShowText(runner, message))
           .Then(_ => new AwaitClick(runner));
       }
-      return cmd;
+      return cmd.Then(_ => ShowText.Clear(runner));
     }
 
     public override IEnumerator GetCoroutine() {

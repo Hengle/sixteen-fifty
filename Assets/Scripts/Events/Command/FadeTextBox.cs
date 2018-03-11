@@ -20,11 +20,12 @@ namespace Commands {
     public override IEnumerator GetCoroutine() {
       EventManager emgr = runner.Manager;
 
-      emgr.TextBox.gameObject.SetActive(true);
-      var renderer = emgr.TextBox.GetComponent<CanvasRenderer>();
+      var box = emgr.TextBox;
 
       var t = direction.GetInitialValueAndMultiplier();
       var initialAlpha = t.Item1;
+      // this works out to 1 if we started at zero, and vice versa.
+      var finalAlpha = 1 - initialAlpha;
       var multiplier = t.Item2;
       
       // we want to go from 0 to 1 (or 1 to 0) over the course of
@@ -36,17 +37,19 @@ namespace Commands {
       // the amount to change the alpha each iteration depends on what
       // direction we're moving in, so we multiply by the multiplier,
       // which acts to invert the direction.
-      var delta = multiplier * 1f / iters;
+      var delta = (float)multiplier / iters;
 
       var alpha = initialAlpha;
+      var col = box.color;
       for(var i = 0; i < iters; i++) {
-        renderer.SetAlpha(alpha);
+        col.a = alpha;
+        box.color = col;
         alpha += delta;
         yield return null;
       }
 
-      // this works out to 1 if we started at zero, and vice versa.
-      renderer.SetAlpha(1 - initialAlpha);
+      col.a = finalAlpha;
+      box.color = col;
 
       result = null;
     }
