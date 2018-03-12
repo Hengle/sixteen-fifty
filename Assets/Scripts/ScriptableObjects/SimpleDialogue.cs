@@ -1,34 +1,51 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 using Commands;
 
+/**
+ * In a simple dialogue, speakers don't appear and disappear during the text.
+ * Speakers appear, at the very beginning, some text is played out, and then the speakers disappear.
+ */
 [CreateAssetMenu(menuName = "1650/Events/Simple Dialogue")]
 public class SimpleDialogue : EventScript {
-  public SpeakerData speaker;
+  public SpeakerConfiguration[] speakerConfigurations;
   public string[] messages;
-  public SpeakerOrientation orientation;
 
   public override Command<object> GetScript(EventRunner runner) {
     var manager = runner.Manager;
 
     var t = manager.Canvas.GetComponent<RectTransform>();
-    Speaker s = null;
+    var speakers = new List<Speaker>();
     return Command<object>.Action(() => manager.BlocksRaycasts = true)
       .ThenPure(
-        _ => s = Speaker.Construct(
-          manager.speakerPrefab,
-          speaker,
-          0.3f,
-          t,
-          orientation))
-      .Then(speaker => new FadeSpeaker(runner, s, FadeDirection.IN))
+        _ =>
+        speakers = speakerConfigurations.Select(
+          s =>
+          Speaker.Construct(
+            manager.speakerPrefab,
+            s.speakerData,
+            s.position,
+            t,
+            s.orientation)
+          .WithAlpha(0))
+        .ToList())
+      .Traverse_(
+        ss => ss.Select(s => new FadeSpeaker(runner, s, FadeDirection.IN)))
       .Then(_ => new FadeTextBox(runner, FadeDirection.IN))
       .Then(_ => new Paragraph(runner, messages))
       .Then(_ => new FadeTextBox(runner, FadeDirection.OUT))
-      .Then(_ => new FadeSpeaker(runner, s, FadeDirection.OUT))
-      .ThenAction(_ => GameObject.Destroy(s.gameObject))
+      .ThenPure(_ => speakers)
+      .Traverse_(
+        ss => ss.Select(s => new FadeSpeaker(runner, s, FadeDirection.OUT)))
+      .ThenAction(
+        _ => {
+          foreach(var s in speakers) {
+            GameObject.Destroy(s.gameObject);
+          }
+        })
       .ThenAction(_ => manager.BlocksRaycasts = false);
   }
 }

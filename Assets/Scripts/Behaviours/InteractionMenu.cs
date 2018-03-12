@@ -67,8 +67,12 @@ public class InteractionMenu : MonoBehaviour {
 
     Debug.Assert(null != buttonPrefab, "The button prefab is not null when creating a new menu.");
     
+    var offset = buttonPrefab.transform.position.y;
     foreach(var interaction in interactions) {
-      buttons.Add(CreateInteractionButton(interaction));
+      var button = CreateInteractionButton(interaction);
+      button.transform.position += new Vector3(0f, offset, 0f);
+      offset -= (button.transform as RectTransform).rect.height;
+      buttons.Add(button);
     }
   }
 
@@ -77,6 +81,7 @@ public class InteractionMenu : MonoBehaviour {
       button.Interacted -= OnButtonInteracted;
       Destroy(button);
     }
+    buttons.Clear();
   }
 
   InteractionButton CreateInteractionButton(Interaction interaction) {

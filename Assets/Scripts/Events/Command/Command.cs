@@ -23,6 +23,33 @@ namespace Commands {
       return new BindCommand<T, R>(this, continuation);
     }
 
+    public virtual Command<object> Traverse_(Func<T, IEnumerable<Command<object>>> continuation) {
+      return new BindCommand<T, object>(
+        this,
+        t => {
+          var acc = Command<object>.Empty;
+          foreach(var cmd in continuation(t)) {
+            acc = acc.Then(_ => cmd);
+          }
+          return acc;
+        });
+    }
+
+    public virtual Command<List<R>> Traverse<R>(Func<T, IEnumerable<Command<R>>> continuation) {
+      return new BindCommand<T, List<R>>(
+        this,
+        t => {
+          var list = new List<R>();
+          var acc = Command<object>.Empty;
+          // idea: compute each command and stick its result in the list
+          foreach(var cmd in continuation(t)) {
+            acc = acc.Then(_ => cmd).ThenAction(r => list.Add(r));
+          }
+          // finally, yield the list.
+          return acc.ThenPure(_ => list);
+        });
+    }
+
     /**
      * Actually, this is fmap.
      */

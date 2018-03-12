@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 65d1980706ef54057b6da5c97cc04196, type: 3}
+  m_Name: Eric
+  m_EditorClassIdentifier: 
+  mapSprite: {fileID: 11400000, guid: 230c9d533806c4f6e848af645be9b1da, type: 2}
+  interactions:
+  - name: Talk
+    script: {fileID: 11400000, guid: 321b6d3b29e25479992e9dd8e763c9f8, type: 2}
+  - name: Quit
+    script: {fileID: 11400000, guid: 557a14865a0a34b358a6cfd0cea0d89c, type: 2}
+  orientation: 0

@@ -8,19 +8,30 @@ using Commands;
 
 public class ControlInteractionMenu : IScript {
   IEnumerable<Interaction> interactions;
+  PlayerController player;
 
-  public ControlInteractionMenu(IEnumerable<Interaction> interactions) {
+  public ControlInteractionMenu(PlayerController player, IEnumerable<Interaction> interactions) {
     this.interactions = interactions;
+    this.player = player;
   }
 
   public Command<object> GetScript(EventRunner runner) {
     var manager = runner.Manager;
+    Debug.Assert(null != manager, "event manager is not null");
     var menu = manager.interactionMenu;
+    Debug.Assert(null != menu, "interaction menu is not null");
 
     Either<Interaction, PointerEventData> ev = null;
     
     return
       Command<object>.Action(() => manager.BlocksRaycasts = true)
+      .Then(
+        _ => {
+          var target = player.transform.position;
+          target.z = Camera.main.transform.position.z;
+          return new MoveTransform(Camera.main.transform, target);
+        })
+      .ThenAction(_ => menu.transform.position = player.transform.position - new Vector3(4f, 0f, 0f))
       .ThenAction(_ => menu.CreateMenu(interactions))
       .ThenAction(_ => menu.MenuActive = true)
       .Then(_ => new FadeInteractionMenu(menu, FadeDirection.IN))

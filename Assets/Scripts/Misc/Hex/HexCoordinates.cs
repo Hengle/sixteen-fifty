@@ -8,7 +8,7 @@ public struct HexCoordinates {
 
   public delegate int Transformation(int coord);
 
-  public const float Y_FUDGE_FACTOR = 0.015f;
+  public const float Y_FUDGE_FACTOR = 0f;
 
   [SerializeField]
   private int x, y;
@@ -151,4 +151,18 @@ public struct HexCoordinates {
 
   public string ToStringMultiline()
   => X.ToString() + "\n" + Y.ToString() + "\n" + Z.ToString();
+
+  /**
+   * Determines which neighbour the given coordinates are for the current hex.
+   * Return null if the given coordinates do not neighbour this position.
+   */
+  public HexDirection? WhichNeighbour(HexCoordinates other) {
+    var self = this;
+    return Enumerable.Range(0, 6)
+      .Select(i => (HexDirection)i)
+      .Select(d => Tuple.Create(d, self[d]))
+      .Where(t => t.Item2.Equals(other))
+      .Select(t => t.Item1)
+      .FirstOrDefault();
+  }
 }

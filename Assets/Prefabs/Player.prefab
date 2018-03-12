@@ -22,6 +22,7 @@ GameObject:
   - component: {fileID: 114860618602737832}
   - component: {fileID: 212201995614174652}
   - component: {fileID: 114209836436637078}
+  - component: {fileID: 114933590884988850}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -53,6 +54,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2accf4eba40d348499dadf3a0359bfae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  grid: {fileID: 0}
 --- !u!114 &114860618602737832
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -65,6 +67,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   grid: {fileID: 0}
+  mapEntity: {fileID: 0}
+--- !u!114 &114933590884988850
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1813968912732676}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7b66e8a088b6643bda8d740e459259c5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hexMapEntity: {fileID: 11400000, guid: 1ca57578bddc74eb7aa8f671c8ceb101, type: 2}
+  renderer: {fileID: 0}
+  registered: 0
   mapEntity: {fileID: 0}
 --- !u!212 &212201995614174652
 SpriteRenderer:
@@ -100,12 +117,12 @@ SpriteRenderer:
   m_SortingLayerID: 608742245
   m_SortingLayer: 2
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 291b626ed367543f7b56e9d84149f573, type: 3}
+  m_Sprite: {fileID: 21300002, guid: 8f697b0d8aba94963bfa48f235225733, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 10.5, y: 17.5}
+  m_Size: {x: 0.8888889, y: 0.7407407}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1

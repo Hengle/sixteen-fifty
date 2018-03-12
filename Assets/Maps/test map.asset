@@ -1,0 +1,60 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ae6675d35be7a49a4bf1f80e077c6a8a, type: 3}
+  m_Name: test map
+  m_EditorClassIdentifier: 
+  mapLoad: {fileID: 11400000, guid: e22e67294cdbd456bb85cb1c4fe17405, type: 2}
+  width: 5
+  tiles:
+  - {fileID: 11400000, guid: 3ba9c4fdae6a24cf190a7733634c3571, type: 2}
+  - {fileID: 11400000, guid: 3ba9c4fdae6a24cf190a7733634c3571, type: 2}
+  - {fileID: 11400000, guid: 3ba9c4fdae6a24cf190a7733634c3571, type: 2}
+  - {fileID: 11400000, guid: 3ba9c4fdae6a24cf190a7733634c3571, type: 2}
+  - {fileID: 11400000, guid: 7a14d52cb426e48da8dd9618fc166bdb, type: 2}
+  - {fileID: 11400000, guid: 7a14d52cb426e48da8dd9618fc166bdb, type: 2}
+  - {fileID: 11400000, guid: 7a14d52cb426e48da8dd9618fc166bdb, type: 2}
+  - {fileID: 11400000, guid: 7a14d52cb426e48da8dd9618fc166bdb, type: 2}
+  - {fileID: 11400000, guid: 2bb474be21b8e44ffa5f3099fa931b59, type: 2}
+  - {fileID: 11400000, guid: 3ba9c4fdae6a24cf190a7733634c3571, type: 2}
+  - {fileID: 11400000, guid: 3ba9c4fdae6a24cf190a7733634c3571, type: 2}
+  - {fileID: 11400000, guid: 3ba9c4fdae6a24cf190a7733634c3571, type: 2}
+  - {fileID: 11400000, guid: 2bb474be21b8e44ffa5f3099fa931b59, type: 2}
+  - {fileID: 11400000, guid: 3ba9c4fdae6a24cf190a7733634c3571, type: 2}
+  - {fileID: 11400000, guid: 2bb474be21b8e44ffa5f3099fa931b59, type: 2}
+  - {fileID: 11400000, guid: 3ba9c4fdae6a24cf190a7733634c3571, type: 2}
+  - {fileID: 11400000, guid: 3ba9c4fdae6a24cf190a7733634c3571, type: 2}
+  - {fileID: 11400000, guid: 3ba9c4fdae6a24cf190a7733634c3571, type: 2}
+  - {fileID: 11400000, guid: 3ba9c4fdae6a24cf190a7733634c3571, type: 2}
+  - {fileID: 11400000, guid: 3ba9c4fdae6a24cf190a7733634c3571, type: 2}
+  - {fileID: 11400000, guid: 3ba9c4fdae6a24cf190a7733634c3571, type: 2}
+  - {fileID: 11400000, guid: 3ba9c4fdae6a24cf190a7733634c3571, type: 2}
+  - {fileID: 11400000, guid: 3ba9c4fdae6a24cf190a7733634c3571, type: 2}
+  - {fileID: 11400000, guid: 3ba9c4fdae6a24cf190a7733634c3571, type: 2}
+  - {fileID: 11400000, guid: 3ba9c4fdae6a24cf190a7733634c3571, type: 2}
+  - {fileID: 11400000, guid: 3ba9c4fdae6a24cf190a7733634c3571, type: 2}
+  - {fileID: 11400000, guid: 3ba9c4fdae6a24cf190a7733634c3571, type: 2}
+  - {fileID: 11400000, guid: 3ba9c4fdae6a24cf190a7733634c3571, type: 2}
+  - {fileID: 11400000, guid: 3ba9c4fdae6a24cf190a7733634c3571, type: 2}
+  - {fileID: 11400000, guid: 2bb474be21b8e44ffa5f3099fa931b59, type: 2}
+  - {fileID: 11400000, guid: 3ba9c4fdae6a24cf190a7733634c3571, type: 2}
+  - {fileID: 11400000, guid: 3ba9c4fdae6a24cf190a7733634c3571, type: 2}
+  - {fileID: 11400000, guid: 3ba9c4fdae6a24cf190a7733634c3571, type: 2}
+  - {fileID: 11400000, guid: 3ba9c4fdae6a24cf190a7733634c3571, type: 2}
+  - {fileID: 11400000, guid: 7a14d52cb426e48da8dd9618fc166bdb, type: 2}
+  npcs:
+  - name: jake
+    npc: {fileID: 11400000, guid: 8ba59238c986347a2a4c3478681c0f28, type: 2}
+    x: 3
+    y: 4
+  - name: eric
+    npc: {fileID: 11400000, guid: b5734f2d568e84e6ba856c357b479e70, type: 2}
+    x: 5
+    y: 7

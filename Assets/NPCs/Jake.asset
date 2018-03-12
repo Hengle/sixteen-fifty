@@ -11,7 +11,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 65d1980706ef54057b6da5c97cc04196, type: 3}
   m_Name: Jake
   m_EditorClassIdentifier: 
-  mapSprite: {fileID: 21300000, guid: 1ebf640c833044739bd48e704adc94a7, type: 3}
+  mapSprite: {fileID: 11400000, guid: 42d63496db79941138db70ad5479f6c8, type: 2}
   interactions:
   - name: Talk
     script: {fileID: 11400000, guid: 8a045c9cdf1d549ad82fb0632de2bf99, type: 2}
+  orientation: 0

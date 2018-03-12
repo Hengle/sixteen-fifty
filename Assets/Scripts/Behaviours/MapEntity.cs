@@ -13,7 +13,7 @@ public class MapEntity : MonoBehaviour {
   /**
    * How fast the player moves, in units per seconds.
    */
-  public const float MOVE_SPEED = 8f;
+  public const float MOVE_SPEED = 6f;
 
   /**
    * The cell the entity is currently occupying.
@@ -44,6 +44,11 @@ public class MapEntity : MonoBehaviour {
    * the move was cancelled.
    */
   public event Action<MapEntity> EndMove;
+
+  /**
+   * Raised during movement whenever there's a change of direction.
+   */
+  public event Action<MapEntity, HexDirection> ChangeDirection;
 
   private Coroutine movement;
 
@@ -157,20 +162,24 @@ public class MapEntity : MonoBehaviour {
 
         // raise an event saying that we're leaving the current cell.
         if(null != self.LeaveCell) {
-            self.LeaveCell(self);
+          self.LeaveCell(self);
         }
         Vector3 target = cell.coordinates.ToPosition();
-        float remaining = 0;
-        do {
-          remaining = (target - self.transform.position).sqrMagnitude;
-          self.transform.position = Vector3.MoveTowards(self.transform.position, target, moveSpeed);
+
+        if(null != self.ChangeDirection) {
+          var d = self.CurrentCell.coordinates.WhichNeighbour(cell.coordinates);
+          Debug.Assert(d.HasValue, "cell emitted by pathfinding is a neighbour of the current cell");
+          self.ChangeDirection(self, d.Value);
+        }
+
+        var move = new MoveTransform(self.transform, target, moveSpeed);
+        foreach(var o in new TrivialEnumerable(move.GetCoroutine())) {
           yield return null;
         }
-        while(remaining > float.Epsilon);
 
         self.CurrentCell = cell;
         if(null != self.EnterCell) {
-            self.EnterCell(self);
+          self.EnterCell(self);
         }
       }
     }

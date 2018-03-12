@@ -7,6 +7,7 @@ using UnityEngine;
  */
 [CreateAssetMenu(menuName = "1650/Basic NPC")]
 public class BasicNPC : ScriptableObject {
-  public Sprite mapSprite;
+  public HexMapEntity mapSprite;
   public Interaction[] interactions;
+  public HexDirection orientation;
 }

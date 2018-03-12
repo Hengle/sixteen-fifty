@@ -43,8 +43,16 @@ public class Speaker : MonoBehaviour {
   }
 
   public SpeakerData data;
+  private SpriteRenderer renderer;
 
   void Awake() {
+    renderer = GetComponent<SpriteRenderer>();
+  }
 
+  public Speaker WithAlpha(float alpha) {
+    var col = renderer.color;
+    col.a = alpha;
+    renderer.color = col;
+    return this;
   }
 }

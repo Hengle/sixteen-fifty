@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using System;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.UI;
-using UnityEngine.Assertions;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
-public class HexGrid : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHandler, IPointerClickHandler {
+public class HexGrid : MonoBehaviour, IPointerClickHandler {
   public GameObject cellPrefab;
   public GameObject npcPrefab;
 
@@ -72,7 +71,7 @@ public class HexGrid : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragH
 
     if(reachedDestination) {
       // then cell refers to the destination.
-      Assert.IsNotNull(cell);
+      Debug.Assert(null != cell, "destination cell is not null when moving");
       // we construct the path from the destination to the source, but
       // this is in reverse order! So we reverse the list.
       var l = new TrivialEnumerable<HexCell>(Path.Construct<HexCell>(cell, cameFrom)).ToList();
@@ -166,6 +165,10 @@ public class HexGrid : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragH
   }
 
   public void OnPointerClick(PointerEventData data) {
+    // if we're doing a drag, then click-to-move shouldn't work
+    if(data.dragging)
+      return;
+    
     Debug.Log("Clicked on grid!");
     if(data.button == 0) {
       TouchCell(data.pointerPressRaycast.worldPosition);
@@ -191,5 +194,17 @@ public class HexGrid : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragH
 
     if(CellDown != null)
         CellDown(cell);
+  }
+
+  public void OnBeginDrag(PointerEventData data) {
+
+  }
+
+  public void OnEndDrag(PointerEventData data) {
+
+  }
+
+  public void OnDrag(PointerEventData data) {
+    
   }
 }

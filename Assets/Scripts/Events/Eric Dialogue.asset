@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa81f5948b75a4ae58ad0bda39afcbd3, type: 3}
+  m_Name: Eric Dialogue
+  m_EditorClassIdentifier: 
+  speakerConfigurations:
+  - speakerData: {fileID: 11400000, guid: 761bcf474ee704ee4bae7acda2a3948c, type: 2}
+    position: 0.33
+    orientation: 1
+  - speakerData: {fileID: 11400000, guid: 9b8a1aab235fa442a9e477c4ee6c9eb9, type: 2}
+    position: 0.66
+    orientation: 0
+  messages:
+  - Hi, I'm Eric!
+  - Give us your money!
+  - GET OFF YOUR COUCH AND GIVE US YOUR MONEY NOW!!!

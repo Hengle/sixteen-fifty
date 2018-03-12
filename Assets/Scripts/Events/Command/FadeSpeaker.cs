@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace Commands {
-  public class FadeSpeaker : Command<Speaker> {
+  public class FadeSpeaker : Command<object> {
     public const float DEFAULT_FADE_TIME = 0.3f;
 
     EventRunner runner;
@@ -33,17 +33,14 @@ namespace Commands {
 
       // how many iterations until the fade is complete?
       var iters = (int)(fadeTime / Time.deltaTime);
-      var col = renderer.color;
       for(int i = 0; i < iters; i++) {
-        col.a = Mathf.Lerp(initialAlpha, finalAlpha, i / (float)iters);
-        renderer.color = col;
+        float alpha = Mathf.Lerp(initialAlpha, finalAlpha, i / (float)iters);
+        speaker.WithAlpha(alpha);
         yield return null;
       }
 
-      col.a = finalAlpha;
-      renderer.color = col;
+      speaker.WithAlpha(finalAlpha);
       
-      result = speaker;
       yield break;
     }
   }

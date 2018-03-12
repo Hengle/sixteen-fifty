@@ -75,12 +75,18 @@ public class PlayerController : MonoBehaviour {
       .Select(me => me.GetComponent<Interactable>())
       .Where(ictb => null != ictb)
       // fish out the interactions from each interactable
-      .SelectMany(ictb => ictb.npcData.interactions);
+      .SelectMany(ictb => ictb.npcData.interactions)
+      .ToList();
+
+    if(interactions.Count == 0)
+      return;
 
     StateManager.Instance.eventManager.BeginScript(
       grid,
-      new ControlInteractionMenu(interactions));
+      new ControlInteractionMenu(this, interactions));
   }
+
+
 
   /**
    * Event handler for cell clicks.

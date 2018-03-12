@@ -11,11 +11,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa81f5948b75a4ae58ad0bda39afcbd3, type: 3}
   m_Name: Jake Dialogue
   m_EditorClassIdentifier: 
-  speaker: {fileID: 11400000, guid: 88af7e3c337d846f692a2cc68869e101, type: 2}
+  speakerConfigurations:
+  - speakerData: {fileID: 11400000, guid: 761bcf474ee704ee4bae7acda2a3948c, type: 2}
+    position: 0.33
+    orientation: 1
+  - speakerData: {fileID: 11400000, guid: 88af7e3c337d846f692a2cc68869e101, type: 2}
+    position: 0.66
+    orientation: 0
   messages:
   - Hi! My name is Jake, and I'm one of the developers of this game!
   - Calling it a game right now might be a bit of a stretch, but you can get at least
     a basic idea of the look at feel of our game.
   - You should talk to my teammate and boyfriend Eric over there to see what he has
     to say about the game too!
-  orientation: 1

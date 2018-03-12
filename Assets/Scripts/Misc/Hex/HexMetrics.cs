@@ -1,19 +1,25 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
-using System;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 
 public static class HexMetrics {
+  public const int PIXELS_PER_UNIT = 27;
+
   /**
    * The half-width of the ellipse into which we inscribe our hexagon.
    * Mathematically, this is paramater _a_ of the ellipse.
+   * Since each hexagon sprite is 64 pixels across, the outer width
+   * needs to be 65px / PIXELS_PER_UNIT / 2 units.
    */
-  public const float OUTER_WIDTH = 1f;
+  public const float OUTER_WIDTH = 64f / PIXELS_PER_UNIT / 2;
 
   /**
    * The half-height of the hexagon.
+   * Our hexagons are squished so that they're twice as wide as they
+   * are tall, so we simply divide the outer width by two.
    */
-  public const float INNER_HEIGHT = 0.5f;
+  public const float INNER_HEIGHT = OUTER_WIDTH / 2;
 
   /**
    * The half-height of the ellipse into which we inscribe our hexagon.

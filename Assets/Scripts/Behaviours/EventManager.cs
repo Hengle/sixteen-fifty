@@ -28,6 +28,16 @@ public class EventManager : MonoBehaviour {
     private set;
   }
 
+  public Image SecretPanel {
+    get;
+    private set;
+  }
+
+  public Image TitleScreen {
+    get;
+    private set;
+  }
+
   public CanvasGroup CanvasGroup {
     get;
     private set;
@@ -66,6 +76,9 @@ public class EventManager : MonoBehaviour {
     TextBox = this.GetComponentInChildrenNotNull<Image>();
     Text = this.GetComponentInChildrenNotNull<Text>();
     CanvasGroup = this.GetComponentInChildrenNotNull<CanvasGroup>();
+    SecretPanel = transform.Find("CanvasGroup/Secret Panel").GetComponent<Image>();
+    Debug.Assert(null != SecretPanel, "secret panel was found");
+    TitleScreen = transform.Find("CanvasGroup/Title Screen").GetComponent<Image>();
 
     BlocksRaycasts = false;
 	}
