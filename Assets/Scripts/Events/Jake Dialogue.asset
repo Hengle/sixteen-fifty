@@ -19,8 +19,24 @@ MonoBehaviour:
     position: 0.66
     orientation: 0
   messages:
-  - Hi! My name is Jake, and I'm one of the developers of this game!
-  - Calling it a game right now might be a bit of a stretch, but you can get at least
-    a basic idea of the look at feel of our game.
-  - You should talk to my teammate and boyfriend Eric over there to see what he has
-    to say about the game too!
+  - Hi! My name is Jake. I study computer science at McGill.
+  - Welcome to our game, 1650! Calling this a game might be a bit of stretch though!
+    Instead, think of this as our application to the B21 BLUE Fellowship.
+  - With the BLUE Fellowship, we will create a historically accurate educational mobile
+    game targeted at Canadian high-school students. Through dialogue with historians
+    and Indigenous Peoples, 1650 will be a fun historical game!
+  - The engine of 1650 is built in Unity, as you may have noticed. All code and assets
+    have been designed by Eric and me.
+  - 1650 is set in New-France in the late 17th century (obviously). Gameplay will
+    be turn-based, and the main objective will be to trade and to survive the harsh
+    Canadian climate.
+  - You play as a "coureur des bois", an early French settler and trader who travels
+    into the interior of Canada to trade European goods for beaver furs with Indigenous
+    Peoples.
+  - '1650 will be as historically accurate as possible. As such, a large component
+    of our project will be to consult with historians and archaeologists, such as
+    those at the McCord museum. '
+  - We will also consult with the Indigenous Nations we wish to include in 1650.
+  - With your help, we can turn this demo into a culturally-sensitive and historically
+    accurate video game about early European and Indigenous contact.
+  - To find out more about why we think this is a worthwhile project, go talk to Eric!

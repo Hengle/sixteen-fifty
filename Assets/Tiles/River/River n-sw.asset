@@ -9,8 +9,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2434b29f969af4952ac3c8ea3af5a30c, type: 3}
-  m_Name: New Hex Tile 3
+  m_Name: River n-sw
   m_EditorClassIdentifier: 
-  sprite: {fileID: 0}
+  sprite: {fileID: 21300014, guid: ea995ed377ce648f4b99a33139f894b2, type: 3}
   movementCost: 0
-  tileName: 
+  tileName: River N SW
