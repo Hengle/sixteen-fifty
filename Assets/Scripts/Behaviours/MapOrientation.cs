@@ -23,10 +23,7 @@ public class MapOrientation : MonoBehaviour {
   }
 
   [SerializeField]
-  private SpriteRenderer renderer;
-
-  [SerializeField]
-  private bool registered = false;
+  new private SpriteRenderer renderer;
 
   [SerializeField]
   private MapEntity mapEntity;

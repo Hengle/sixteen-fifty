@@ -43,7 +43,7 @@ public class Speaker : MonoBehaviour {
   }
 
   public SpeakerData data;
-  private SpriteRenderer renderer;
+  new private SpriteRenderer renderer;
 
   void Awake() {
     renderer = GetComponent<SpriteRenderer>();

@@ -13,6 +13,8 @@ public class IntroSequence : EventScript {
     var s = manager.SecretPanel;
     var t = manager.TitleScreen;
     return Command<object>
+      // display the title screen
+      // and make the secret panel full black
       .Action(
         () => {
           manager.BlocksRaycasts = true;
@@ -23,6 +25,7 @@ public class IntroSequence : EventScript {
           col.a = 1;
           s.color = col;
         })
+      // wait two seconds, and then fade out the title screen
       .Then(_ => new Delay(2f))
       .Then(
         _ => new Lerp(
@@ -31,6 +34,7 @@ public class IntroSequence : EventScript {
             col.a = x;
             t.color = col;
           }))
+      // wait one more second with the screen black
       .Then(_ => new Delay(1f))
       .Then(
         _ => new Lerp(
@@ -39,6 +43,7 @@ public class IntroSequence : EventScript {
             col.a = x;
             s.color = col;
           }))
+      .ThenAction(_ => runner.Map.GetComponent<AudioSource>().Play())
       .ThenAction(_ => manager.BlocksRaycasts = false)
       .Then(_ => introDialogue.GetScript(runner));
   }
