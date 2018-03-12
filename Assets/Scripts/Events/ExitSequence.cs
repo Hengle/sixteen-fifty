@@ -10,13 +10,8 @@ public class ExitSequence : EventScript {
     var manager = runner.Manager;
     return Command<object>
       .Action(() => manager.BlocksRaycasts = true)
-      .Then(
-        _ => new Lerp(0f, 1f, 2.5f)
-        .WithAction(
-          x => {
-            var col = manager.SecretPanel.color;
-            col.a = x;
-            manager.SecretPanel.color = col;
-          }));
+      .Then(_ => Lerp.FadeImage(manager.SecretPanel, FadeDirection.IN, 2.5f))
+      .Then(_ => new Delay(1f))
+      .ThenAction(_ => Application.Quit());
   }
 }

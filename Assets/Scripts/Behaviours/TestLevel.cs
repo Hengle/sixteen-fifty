@@ -10,14 +10,8 @@ public class TestLevel : MonoBehaviour {
     private set;
   }
 
-  public PlayerController player {
-    get;
-    private set;
-  }
-
 	// Use this for initialization
 	void Start () {
     grid = GetComponentInChildren<HexGrid>();
-    player = PlayerController.Construct(playerPrefab, grid);
 	}
 }

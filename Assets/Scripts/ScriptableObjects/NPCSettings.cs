@@ -23,8 +23,7 @@ public struct NPCSettings {
     var interactable = prefab.GetComponent<Interactable>();
     interactable.npcData = npc;
 
-    var instance = GameObject.Instantiate(prefab);
-    instance.transform.parent = transform;
+    var instance = GameObject.Instantiate(prefab, transform);
 
     ip.x = default(int);
     ip.y = default(int);

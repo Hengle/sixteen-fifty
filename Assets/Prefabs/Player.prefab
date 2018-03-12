@@ -19,13 +19,13 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4986000023483944}
+  - component: {fileID: 114209836436637078}
   - component: {fileID: 114860618602737832}
   - component: {fileID: 212201995614174652}
-  - component: {fileID: 114209836436637078}
   - component: {fileID: 114933590884988850}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -81,7 +81,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hexMapEntity: {fileID: 11400000, guid: 1ca57578bddc74eb7aa8f671c8ceb101, type: 2}
   renderer: {fileID: 0}
-  registered: 0
   mapEntity: {fileID: 0}
 --- !u!212 &212201995614174652
 SpriteRenderer:

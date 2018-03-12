@@ -44,6 +44,13 @@ public class IntroSequence : EventScript {
             s.color = col;
           }))
       .ThenAction(_ => runner.Map.GetComponent<AudioSource>().Play())
+      .Then(
+        _ => {
+          var player = GameObject.FindWithTag("Player");
+          var target = player.transform.position;
+          target.z = Camera.main.transform.position.z;
+          return new MoveTransform(Camera.main.transform, target);
+        })
       .ThenAction(_ => manager.BlocksRaycasts = false)
       .Then(_ => introDialogue.GetScript(runner));
   }

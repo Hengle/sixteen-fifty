@@ -94,6 +94,7 @@ public class MapEntity : MonoBehaviour {
   }
 
   void Awake () {
+    grid = this.GetComponentInParentNotNull<HexGrid>();
   }
 
   /**

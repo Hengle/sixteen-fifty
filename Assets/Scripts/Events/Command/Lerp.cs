@@ -42,6 +42,8 @@ namespace Commands {
         yield return null;
       }
 
+      action(final);
+
       yield break;
     }
 

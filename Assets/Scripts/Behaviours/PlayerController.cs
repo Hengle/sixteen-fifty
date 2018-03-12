@@ -16,19 +16,6 @@ public class PlayerController : MonoBehaviour {
    */
   public MapEntity mapEntity;
 
-  public static PlayerController Construct(GameObject prefab, HexGrid grid) {
-    var self = prefab.GetComponent<PlayerController>();
-    self.grid = grid;
-    var instance = Instantiate(prefab).GetComponent<PlayerController>();
-    self.grid = null;
-
-    instance.transform.parent = grid.transform;
-
-    instance.mapEntity.Warp(grid[HexCoordinates.Zero]);
-
-    return instance;
-  }
-
   void OnBeginMove(MapEntity me) {
     Debug.Assert(me == mapEntity);
     DisableInteractions();
@@ -114,7 +101,12 @@ public class PlayerController : MonoBehaviour {
 	// Use this for initialization
 	void Awake() {
     mapEntity = this.GetComponentNotNull<MapEntity>();
+    grid = this.GetComponentInParentNotNull<HexGrid>();
 	}
+
+  void Start() {
+    mapEntity.Warp(new HexCoordinates(grid.map.initialPlayerX, grid.map.initialPlayerY));
+  }
 
 	// Update is called once per frame
 	void Update () {

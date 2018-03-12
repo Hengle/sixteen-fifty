@@ -11,7 +11,9 @@ using UnityEngine;
 public class HexMap : ScriptableObject {
   public EventScript mapLoad;
   public int width;
-  public HexTile[] tiles;
+  /* In offset coordinates. */
+  public int initialPlayerX, initialPlayerY;
   public NPCSettings[] npcs;
   public int height => tiles.Length / width;
+  public HexTile[] tiles;
 }
