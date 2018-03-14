@@ -33,4 +33,14 @@ namespace Commands {
       yield break;
     }
   }
+
+  public static class AwaitActionExt {
+    public static Command<R> Await<T, R>(
+      this Command<T> self,
+      Action<Action<R>> subscribe,
+      Action<Action<R>> unsubscribe) {
+
+      return self.Then(_ => new AwaitAction<R>(subscribe, unsubscribe));
+    }
+  }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -19,63 +20,33 @@ namespace Commands {
     public T Result => result;
     public abstract IEnumerator GetCoroutine();
   
-    public virtual Command<R> Then<R>(Func<T, Command<R>> continuation) {
-      return new BindCommand<T, R>(this, continuation);
-    }
-
-    public virtual Command<object> Traverse_(Func<T, IEnumerable<Command<object>>> continuation) {
-      return new BindCommand<T, object>(
-        this,
-        t => {
-          var acc = Command<object>.Empty;
-          foreach(var cmd in continuation(t)) {
-            acc = acc.Then(_ => cmd);
-          }
-          return acc;
-        });
-    }
-
-    public virtual Command<List<R>> Traverse<R>(Func<T, IEnumerable<Command<R>>> continuation) {
-      return new BindCommand<T, List<R>>(
-        this,
-        t => {
-          var list = new List<R>();
-          var acc = Command<object>.Empty;
-          // idea: compute each command and stick its result in the list
-          foreach(var cmd in continuation(t)) {
-            acc = acc.Then(_ => cmd).ThenAction(r => list.Add(r));
-          }
-          // finally, yield the list.
-          return acc.ThenPure(_ => list);
-        });
-    }
-
     /**
-     * Actually, this is fmap.
+     * Construct a one-off command using the given function to enumerate the frames.
      */
-    public Command<R> ThenPure<R>(Func<T, R> continuation) {
-      return Then(t => Command<R>.Pure(() => continuation(t)));
-    }
-
-    public Command<object> ThenAction(Action<T> continuation) {
-      return Then(t => Command<object>.Action(() => continuation(t)));
-    }
-  
-    public Command<Either<T, S>> And<S>(Command<S> that) {
-      return new Race<T, S>(this, that);
-    }
-  
     public static Command<T> Invent(Func<IEnumerator> invention) {
       return new InventedCommand<T>(invention);
     }
 
+    /**
+     * Returns a command that executes the given action, yielding a null result.
+     */
     public static Command<object> Action(Action action) => new ActionCommand(action);
 
+    /**
+     * Returns a command that executes the given function and yields its result.
+     */
     public static Command<T> Pure(Func<T> f) => new PureCommand<T>(f);
 
-    public static Command<object> Empty => new ActionCommand(() => { return; });
+    /**
+     * Returns a command with no effects and a null result object.
+     */
+    public static Command<object> Empty => Action(() => { return; });
+
+    public Command<object> ThenAction(Action<T> continuation) {
+      return this.Then(t => Command<object>.Action(() => continuation(t)));
+    }
   }
-  
+
   /**
    * An invented command is a command that just executes a given function.
    */
@@ -114,7 +85,7 @@ namespace Commands {
       yield break;
     }
   }
-  
+
   /**
    * This is a composite command that runs the given command, and then
    * feeds the result of that command into the provided continuation to
@@ -178,6 +149,66 @@ namespace Commands {
   
         yield return null;
       }
+    }
+  }
+
+  public static class PureExt {
+    /**
+     * Actually, this is fmap.
+     */
+    public static Command<R> ThenPure<T, R>(this Command<T> self, Func<T, R> k) {
+      return self.Then(t => Command<R>.Pure(() => k(t)));
+    }
+  }
+  
+  public static class BindExt {
+    /**
+     * Sequences a command to occur after this command.
+     * The next command can access the result of the current command,
+     * and use this result to determine which next command should be
+     * executed.
+     */
+    public static Command<R> Then<T, R>(this Command<T> self, Func<T, Command<R>> k) {
+      return new BindCommand<T, R>(self, k);
+    }
+  }
+
+  public static class TraverseExt {
+    public static Command<List<R>> Traverse<T, R>(this IEnumerable<T> self, Func<T, Command<R>> f) {
+      return self.Select(x => f(x)).Sequence();
+    }
+
+    public static Command<object> Traverse_<T>(this IEnumerable<T> self, Func<T, Command<object>> f) {
+      return self.Select(x => f(x)).Sequence_();
+    }
+  }
+
+  public static class SequenceExt {
+    /**
+     * Compiles a sequence of commands into a single command that
+     * executes the sequence.
+     */
+    public static Command<List<T>> Sequence<T>(this IEnumerable<Command<T>> self) {
+      var list = new List<T>();
+      var acc = Command<object>.Empty;
+      foreach(var cmd in self) {
+        acc = acc.Then(_ => cmd).ThenAction(r => list.Add(r));
+      }
+      return acc.ThenPure(_ => list);
+    }
+
+    public static Command<object> Sequence_(this IEnumerable<Command<object>> self) {
+      var acc = Command<object>.Empty;
+      foreach(var cmd in self) {
+        acc = acc.Then(_ => cmd);
+      }
+      return acc;
+    }
+  }
+  
+  public static class RaceExt {
+    public static Command<Either<T, S>> And<T, S>(this Command<T> self, Command<S> that) {
+      return new Race<T, S>(self, that);
     }
   }
 }

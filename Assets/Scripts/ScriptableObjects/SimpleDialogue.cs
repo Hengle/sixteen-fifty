@@ -32,14 +32,14 @@ public class SimpleDialogue : EventScript {
             s.orientation)
           .WithAlpha(0))
         .ToList())
-      .Traverse_(
-        ss => ss.Select(s => Lerp.FadeSpriteRenderer(s.GetComponent<SpriteRenderer>(), FadeDirection.IN)))
+      .Then(
+        ss => ss.Traverse_(s => Lerp.FadeSpriteRenderer(s.GetComponent<SpriteRenderer>(), FadeDirection.IN)))
       .Then(_ => Lerp.FadeImage(runner.Manager.TextBox, FadeDirection.IN))
       .Then(_ => new Paragraph(runner, messages))
       .Then(_ => Lerp.FadeImage(runner.Manager.TextBox, FadeDirection.OUT))
-      .ThenPure(_ => speakers)
-      .Traverse_(
-        ss => ss.Select(s => Lerp.FadeSpriteRenderer(s.GetComponent<SpriteRenderer>(), FadeDirection.OUT)))
+      .Then(
+        _ => speakers.Traverse_(
+          s => Lerp.FadeSpriteRenderer(s.GetComponent<SpriteRenderer>(), FadeDirection.OUT)))
       .ThenAction(
         _ => {
           foreach(var s in speakers) {
