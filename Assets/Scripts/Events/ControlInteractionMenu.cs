@@ -48,7 +48,7 @@ public class ControlInteractionMenu : IScript {
       .ThenAction(e => ev = e)
       .Then(_ => new FadeInteractionMenu(menu, FadeDirection.OUT))
       .ThenAction(_ => menu.DestroyMenu())
-      .ThenAction(_ => menu.MenuAction = manager.BlocksRaycasts = false)
+      .ThenAction(_ => menu.MenuActive = manager.BlocksRaycasts = false)
       .Then(
         _ => ev.Eliminate(
           // if we clicked on a button, then we run its associated event script
