@@ -195,16 +195,4 @@ public class HexGrid : MonoBehaviour, IPointerClickHandler {
     if(CellDown != null)
         CellDown(cell);
   }
-
-  public void OnBeginDrag(PointerEventData data) {
-
-  }
-
-  public void OnEndDrag(PointerEventData data) {
-
-  }
-
-  public void OnDrag(PointerEventData data) {
-    
-  }
 }
