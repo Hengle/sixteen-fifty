@@ -6,49 +6,93 @@ using UnityEngine;
 
 namespace Commands {
   /**
-   * An abstract command producing a result of type T.
-   * Commands are the basis for events: a scripted event is a sequence
-   * of commands.
-   * Commands can be chained using the `Then` method, which takes a
-   * function from the result of the current command to compute a new
-   * command to execute.
-   * This structure allows event scripts to be programmed in a way
-   * resembling promises.
+   * \brief
+   * A wrapper for a coroutine computing a result of type `T`.
+   *
+   * - Commands are the basis for events: a scripted event is a
+   *   sequence of commands.
+   * - Commands can be chained using the `Then` method, which takes a
+   *   function from the result of the current command to compute a
+   *   new command to execute.
+   * - This structure allows event scripts to be programmed in a way
+   *   resembling promises.
    */
   public abstract class Command<T> {
     protected T result;
+    /**
+     * \brief
+     * The result of the command.
+     * 
+     * In general, you should never read this property directly.
+     * It's best to obtain the result of a command by chaining using
+     * BindExt::Then.
+     */
     public T Result => result;
+
+    /**
+     * \brief
+     * The coroutine that implements the command.
+     */
     public abstract IEnumerator GetCoroutine();
   
     /**
+     * \brief
      * Construct a one-off command using the given function to enumerate the frames.
+     *
+     * Usually, this isn't super useful because C# doesn't allow using
+     * the `yield return` syntax inside an anonymous function.
      */
     public static Command<T> Invent(Func<IEnumerator> invention) {
       return new InventedCommand<T>(invention);
     }
 
     /**
-     * Returns a command that executes the given action, yielding a null result.
+     * \brief 
+     * Constructs a command that executes the given action, yielding a null result.
+     *
+     * \sa
+     * ActionCommand
+     * #ThenAction
+     * #Pure
+     * PureExt
      */
     public static Command<object> Action(Action action) => new ActionCommand(action);
 
     /**
-     * Returns a command that executes the given function and yields its result.
+     * \brief
+     * Constructs a command that executes the given function and yields its result.
+     *
+     * \sa
+     * PureExt
      */
     public static Command<T> Pure(Func<T> f) => new PureCommand<T>(f);
 
     /**
-     * Returns a command with no effects and a null result object.
+     * \brief
+     * Constructs a command that does nothing and yields a null result.
      */
     public static Command<object> Empty => Action(() => { return; });
 
+    /**
+     * \brief
+     * Chains this command with an Action.
+     *
+     * \sa
+     * ActionCommand
+     * PureExt
+     * BindExt
+     */
     public Command<object> ThenAction(Action<T> continuation) {
       return this.Then(t => Command<object>.Action(() => continuation(t)));
     }
   }
 
   /**
-   * An invented command is a command that just executes a given function.
+   * \brief
+   * An invented command is a command that just executes a given function as its IEnumerator.
+   *
+   * \sa
+   * Command::Invent
    */
   class InventedCommand<T> : Command<T> {
     private Func<IEnumerator> invention;
@@ -61,6 +105,14 @@ namespace Commands {
     }
   }
 
+  /**
+   * \brief
+   * A Command that invokes a given Action to create effects and has a
+   * null result.
+   *
+   * \sa
+   * Command::ThenAction
+   */
   class ActionCommand : Command<object> {
     private Action action;
     public ActionCommand(Action action) {
@@ -74,6 +126,10 @@ namespace Commands {
     }
   }
 
+  /**
+   * \brief
+   * A Command that invokes a given function to compute its result.
+   */
   class PureCommand<T> : Command<T> {
     private Func<T> f;
     public PureCommand(Func<T> f) {
@@ -87,11 +143,18 @@ namespace Commands {
   }
 
   /**
-   * This is a composite command that runs the given command, and then
-   * feeds the result of that command into the provided continuation to
-   * compute a new command that is executed.
-   * Essentially, this is a monadic bind operation.
-   * This class is used internally to implement the `Then` method of Command.
+   * \brief
+   * Runs one Command, and feeds its result into a Func that
+   * computes the next Command to run.
+   *
+   * This is a composite Command that runs the given Command, and then
+   * feeds the result of that Command into the provided Func to
+   * compute a new Command to run.
+   *
+   * Essentially, this is a _monadic bind operation_.
+   *
+   * \sa
+   * BindExt::Then
    */
   class BindCommand<S, T> : Command<T> {
     private Func<S, Command<T>> continuation;
@@ -115,10 +178,17 @@ namespace Commands {
   }
   
   /**
+   * \brief
    * A compound command that executes two coroutines at once, by interleaving them.
+   *
    * This command ends when either of its subcommands ends, returning
    * the result in an Either.
-   * WARNING: using Race is somewhat dangerous because it completely
+   *
+   * \sa
+   * RaceExt::And
+   *
+   * \warning
+   * Using Race is somewhat dangerous because it completely
    * ignores what the underlying coroutines being raced return.
    * This means that returning things such as WaitForSeconds from the
    * component coroutines will not work!
@@ -154,6 +224,7 @@ namespace Commands {
 
   public static class PureExt {
     /**
+     * \brief
      * Actually, this is fmap.
      */
     public static Command<R> ThenPure<T, R>(this Command<T> self, Func<T, R> k) {
@@ -163,30 +234,64 @@ namespace Commands {
   
   public static class BindExt {
     /**
-     * Sequences a command to occur after this command.
-     * The next command can access the result of the current command,
-     * and use this result to determine which next command should be
-     * executed.
+     * \brief
+     * Sequences a command after this one by passing the result of
+     * this command to a given function that computes a new command.
      */
     public static Command<R> Then<T, R>(this Command<T> self, Func<T, Command<R>> k) {
       return new BindCommand<T, R>(self, k);
     }
   }
 
+  /**
+   * \brief
+   * Extension methods for transforming an IEnumerable into a Command.
+   */
   public static class TraverseExt {
+    /**
+     * \brief
+     * Computes a command for each element of an IEnumerable and
+     * sequences all the commands.
+     *
+     * The results of the commands are collected into a List that
+     * becomes the result of this command.
+     *
+     * \sa
+     * SequenceExt::Sequence
+     */
     public static Command<List<R>> Traverse<T, R>(this IEnumerable<T> self, Func<T, Command<R>> f) {
       return self.Select(x => f(x)).Sequence();
     }
 
+    /**
+     * \brief
+     * Computes a unit command for each element of an IEnumerable and sequences all the commands.
+     *
+     * The results of the commands are thrown away. (They're all null anyway.)
+     *
+     * \sa
+     * SequenceExt::Sequence_
+     */
     public static Command<object> Traverse_<T>(this IEnumerable<T> self, Func<T, Command<object>> f) {
       return self.Select(x => f(x)).Sequence_();
     }
   }
 
+  /**
+   * \brief
+   * Extension methods for collapsing an IEnumerable<Command> into a single Command.
+   */
   public static class SequenceExt {
     /**
+     * \brief
      * Compiles a sequence of commands into a single command that
      * executes the sequence.
+     *
+     * The results of the commands are collected into a list that is
+     * yielded as the result of this command.
+     *
+     * \sa
+     * TraverseExt::Traverse
      */
     public static Command<List<T>> Sequence<T>(this IEnumerable<Command<T>> self) {
       var list = new List<T>();
@@ -197,6 +302,16 @@ namespace Commands {
       return acc.ThenPure(_ => list);
     }
 
+    /**
+     * \brief
+     * Compiles a sequence of commands into a single command that
+     * executes the sequence.
+     *
+     * The results of the commands are thrown away. (They're null anyway.)
+     *
+     * \sa
+     * TraverseExt::Traverse_
+     */
     public static Command<object> Sequence_(this IEnumerable<Command<object>> self) {
       var acc = Command<object>.Empty;
       foreach(var cmd in self) {
@@ -206,7 +321,15 @@ namespace Commands {
     }
   }
   
+  /**
+   * \brief
+   * Extension methods for performing multiple Commands concurrently.
+   */
   public static class RaceExt {
+    /**
+     * \brief
+     * Runs the given Command concurrently with this once.
+     */
     public static Command<Either<T, S>> And<T, S>(this Command<T> self, Command<S> that) {
       return new Race<T, S>(self, that);
     }

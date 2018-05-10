@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace Commands {
+  /**
+     \brief
+     Fades an InteractionMenu in or out.
+   */ 
   public class FadeInteractionMenu : Command<object> {
     public const float DEFAULT_FADE_TIME = 0.35f;
 

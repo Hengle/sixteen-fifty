@@ -5,7 +5,8 @@ using UnityEngine;
 
 namespace Commands {
   /**
-   * Moves a transform to a given destination using a speed.
+   * \brief
+   * Linearly moves a transform to a given destination using a speed.
    */
   public class MoveTransform : Command<object> {
     // in units per *second*

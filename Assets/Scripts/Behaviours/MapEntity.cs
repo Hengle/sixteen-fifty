@@ -6,23 +6,35 @@ using UnityEngine;
 using Commands;
 
 /**
- * A mapentity component should be attached to any objects that exist
- * on top of the map, at particular coordinates.
+ * \brief
+ * A behaviour for things that exist within a HexGrid at specific
+ * coordinates and can move around.
+ *
+ * This class only handles *positions*, and raises appropriate events
+ * when the entity enters / leaves a cell, changes orientations while
+ * moving, etc.
+ *
+ * In order to render a MapEntity, define a HexMapEntity asset and
+ * connect the MapEntity with the HexMapEntity using the
+ * MapOrientation behaviour.
  */
 public class MapEntity : MonoBehaviour {
   /**
+   * \brief
    * How fast the player moves, in units per seconds.
    */
   public const float MOVE_SPEED = 6f;
 
+  private HexCell currentCell;
   /**
+   * \brief
    * The cell the entity is currently occupying.
-   * Note: while the player is in motion, this value becomes stale
-   * until the player enters at a new cell.
+
+   * While the player is in motion, this value becomes stale until the
+   * player enters at a new cell.
    * Every time the player passes through a cell, this value gets
    * updated.
    */
-  private HexCell currentCell;
   public HexCell CurrentCell {
     get {
       return currentCell;
@@ -35,26 +47,54 @@ public class MapEntity : MonoBehaviour {
     }
   }
 
+  /**
+   * \brief
+   * Raised when the MapEntity leaves a cell on the HexGrid.
+   */
   public event Action<MapEntity> LeaveCell;
+
+  /**
+   * \brief
+   * Raised when the MapEntity enters a cell on the HexGrid.
+   */
   public event Action<MapEntity> EnterCell;
 
-  public event Action<MapEntity> BeginMove;
   /**
-   * Note that when this is fired, MovementCancelled will be false if
+   * \brief
+   * Raised when the MapEntity begins to move.
+   */
+  public event Action<MapEntity> BeginMove;
+
+  /**
+   * \brief
+   * Raised when the MapEntity ends its move. (i.e. It has arrived at its destination.)
+   *
+   * Note that when this is fired, #MovementCancelled will be false if
    * the move was cancelled.
    */
   public event Action<MapEntity> EndMove;
 
   /**
+   * \brief
    * Raised during movement whenever there's a change of direction.
+   *
+   * \sa
+   * MapOrientation
    */
   public event Action<MapEntity, HexDirection> ChangeDirection;
 
   private Coroutine movement;
 
+  /**
+   * \brief
+   * Is the MapEntity currently in motion?
+   */
   public bool IsMoving => movement != null;
 
   /**
+   * \brief
+   * Was the players movement cancelled?
+   *
    * If the player's movement is cancelled, then the player will stop
    * moving when it arrives at its next intermediate destination,
    * after raising the EnterCell event.
@@ -64,10 +104,20 @@ public class MapEntity : MonoBehaviour {
     private set;
   }
 
+  /**
+   * \brief
+   * The grid in which the MapEntity exists.
+   *
+   * Initialized during #Awake.
+   */
   public HexGrid grid;
 
   /**
+   * \brief
    * Teleports the entity instantly to the given cell.
+   *
+   * This will correctly adjust #CurrentCell but it does not raise
+   * #LeaveCell or #EnterCell.
    */
   public void Warp(HexCell cell) {
     Debug.Assert(null != cell);
@@ -75,14 +125,23 @@ public class MapEntity : MonoBehaviour {
     transform.localPosition = cell.coordinates.ToPosition();
   }
 
+  /**
+   * \brief
+   * Teleports the entity instantly to the cell at the given coordinates.
+   */
   public void Warp(HexCoordinates coords) {
     Warp(grid[coords]);
   }
 
   /**
+   * \brief
    * Cancels the entity's movement.
+   *
    * Calling this function is a no-op (but issues a warning) if the
    * entity is not moving.
+   *
+   * \sa
+   * #MovementCancelled
    */
   public void CancelMovement() {
     if(null == movement) {
@@ -98,20 +157,23 @@ public class MapEntity : MonoBehaviour {
   }
 
   /**
-   * Asynchronously begins moving the entity along the given path.
-   * The path's cells should all be sequentially adjacent.
-   * The path should not include the cell that the entity is currently
-   * on.
-   * Fires BeginMove when the move actually starts and fires EndMove
-   * when the movement ends.
-   * Fires LeaveCell and EnterCell as the player traverses various
-   * cells.
-   * It's only possible to cancel a move before any cells have been
-   * traversed from BeginMove.
-   * LeaveCell is raised too late (after checking MovementCancelled).
-   * Note that EndMove will be called even when a move is cancelled,
-   * and that MovementCancelled will be `true` during the call to the
-   * handler.
+     \brief
+     Asynchronously begins moving the entity along the given path.
+    
+     - The path's cells should all be sequentially adjacent.
+     - The path should not include the cell that the entity is
+       currently on.
+     - Fires #BeginMove when the move actually starts and fires
+       #EndMove when the movement ends.
+     - Fires #LeaveCell and #EnterCell as the player traverses
+       various cells.
+     - Movement can be cancelled from the #BeginMove and #EnterCell
+       event handlers.
+       (#LeaveCell is raised too late, only _after_ checking
+       #MovementCancelled).
+     - #EndMove will be raised even when a move is
+       cancelled, and that #MovementCancelled will be `true` during the
+       call to the handler.
    */
   public void MoveFollowingPath(IEnumerable<HexCell> path, float moveSpeed = DoMoveFollowingPath.DEFAULT_MOVE_SPEED) {
     if(null != movement) {

@@ -6,6 +6,15 @@ using UnityEngine.EventSystems;
 
 using Commands;
 
+/**
+ * \brief
+ * Controls an InteractionMenu.
+ *
+ * This IScript is used to manage an InteractionMenu, including fading
+ * it in and out, waiting for the user to click on an option or to
+ * dismiss the menu, and running the EventScript associated with the
+ * chosen Interaction.
+ */
 public class ControlInteractionMenu : IScript {
   IEnumerable<Interaction> interactions;
   PlayerController player;

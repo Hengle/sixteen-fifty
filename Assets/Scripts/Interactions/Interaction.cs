@@ -2,6 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/**
+ * An interaction is essentially just a named EventScript.
+ * Typically, menus are populated with buttons created from a list of interactions.
+ */
 [System.Serializable]
 public struct Interaction {
   /**

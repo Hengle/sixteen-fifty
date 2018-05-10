@@ -5,9 +5,8 @@ using UnityEngine.EventSystems;
 
 namespace Commands {
   /**
-   * A command that completes when a click is made to the main event panel.
-   * The main event panel is an invisible panel used to block
-   * interactions with the game below.
+   * \brief
+   * A command that completes when the EventOverlayPanel is clicked.
    */
   public class AwaitClick : Command<object> {
     private EventRunner runner;

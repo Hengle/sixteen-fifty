@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /**
- * A behaviour for orientable sprites.
- * Automatically hooks up to a MapEntity component, if present, and
- * watches the ChangeDirection event.
+ * \brief
+ * Renders a HexMapEntity in the correct orientation.
+ * This component connects a HexMapEntity to a MapEntity.
  */
 [RequireComponent(typeof(SpriteRenderer))]
 public class MapOrientation : MonoBehaviour {
@@ -13,6 +13,13 @@ public class MapOrientation : MonoBehaviour {
 
   public HexMapEntity hexMapEntity;
 
+  /**
+   * \brief
+   * The current orientation of the MapEntity.
+   *
+   * Setting this property changes which Sprite the SpriteRenderer
+   * will draw.
+   */
   public HexDirection Orientation {
     get { return orientation; }
     set {
@@ -22,9 +29,21 @@ public class MapOrientation : MonoBehaviour {
     }
   }
 
+  /**
+   * \brief
+   * The renderer to use to draw the HexMapEntity's Sprites.
+   *
+   * Initialized in ::Awake.
+   */
   [SerializeField]
   new private SpriteRenderer renderer;
 
+  /**
+   * \brief
+   * The MapEntity to monitor for orientation changes.
+   * 
+   * Initialized in ::OnEnable.
+   */
   [SerializeField]
   private MapEntity mapEntity;
 
@@ -47,6 +66,10 @@ public class MapOrientation : MonoBehaviour {
     mapEntity.ChangeDirection -= OnChangeDirection;
   }
 
+  /**
+   * \brief
+   * Handles ::mapEntity::ChangeDirection.
+   */
   void OnChangeDirection(MapEntity me, HexDirection d) {
     Orientation = d;
   }

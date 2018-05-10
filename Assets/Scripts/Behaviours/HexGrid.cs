@@ -6,19 +6,56 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
+/**
+ * \brief
+ * A controller for the HexMap model.
+
+ * The HexGrid represents a hexagonal grid map.
+ */
 public class HexGrid : MonoBehaviour, IPointerClickHandler {
+  /**
+   * \brief
+   * The prefab for HexCells.
+   */
   public GameObject cellPrefab;
+
+  /**
+   * \brief
+   * Used to instantiate the NPCs listed in map model.
+   */
   public GameObject npcPrefab;
 
+  /**
+   * \brief
+   * The map to render as a HexGrid.
+   */
   public HexMap map;
 
+  /**
+   * \brief
+   * Used to handle clicks on the grid.
+   */
   new public BoxCollider collider;
   
+  /**
+   * \brief
+   * The actual cells inside the map.
+   */
   HexCell[] cells;
 
+  /**
+   * \brief
+   * Raised when a HexCell is tapped by the user.
+   */
   public event Action<HexCell> CellDown;
 
   /**
+   * \brief
+   * A pathfinding algorithm from a source HexCoordinates to a
+   * destination HexCoordinates within this HexGrid.
+   *
+   * This is an implementation of Dijkstra's algorithm.
+   *
    * Generates a sequence of cells (excluding the cell at the source
    * position) that goes from the source coordinates to the
    * destination coordinates.
@@ -92,6 +129,10 @@ public class HexGrid : MonoBehaviour, IPointerClickHandler {
     StateManager.Instance.eventManager.BeginScript(this, map.mapLoad);
   }
 
+  /**
+   * \brief
+   * Intialize each BasicNPC from map::npcs.
+   */
   void SetupNPCs() {
     foreach(var npc in map.npcs) {
       npc.Construct(npcPrefab, this, transform);
@@ -141,7 +182,9 @@ public class HexGrid : MonoBehaviour, IPointerClickHandler {
   }
 
   /**
+   * \brief
    * Gets the cell in the grid at the given coordinates.
+   *
    * Returns null if the coordinates are bogus (do not refer to a real
    * cell / are out of bounds.)
    */
@@ -154,7 +197,10 @@ public class HexGrid : MonoBehaviour, IPointerClickHandler {
   }
 
   /**
-   * An exception-throwing variant of this[p].
+   * \brief
+   * Gets the cell in the grid at the given coordinates.
+   *
+   * An exception-throwing variant of `this[p]`.
    * If the identified cell does not exist, throws a NullReferenceException.
    */
   public HexCell at(HexCoordinates p) {
