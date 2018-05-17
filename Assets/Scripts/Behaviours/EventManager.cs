@@ -6,43 +6,59 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
 /**
- * Handler for scripted events such as dialogue.
+ * \brief
+ * Handler for scripted events.
  */
 public class EventManager : MonoBehaviour {
 
   private EventRunner currentEvent;
-  public Canvas Canvas {
+
+  public RectTransform RectTransform {
     get;
     private set;
   }
 
+  /**
+   * \brief
+   * The current interaction menu present in the game.
+   */
   public InteractionMenu interactionMenu;
 
-  public Image TextBox {
-    get;
-    private set;
-  }
+  /**
+   * \brief
+   * The box that houses the dialogue text.
+   */
+  public Image dialogueTextBox;
 
-  public Text Text {
-    get;
-    private set;
-  }
+  /**
+   * \brief
+   * The text object that holds dialogue text.
+   */
+  public Text dialogueText;
 
-  public Image SecretPanel {
-    get;
-    private set;
-  }
+  /**
+   * \brief
+   * A panel used to cover the entire screen with black.
+   */
+  public Image fadeToBlackPanel;
 
-  public Image TitleScreen {
-    get;
-    private set;
-  }
+  /**
+   * \brief
+   * Used to display full-screen images (e.g. title screen)
+   */
+  public Image fullscreenImage;
 
-  public CanvasGroup CanvasGroup {
-    get;
-    private set;
-  }
+  /**
+   * \brief
+   * Houses all dialogue system related objects.
+   * Controlling the alpha of this CanvasGroup is used to fade in and out the dialogue system.
+   */
+  public CanvasGroup DialogueSystemCanvasGroup;
 
+  /**
+   * \brief
+   * A prefab used to create talking heads.
+   */
   public GameObject speakerPrefab;
 
   /**
@@ -61,10 +77,10 @@ public class EventManager : MonoBehaviour {
    */
   public bool BlocksRaycasts {
     get {
-      return CanvasGroup.blocksRaycasts;
+      return DialogueSystemCanvasGroup.blocksRaycasts;
     }
     set {
-      CanvasGroup.blocksRaycasts = value;
+      DialogueSystemCanvasGroup.blocksRaycasts = value;
     }
   }
 
@@ -72,14 +88,8 @@ public class EventManager : MonoBehaviour {
 	void Awake () {
     // we become the current event manager upon initialization;
     StateManager.Instance.eventManager = this;
-    Canvas = this.GetComponentNotNull<Canvas>();
-    TextBox = this.GetComponentInChildrenNotNull<Image>();
-    Text = this.GetComponentInChildrenNotNull<Text>();
-    CanvasGroup = this.GetComponentInChildrenNotNull<CanvasGroup>();
-    SecretPanel = transform.Find("CanvasGroup/Secret Panel").GetComponent<Image>();
-    Debug.Assert(null != SecretPanel, "secret panel was found");
-    TitleScreen = transform.Find("CanvasGroup/Title Screen").GetComponent<Image>();
-
+    RectTransform = GetComponent<RectTransform>();
+    Debug.Assert(null != RectTransform, "EventManager RectTransform is not null.");
     BlocksRaycasts = false;
 	}
 

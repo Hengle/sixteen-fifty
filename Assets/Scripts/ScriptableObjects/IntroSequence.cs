@@ -10,8 +10,8 @@ public class IntroSequence : EventScript {
 
   public override Command<object> GetScript(EventRunner runner) {
     var manager = runner.Manager;
-    var s = manager.SecretPanel;
-    var t = manager.TitleScreen;
+    var s = manager.fadeToBlackPanel;
+    var t = manager.fullscreenImage;
     return Command<object>
       // display the title screen
       // and make the secret panel full black

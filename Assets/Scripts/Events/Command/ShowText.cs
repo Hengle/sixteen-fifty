@@ -30,16 +30,16 @@ namespace Commands {
 
       emgr.MainPanelClicked += OnClick;
 
-      emgr.Text.text = "";
+      emgr.dialogueText.text = "";
 
       foreach(char c in text.ToCharArray()) {
         if(clicked)
           break;
-        emgr.Text.text += c;
+        emgr.dialogueText.text += c;
         yield return new WaitForSeconds(CHARACTER_TIME);
       }
 
-      emgr.Text.text = text;
+      emgr.dialogueText.text = text;
 
       emgr.MainPanelClicked -= OnClick;
 

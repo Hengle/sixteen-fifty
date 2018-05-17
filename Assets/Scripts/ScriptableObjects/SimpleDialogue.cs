@@ -17,7 +17,7 @@ public class SimpleDialogue : EventScript {
   public override Command<object> GetScript(EventRunner runner) {
     var manager = runner.Manager;
 
-    var t = manager.Canvas.GetComponent<RectTransform>();
+    var t = manager.GetComponent<RectTransform>();
     var speakers = new List<Speaker>();
     return Command<object>.Action(() => manager.BlocksRaycasts = true)
       .ThenPure(
@@ -34,9 +34,9 @@ public class SimpleDialogue : EventScript {
         .ToList())
       .Then(
         ss => ss.Traverse_(s => Lerp.FadeSpriteRenderer(s.GetComponent<SpriteRenderer>(), FadeDirection.IN)))
-      .Then(_ => Lerp.FadeImage(runner.Manager.TextBox, FadeDirection.IN))
+      .Then(_ => Lerp.FadeImage(runner.Manager.dialogueTextBox, FadeDirection.IN))
       .Then(_ => new Paragraph(runner, messages))
-      .Then(_ => Lerp.FadeImage(runner.Manager.TextBox, FadeDirection.OUT))
+      .Then(_ => Lerp.FadeImage(runner.Manager.dialogueTextBox, FadeDirection.OUT))
       .Then(
         _ => speakers.Traverse_(
           s => Lerp.FadeSpriteRenderer(s.GetComponent<SpriteRenderer>(), FadeDirection.OUT)))

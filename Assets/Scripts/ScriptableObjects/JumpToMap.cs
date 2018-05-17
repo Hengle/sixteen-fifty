@@ -13,7 +13,7 @@ public class JumpToMap : EventScript {
       .Action(
         () => {
           var hexGridManager = StateManager.Instance.hexGridManager;
-          var grid = hexGridManager.LoadMap(map);
+          hexGridManager.LoadMap(map);
           var player = hexGridManager.SpawnPlayer();
           player.mapEntity.Warp(coords);
         });
