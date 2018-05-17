@@ -13,9 +13,6 @@ public struct NPCSettings {
     ip.x = x;
     ip.y = y;
 
-    var me = prefab.GetComponent<MapEntity>();
-    me.grid = grid;
-
     var mo = prefab.GetComponent<MapOrientation>();
     mo.hexMapEntity = npc.mapSprite;
     mo.Orientation = npc.orientation;
@@ -28,7 +25,6 @@ public struct NPCSettings {
     ip.x = default(int);
     ip.y = default(int);
     interactable.npcData = default(BasicNPC);
-    me.grid = default(HexGrid);
     mo.Orientation = default(HexDirection);
     mo.hexMapEntity = default(HexMapEntity);
 

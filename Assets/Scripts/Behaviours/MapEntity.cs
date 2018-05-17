@@ -110,7 +110,10 @@ public class MapEntity : MonoBehaviour {
    *
    * Initialized during #Awake.
    */
-  public HexGrid grid;
+  public HexGrid Grid {
+    get;
+    private set;
+  }
 
   /**
    * \brief
@@ -130,7 +133,7 @@ public class MapEntity : MonoBehaviour {
    * Teleports the entity instantly to the cell at the given coordinates.
    */
   public void Warp(HexCoordinates coords) {
-    Warp(grid[coords]);
+    Warp(Grid[coords]);
   }
 
   /**
@@ -153,7 +156,7 @@ public class MapEntity : MonoBehaviour {
   }
 
   void Awake () {
-    grid = this.GetComponentInParentNotNull<HexGrid>();
+    Grid = this.GetComponentInParentNotNull<HexGrid>();
   }
 
   /**
@@ -175,7 +178,10 @@ public class MapEntity : MonoBehaviour {
        cancelled, and that #MovementCancelled will be `true` during the
        call to the handler.
    */
-  public void MoveFollowingPath(IEnumerable<HexCell> path, float moveSpeed = DoMoveFollowingPath.DEFAULT_MOVE_SPEED) {
+  public void MoveFollowingPath(
+    IEnumerable<HexCell> path,
+    float moveSpeed = DoMoveFollowingPath.DEFAULT_MOVE_SPEED) {
+
     if(null != movement) {
       Debug.LogError(name + " tried to start moving when already moving!");
       return;
@@ -193,9 +199,12 @@ public class MapEntity : MonoBehaviour {
           if(null != EndMove)
             EndMove(this);
           movement = null;
+          Debug.Log("movement nulled out");
           MovementCancelled = false;
         })
       .GetCoroutine());
+
+    Debug.Log("movement set!");
   }
 
   class DoMoveFollowingPath : Command<object> {

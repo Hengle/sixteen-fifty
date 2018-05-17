@@ -16,12 +16,13 @@ using Commands;
  * chosen Interaction.
  */
 public class ControlInteractionMenu : IScript {
+  const float MENU_OFFSET = 4f;
   IEnumerable<Interaction> interactions;
-  PlayerController player;
+  Vector3 target;
 
-  public ControlInteractionMenu(PlayerController player, IEnumerable<Interaction> interactions) {
+  public ControlInteractionMenu(Vector3 target, IEnumerable<Interaction> interactions) {
     this.interactions = interactions;
-    this.player = player;
+    this.target = target;
   }
 
   public Command<object> GetScript(EventRunner runner) {
@@ -36,11 +37,12 @@ public class ControlInteractionMenu : IScript {
       Command<object>.Action(() => manager.BlocksRaycasts = true)
       .Then(
         _ => {
-          var target = player.transform.position;
-          target.z = Camera.main.transform.position.z;
-          return new MoveTransform(Camera.main.transform, target);
+          // make a copy
+          var t = target;
+          t.z = Camera.main.transform.position.z;
+          return new MoveTransform(Camera.main.transform, t);
         })
-      .ThenAction(_ => menu.transform.position = player.transform.position - new Vector3(4f, 0f, 0f))
+      .ThenAction(_ => menu.transform.position = target - new Vector3(MENU_OFFSET, 0f, 0f))
       .ThenAction(_ => menu.CreateMenu(interactions))
       .ThenAction(_ => menu.MenuActive = true)
       .Then(_ => new FadeInteractionMenu(menu, FadeDirection.IN))

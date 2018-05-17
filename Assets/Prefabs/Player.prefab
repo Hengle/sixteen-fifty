@@ -19,10 +19,11 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4986000023483944}
-  - component: {fileID: 114209836436637078}
   - component: {fileID: 114860618602737832}
-  - component: {fileID: 212201995614174652}
+  - component: {fileID: 114209836436637078}
   - component: {fileID: 114933590884988850}
+  - component: {fileID: 212201995614174652}
+  - component: {fileID: 114904052526100102}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -66,8 +67,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 19f788869593c4dc6a348d947fcdcd5b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  grid: {fileID: 0}
   mapEntity: {fileID: 0}
+  clickToInteract: {fileID: 0}
+--- !u!114 &114904052526100102
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1813968912732676}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e462f85228e54959a2bb0f0aec99191, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114933590884988850
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -95,6 +107,7 @@ SpriteRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RenderingLayerMask: 4294967295
   m_Materials:
   - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
   m_StaticBatchInfo:

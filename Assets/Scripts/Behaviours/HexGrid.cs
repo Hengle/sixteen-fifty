@@ -1,18 +1,20 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System;
+﻿using System;
 using System.Linq;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.UI;
 
-/**
- * \brief
- * A controller for the HexMap model.
-
- * The HexGrid represents a hexagonal grid map.
- */
 public class HexGrid : MonoBehaviour, IPointerClickHandler {
+  /**
+   * \brief
+   * The HexMap represented by this grid.
+   */
+  public HexMap Map {
+    get;
+    private set;
+  }
+  
   /**
    * \brief
    * The prefab for HexCells.
@@ -24,12 +26,6 @@ public class HexGrid : MonoBehaviour, IPointerClickHandler {
    * Used to instantiate the NPCs listed in map model.
    */
   public GameObject npcPrefab;
-
-  /**
-   * \brief
-   * The map to render as a HexGrid.
-   */
-  public HexMap map;
 
   /**
    * \brief
@@ -49,6 +45,136 @@ public class HexGrid : MonoBehaviour, IPointerClickHandler {
    */
   public event Action<HexCell> CellDown;
 
+	// Use this for initialization
+	void Start () {
+		
+	}
+	
+	// Update is called once per frame
+	void Update () {
+		
+	}
+
+  public void Setup (HexMap map) {
+    Debug.Assert(Map == null, "Map has been set up only once.");
+    Map = map;
+    SetupGrid(map);
+    SetupNPCs(map.npcs);
+  }
+
+  /**
+   * \brief
+   * Intialize each BasicNPC from map::npcs.
+   */
+  void SetupNPCs(IEnumerable<NPCSettings> npcs) {
+    foreach(var npc in npcs) {
+      npc.Construct(npcPrefab, this, transform);
+    }
+  }
+
+  void SetupGrid(HexMap map) {
+    // our cell grid is as big as the map
+    cells = new HexCell[map.tiles.Length];
+
+    for(int i = 0; i < map.tiles.Length; i++) {
+      var x = i % map.width;
+      var y = i / map.width;
+      var tile = map.tiles[i];
+      cells[i] = CreateCell(x, y, tile);
+      cells[i].SortingOrder = (map.height - y - 1) * 4 + (x % 2) * 2;
+      // we set the sorting order to 0 for the top row,
+      // 2 for the offset row, 4 for the next row, and so on.
+      // The idea is to put the player on the odd-numbered orders in
+      // between, so that the player can appear *behind* parts of the
+      // map.
+      // This is easy, when a player enters a cell, we set the
+      // player's sorting order to be one greater than the cell
+      // they're on.
+    }
+
+    var bounds = HexMetrics.Bounds(map.width, map.height);
+
+    // compute the bounding box of our hex-map
+    collider.size = bounds;
+    // and shift it over so it actually contains our hex whose center is at the origin.
+    collider.center = bounds * (1/2f) - new Vector2(HexMetrics.OUTER_WIDTH, HexMetrics.FULL_HEIGHT);
+  }
+
+  HexCell CreateCell (int x , int y, HexTile tile) {
+    // define the position for our tile
+    HexCoordinates coordinates = HexCoordinates.FromOffsetCoordinates(x, y);
+    Vector2 position = coordinates.ToPosition();
+
+    var cell = HexCell.Construct(cellPrefab, tile);
+
+    // make the cell belong to the grid, by reparenting its transform
+    cell.coordinates = coordinates;
+    cell.transform.SetParent(transform, false);
+    cell.transform.localPosition = position.Upgrade();
+
+    return cell;
+  }
+
+  /**
+   * \brief
+   * Gets the cell in the grid at the given coordinates.
+   *
+   * Returns null if the coordinates are bogus (do not refer to a real
+   * cell / are out of bounds.)
+   */
+  public HexCell this[HexCoordinates p] {
+    get {
+      var oc = p.ToOffsetCoordinates();
+      var i = oc.Item1 + oc.Item2 * Map.width;
+      return i >= 0 && i < cells.Length ? cells[i] : null;
+    }
+  }
+
+  /**
+   * \brief
+   * Gets the cell in the grid at the given coordinates.
+   *
+   * An exception-throwing variant of `this[p]`.
+   * If the identified cell does not exist, throws a NullReferenceException.
+   */
+  public HexCell at(HexCoordinates p) {
+    var cell = this[p];
+    if(null == cell)
+      throw new NullReferenceException("No such cell at " + p.ToString());
+    return cell;
+  }
+
+  public void OnPointerClick(PointerEventData data) {
+    // if we're doing a drag, then click-to-move shouldn't work
+    if(data.dragging)
+      return;
+    
+    Debug.Log("Clicked on grid!");
+    if(data.button == 0) {
+      TouchCell(data.pointerPressRaycast.worldPosition);
+    }
+  }
+
+  void TouchCell (Vector3 worldPosition) {
+    // the input position is in world-space, so we inverse transform
+    // it to obtain coordinates relative to our hexgrid.
+    var position = transform.InverseTransformPoint(worldPosition);
+    // then we convert from grid-origin cartesian coordinates to hex
+    // coordinates.
+    var coordinates = HexCoordinates.FromPosition(position);
+    // Get the cell at those hex coordinates.
+    var cell = this[coordinates];
+    if(cell == null) {
+      Debug.LogWarning("touched bogus position");
+      return;
+    }
+
+    Debug.Log("Touched at " + coordinates.ToString() + "; raising CellDown");
+    // raise the CellDown event passing in the cell that was clicked.
+
+    if(CellDown != null)
+        CellDown(cell);
+  }
   /**
    * \brief
    * A pathfinding algorithm from a source HexCoordinates to a
@@ -99,7 +225,7 @@ public class HexGrid : MonoBehaviour, IPointerClickHandler {
       // and enqueue them to be explored later.
       foreach(var d in ds) {
         // we say that we arrived at cell `d` from `cell`.
-        Debug.Log(cell.ToString() + " -> " + d.ToString());
+        // Debug.Log(cell.ToString() + " -> " + d.ToString());
         cameFrom.Add(d, cell);
         // we add these new cells to our frontier.
         q.Enqueue(d);
@@ -118,127 +244,5 @@ public class HexGrid : MonoBehaviour, IPointerClickHandler {
     else {
       return null;
     }
-  }
-
-  void Awake () {
-    SetupGrid();
-    SetupNPCs();
-  }
-
-  void Start() {
-    StateManager.Instance.eventManager.BeginScript(this, map.mapLoad);
-  }
-
-  /**
-   * \brief
-   * Intialize each BasicNPC from map::npcs.
-   */
-  void SetupNPCs() {
-    foreach(var npc in map.npcs) {
-      npc.Construct(npcPrefab, this, transform);
-    }
-  }
-
-  void SetupGrid() {
-    // our cell grid is as big as the map
-    cells = new HexCell[map.tiles.Length];
-
-    for(int i = 0; i < map.tiles.Length; i++) {
-      var x = i % map.width;
-      var y = i / map.width;
-      var tile = map.tiles[i];
-      cells[i] = CreateCell(x, y, tile);
-      cells[i].SortingOrder = (map.height - y - 1) * 4 + (x % 2) * 2;
-      // we set the sorting order to 0 for the top row,
-      // 2 for the offset row, 4 for the next row, and so on.
-      // The idea is to put the player on the odd-numbered orders in
-      // between, so that the player can appear *behind* parts of the
-      // map.
-      // This is easy, when a player enters a cell, we set the
-      // player's sorting order to be one greater than the cell
-      // they're on.
-    }
-
-    var bounds = HexMetrics.Bounds(map.width, map.height);
-
-    // compute the bounding box of our hex-map
-    collider.size = bounds;
-    // and shift it over so it actually contains our hex whose center is at the origin.
-    collider.center = bounds * (1/2f) - new Vector2(HexMetrics.OUTER_WIDTH, HexMetrics.FULL_HEIGHT);
-  }
-
-  HexCell CreateCell (int x , int y, HexTile tile) {
-    // define the position for our tile
-    HexCoordinates coordinates = HexCoordinates.FromOffsetCoordinates(x, y);
-    Vector2 position = coordinates.ToPosition();
-
-    var cell = HexCell.Construct(cellPrefab, tile);
-    // make the cell belong to the grid, by reparenting its transform
-    cell.coordinates = coordinates;
-    cell.transform.SetParent(transform, false);
-    cell.transform.localPosition = position.Upgrade();
-
-    return cell;
-  }
-
-  /**
-   * \brief
-   * Gets the cell in the grid at the given coordinates.
-   *
-   * Returns null if the coordinates are bogus (do not refer to a real
-   * cell / are out of bounds.)
-   */
-  public HexCell this[HexCoordinates p] {
-    get {
-      var oc = p.ToOffsetCoordinates();
-      var i = oc.Item1 + oc.Item2 * map.width;
-      return i >= 0 && i < cells.Length ? cells[i] : null;
-    }
-  }
-
-  /**
-   * \brief
-   * Gets the cell in the grid at the given coordinates.
-   *
-   * An exception-throwing variant of `this[p]`.
-   * If the identified cell does not exist, throws a NullReferenceException.
-   */
-  public HexCell at(HexCoordinates p) {
-    var cell = this[p];
-    if(null == cell)
-      throw new NullReferenceException("No such cell at " + p.ToString());
-    return cell;
-  }
-
-  public void OnPointerClick(PointerEventData data) {
-    // if we're doing a drag, then click-to-move shouldn't work
-    if(data.dragging)
-      return;
-    
-    Debug.Log("Clicked on grid!");
-    if(data.button == 0) {
-      TouchCell(data.pointerPressRaycast.worldPosition);
-    }
-  }
-
-  void TouchCell (Vector3 worldPosition) {
-    // the input position is in world-space, so we inverse transform
-    // it to obtain coordinates relative to our hexgrid.
-    var position = transform.InverseTransformPoint(worldPosition);
-    // then we convert from grid-origin cartesian coordinates to hex
-    // coordinates.
-    var coordinates = HexCoordinates.FromPosition(position);
-    // Get the cell at those hex coordinates.
-    var cell = this[coordinates];
-    if(cell == null) {
-      Debug.LogWarning("touched bogus position");
-      return;
-    }
-
-    Debug.Log("Touched at " + coordinates.ToString() + "; raising CellDown");
-    // raise the CellDown event passing in the cell that was clicked.
-
-    if(CellDown != null)
-        CellDown(cell);
   }
 }

@@ -5,7 +5,6 @@ using UnityEngine.SceneManagement;
 
 public class Loader : MonoBehaviour {
   public GameObject stateManagerPrefab;
-
   public string initialScene;
 
 	void Awake () {

@@ -15,4 +15,6 @@ MonoBehaviour:
   interactions:
   - name: Talk
     script: {fileID: 11400000, guid: 8a045c9cdf1d549ad82fb0632de2bf99, type: 2}
+  - name: Leave
+    script: {fileID: 11400000, guid: 7459c0bdd311d4054ac4984f6f06451c, type: 2}
   orientation: 0

@@ -11,6 +11,7 @@ public class StateManager : MonoBehaviour {
 
   public EventManager eventManager;
   public PlayerController playerController;
+  public HexGridManager hexGridManager;
 
   private StateManager() {
     
