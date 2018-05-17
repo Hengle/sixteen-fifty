@@ -11,7 +11,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae6675d35be7a49a4bf1f80e077c6a8a, type: 3}
   m_Name: test map
   m_EditorClassIdentifier: 
-  mapLoad: {fileID: 11400000, guid: e22e67294cdbd456bb85cb1c4fe17405, type: 2}
+  mapLoad: {fileID: 0}
   width: 8
   initialPlayerX: 2
   initialPlayerY: 2
