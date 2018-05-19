@@ -9,6 +9,8 @@ public class StateManager : MonoBehaviour {
   private static StateManager instance = null;
   public static StateManager Instance => instance;
 
+  public GameObject selfPrefab;
+
   public EventManager eventManager;
   public PlayerController playerController;
   public HexGridManager hexGridManager;

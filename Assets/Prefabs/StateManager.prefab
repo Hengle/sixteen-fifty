@@ -51,3 +51,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 02b7c7cddc689463895831ab032628ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  selfPrefab: {fileID: 1982859061078052}
+  eventManager: {fileID: 0}
+  playerController: {fileID: 0}
+  hexGridManager: {fileID: 0}

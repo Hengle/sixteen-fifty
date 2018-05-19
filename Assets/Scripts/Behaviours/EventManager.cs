@@ -57,6 +57,12 @@ public class EventManager : MonoBehaviour {
 
   /**
    * \brief
+   * Manages the inventory and its UI.
+   */
+  public PlayerMenuManager playerMenuManager;
+
+  /**
+   * \brief
    * A prefab used to create talking heads.
    */
   public GameObject speakerPrefab;
