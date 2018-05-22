@@ -1,11 +1,21 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+
 using UnityEngine;
 
+using Commands;
+
 public interface IScript {
-  Commands.Command<object> GetScript(EventRunner runner);
+  Command<object> GetScript(EventRunner runner);
 }
 
+[Serializable]
+public abstract class BasicScript {
+  public abstract Command<object> GetScript(EventRunner runner);
+}
+
+[Serializable]
 public abstract class EventScript : ScriptableObject, IScript {
-  public abstract Commands.Command<object> GetScript(EventRunner runner);
+  public abstract Command<object> GetScript(EventRunner runner);
 }

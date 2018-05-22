@@ -9,6 +9,11 @@ using UnityEngine;
 public class EventRunner {
   private readonly IScript e;
 
+  public InventoryController Inventory {
+    get;
+    private set;
+  }
+
   public EventManager Manager {
     get;
     private set;
@@ -21,10 +26,11 @@ public class EventRunner {
 
   public event Action<IScript> EventComplete;
 
-  public EventRunner(EventManager manager, HexGrid map, IScript e) {
+  public EventRunner(EventManager manager, HexGrid map, InventoryController inventory, IScript e) {
     this.e = e;
     Map = map;
     Manager = manager;
+    Inventory = inventory;
   }
 
   public IEnumerator Coroutine {
