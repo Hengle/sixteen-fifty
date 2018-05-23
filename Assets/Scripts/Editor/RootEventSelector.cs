@@ -1,13 +1,38 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using UnityEngine;
 using UnityEditor;
 
 public class RootEventSelector {
-  public static readonly Type[] knownScripts = new [] {
-    typeof(ListScript)
-  };
+  public static readonly Type[] knownScripts;
+
+  static RootEventSelector() {
+    // Loop over all BasicScript subtypes and find those with the
+    // EventAttribute attribute.
+    // Add them to knownScripts.
+    var ts = new List<Type>();
+    var types = SubtypeReflector.GetSubtypes<BasicScript>();
+    foreach(var type in types) {
+      var attrInfo = type.CustomAttributes
+        .Where(a => a.AttributeType == typeof(EventAttribute))
+        .FirstOrSentinel(null);
+      if(attrInfo == null)
+        continue;
+      ts.Add(type);
+      // foreach(var arg in attrInfo.NamedArguments) {
+      //   switch(arg.MemberName) {
+      //   case "friendlyName":
+      //     ts.Add(new Named<Type>(arg.TypedValue.Value as string, type));
+      //     break;
+      //   default:
+      //     Debug.Assert(false, "impossible!");
+      //     break;
+      //   }
+      // }
+    }
+  }
 
   Numbered<Type> currentChoice;
   public EventScript rootEvent;

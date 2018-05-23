@@ -5,12 +5,11 @@ using UnityEngine;
 
 using Commands;
 
-[Serializable]
-public class GiveItemScript : IScript {
+public class GiveItemScript : BasicScript {
   public Item item;
   public int count;
 
-  public Command<object> GetScript(EventRunner runner) {
+  public override Command<object> GetScript(EventRunner runner) {
     return Command<EventRunner>.Pure(() => runner).ThenAction(Do);
   }
 
