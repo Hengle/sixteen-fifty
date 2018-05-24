@@ -1,0 +1,16 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 446206ba5f40f47a1895cc75db0f56fe, type: 3}
+  m_Name: dummy item
+  m_EditorClassIdentifier: 
+  icon: {fileID: 21300000, guid: 14a0d411ea8d5405088177510948bafe, type: 3}
+  name: DUMMY
+  stackingSize: 10

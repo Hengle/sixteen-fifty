@@ -9,6 +9,7 @@ using Commands;
  * In a simple dialogue, speakers don't appear and disappear during the text.
  * Speakers appear, at the very beginning, some text is played out, and then the speakers disappear.
  */
+[EventAttribute(friendlyName = "Simple Dialogue")]
 [CreateAssetMenu(menuName = "1650/Events/Simple Dialogue")]
 public class SimpleDialogue : EventScript {
   public SpeakerConfiguration[] speakerConfigurations;

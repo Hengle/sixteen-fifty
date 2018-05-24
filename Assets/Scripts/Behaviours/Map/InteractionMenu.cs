@@ -32,30 +32,19 @@ public class InteractionMenu : MonoBehaviour {
    * The Canvas into which the UI elements of the menu are drawn.
    * Initialized on Awake.
    */
-  public Canvas Canvas {
-    get;
-    private set;
-  }
+  public Canvas canvas;
 
   /**
    * \brief
    * The CanvasGroup behaviour of the child of the GameObject.
-   * Initialized on Awake.
    */
-  public CanvasGroup CanvasGroup {
-    get;
-    private set;
-  }
+  public CanvasGroup canvasGroup;
 
   /**
    * \brief
    * The Panel behaviour of the grandchild of the GameObject.
-   * Initiailzed on Awake.
    */
-  public Image Panel {
-    get;
-    private set;
-  }
+  public Image panel;
 
   /**
    * \brief
@@ -63,10 +52,10 @@ public class InteractionMenu : MonoBehaviour {
    */
   public float Alpha {
     get {
-      return CanvasGroup.alpha;
+      return canvasGroup.alpha;
     }
     set {
-      CanvasGroup.alpha = value;
+      canvasGroup.alpha = value;
     }
   }
 
@@ -81,11 +70,11 @@ public class InteractionMenu : MonoBehaviour {
    */
   public bool MenuActive {
     get {
-      Debug.Assert(CanvasGroup.interactable == CanvasGroup.blocksRaycasts);
-      return CanvasGroup.interactable;
+      Debug.Assert(canvasGroup.interactable == canvasGroup.blocksRaycasts);
+      return canvasGroup.interactable;
     }
     set {
-      CanvasGroup.interactable = CanvasGroup.blocksRaycasts = value;
+      canvasGroup.interactable = canvasGroup.blocksRaycasts = value;
     }
   }
 
@@ -100,17 +89,7 @@ public class InteractionMenu : MonoBehaviour {
   public event Action<Interaction> Interacted;
 
   void Awake() {
-    Canvas = this.GetComponentNotNull<Canvas>();
-    CanvasGroup = this.GetComponentInChildrenNotNull<CanvasGroup>();
     buttons = new List<InteractionButton>();
-    Panel = this.GetComponentInChildrenNotNull<Image>();
-  }
-
-  /**
-   * Sets the global EventManager::interactionMenu to this instance.
-   */
-  void Start () {
-    StateManager.Instance.eventManager.interactionMenu = this;
   }
 
   /**
@@ -151,7 +130,7 @@ public class InteractionMenu : MonoBehaviour {
 
   InteractionButton CreateInteractionButton(Interaction interaction) {
     var obj = Instantiate(buttonPrefab);
-    obj.transform.SetParent(Panel.transform, false);
+    obj.transform.SetParent(panel.transform, false);
     var button = obj.GetComponent<InteractionButton>();
     button.Interaction = interaction;
     button.Interacted += OnButtonInteracted;

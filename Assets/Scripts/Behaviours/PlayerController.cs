@@ -8,11 +8,14 @@ using Commands;
 
 [RequireComponent(typeof(ClickToInteract))]
 [RequireComponent(typeof(MapEntity))]
+[RequireComponent(typeof(Inventory))]
 public class PlayerController : MonoBehaviour {
   /**
    * The map properties of the player.
    */
   public MapEntity mapEntity;
+
+  public Inventory inventory;
 
   public ClickToInteract clickToInteract;
 
@@ -26,8 +29,6 @@ public class PlayerController : MonoBehaviour {
 
 	// Use this for initialization
 	void Awake() {
-    mapEntity = GetComponent<MapEntity>();
-    clickToInteract = GetComponent<ClickToInteract>();
 	}
 
   void Start() {

@@ -20,6 +20,12 @@ public class EventManager : MonoBehaviour {
 
   /**
    * \brief
+   * The controller for the inventory.
+   */
+  public InventoryController inventory;
+
+  /**
+   * \brief
    * The current interaction menu present in the game.
    */
   public InteractionMenu interactionMenu;
@@ -59,7 +65,7 @@ public class EventManager : MonoBehaviour {
    * \brief
    * Manages the inventory and its UI.
    */
-  public PlayerMenuManager playerMenuManager;
+  public PlayerMenuController playerMenuController;
 
   /**
    * \brief
@@ -109,7 +115,9 @@ public class EventManager : MonoBehaviour {
     // finish executing script, so if currentEvent is not null,
     // there's already an event running.
     Debug.Assert(null == currentEvent, "Only one event can be running at once.");
-    currentEvent = new EventRunner(this, map, e);
+
+    var player = StateManager.Instance.playerController;
+    currentEvent = new EventRunner(this, map, inventory, player, e);
     currentEvent.EventComplete += OnEventComplete;
     StartCoroutine(currentEvent.Coroutine);
   }
