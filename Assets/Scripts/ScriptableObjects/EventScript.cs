@@ -20,10 +20,10 @@ public interface IScript {
   Command<object> GetScript(EventRunner runner);
 }
 
-[Serializable]
-public abstract class BasicScript {
-  public abstract Command<object> GetScript(EventRunner runner);
-}
+// [Serializable]
+// public abstract class BasicScript {
+//   public abstract Command<object> GetScript(EventRunner runner);
+// }
 
 [Serializable]
 public abstract class EventScript : ScriptableObject, IScript {

@@ -60,7 +60,7 @@ public class HexGridManager : MonoBehaviour {
     if(CurrentGrid != null)
       DestroyMap();
 
-    var obj = GameObject.Instantiate(gridPrefab);
+    var obj = GameObject.Instantiate(gridPrefab, transform);
     CurrentGrid = obj.GetComponent<HexGrid>();
     Debug.Assert(CurrentGrid != null, "gridPrefab GameObject contains a HexGrid component.");
     CurrentGrid.Setup(map);

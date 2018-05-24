@@ -115,7 +115,9 @@ public class EventManager : MonoBehaviour {
     // finish executing script, so if currentEvent is not null,
     // there's already an event running.
     Debug.Assert(null == currentEvent, "Only one event can be running at once.");
-    currentEvent = new EventRunner(this, map, inventory, e);
+
+    var player = StateManager.Instance.playerController;
+    currentEvent = new EventRunner(this, map, inventory, player, e);
     currentEvent.EventComplete += OnEventComplete;
     StartCoroutine(currentEvent.Coroutine);
   }

@@ -6,10 +6,10 @@ using UnityEditor;
 
 [CustomEditor(typeof(ListScript))]
 public class BasicEventPropertyDrawer : Editor {
-  RootEventSelector rootEventSelector;
+  EventSelectorEditor rootEventSelector;
 
   void Awake() {
-    rootEventSelector = new RootEventSelector();
+    rootEventSelector = new EventSelectorEditor();
   }
 
   public override void OnInspectorGUI() {
@@ -36,10 +36,10 @@ public class BasicEventPropertyDrawer : Editor {
 
 [CustomEditor(typeof(BasicEvent))]
 public class BasicScriptEditor : Editor {
-  RootEventSelector rootEventSelector;
+  EventSelectorEditor rootEventSelector;
 
   void Awake() {
-    rootEventSelector = new RootEventSelector();
+    rootEventSelector = new EventSelectorEditor();
   }
   
   public override void OnInspectorGUI() {

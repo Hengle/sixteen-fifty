@@ -235,6 +235,8 @@ GameObject:
   m_Component:
   - component: {fileID: 19142641}
   - component: {fileID: 19142642}
+  - component: {fileID: 19142643}
+  - component: {fileID: 19142644}
   m_Layer: 5
   m_Name: Panel
   m_TagString: Untagged
@@ -266,6 +268,44 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 19142640}
+--- !u!114 &19142643
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 19142640}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -765806418, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
+  m_RaycastTarget: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
+      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+  m_Sprite: {fileID: 0}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+--- !u!114 &19142644
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 19142640}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95fc2da0a092c456e8a858c34c93313c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &201364429
 GameObject:
   m_ObjectHideFlags: 0
@@ -803,7 +843,7 @@ RectTransform:
   - {fileID: 926782045}
   - {fileID: 1554278727}
   m_Father: {fileID: 1138619151}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -1032,7 +1072,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1138619151}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -1506,10 +1546,10 @@ RectTransform:
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_Children:
   - {fileID: 477912493}
-  - {fileID: 1468725737}
   - {fileID: 993675161}
   - {fileID: 760370284}
   - {fileID: 1189574138}
+  - {fileID: 1468725737}
   m_Father: {fileID: 743335549}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1547,7 +1587,7 @@ RectTransform:
   m_Children:
   - {fileID: 264217454}
   m_Father: {fileID: 1138619151}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -1750,6 +1790,7 @@ MonoBehaviour:
     type: 2}
   inventoryArea: {fileID: 1030630833}
   playerMenuController: {fileID: 760370287}
+  inventory: {fileID: 0}
 --- !u!114 &1304049199
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1816,8 +1857,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 1, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0, y: 448.88885}
-  m_SizeDelta: {x: 960, y: 240}
+  m_AnchoredPosition: {x: 0, y: -20}
+  m_SizeDelta: {x: 600, y: 240}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &1346005028
 MonoBehaviour:
@@ -2236,17 +2277,17 @@ RectTransform:
   m_GameObject: {fileID: 1468725736}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.9997017, y: 0.9997017, z: 0.9997017}
   m_Children:
   - {fileID: 1346005027}
   - {fileID: 19142641}
   m_Father: {fileID: 1138619151}
-  m_RootOrder: 1
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: 0.19128418, y: 0.3400879}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!225 &1468725738
 CanvasGroup:
@@ -3082,7 +3123,7 @@ MonoBehaviour:
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_spriteAnimator: {fileID: 0}
-  m_isInputParsingRequired: 0
+  m_isInputParsingRequired: 1
   m_inputSource: 0
   m_hasFontAssetChanged: 0
   m_subTextObjects:

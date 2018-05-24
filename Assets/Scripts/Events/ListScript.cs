@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 using Commands;
 
-[Serializable]
+[EventAttribute(friendlyName = "Event Sequence")]
 public class ListScript : EventScript {
   public List<EventScript> scripts;
 

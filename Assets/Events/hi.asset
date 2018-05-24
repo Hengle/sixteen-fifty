@@ -1,0 +1,61 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 0}
+  m_Name: hi
+  m_EditorClassIdentifier: Assembly-CSharp::BasicEvent
+  script: {fileID: 114126270304884560}
+--- !u!114 &114126270304884560
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c53de735019c54a679151459a9bdbf11, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  scripts:
+  - {fileID: 114840584427595374}
+  - {fileID: 114174792660445640}
+--- !u!114 &114174792660445640
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 684c4f3747fe749799d409cde1f0374b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  item: {fileID: 11400000, guid: bd3c48a6ac7ae49e9b4c7bf49ff58022, type: 2}
+  count: 1
+--- !u!114 &114840584427595374
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa81f5948b75a4ae58ad0bda39afcbd3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speakerConfigurations:
+  - speakerData: {fileID: 11400000, guid: 9b8a1aab235fa442a9e477c4ee6c9eb9, type: 2}
+    position: 0.3
+    orientation: 1
+  - speakerData: {fileID: 11400000, guid: 88af7e3c337d846f692a2cc68869e101, type: 2}
+    position: 0.7
+    orientation: 0
+  messages:
+  - Have an item!

@@ -5,7 +5,8 @@ using UnityEngine;
 
 using Commands;
 
-public class GiveItemScript : BasicScript {
+[EventAttribute(friendlyName = "Give Item")]
+public class GiveItemScript : EventScript {
   public Item item;
   public int count;
 
@@ -14,7 +15,8 @@ public class GiveItemScript : BasicScript {
   }
 
   private void Do(EventRunner runner) {
-    var r = runner.Inventory.AddItem(item, count);
+    Debug.Log("giving item from script");
+    var r = runner.Player.inventory.AddItem(item, count);
     if(!r) {
       Debug.Log("Can't add item because no room!");
     }

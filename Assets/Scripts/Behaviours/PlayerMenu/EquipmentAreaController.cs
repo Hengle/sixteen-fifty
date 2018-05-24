@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class EquipmentAreaController : MonoBehaviour {
-  public ItemSlot head;
-  public ItemSlot body;
-  public ItemSlot feet;
+  public ItemSlotController head;
+  public ItemSlotController body;
+  public ItemSlotController feet;
 
-  public ItemSlot[] Slots =>
+  public ItemSlotController[] Slots =>
     new [] {head, body, feet};
 
 	// Use this for initialization
