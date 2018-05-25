@@ -29,7 +29,7 @@ public class Speaker : MonoBehaviour {
 
     var screenRect = parent.rect;
 
-    obj.transform.parent = parent;
+    obj.transform.SetParent(parent);
     obj.transform.localPosition =
       new Vector2(
         screenRect.width * position - screenRect.width/2,
