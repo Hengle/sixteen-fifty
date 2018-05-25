@@ -37,6 +37,7 @@ public class InventoryController : MonoBehaviour {
     inventory = StateManager.Instance.playerController.inventory;
     Debug.Assert(null != inventory, "there is an inventory to display");
     CreateInventory(inventory.Size);
+    playerMenuController.title.text = "Inventory";
   }
 
   void OnDisable() {

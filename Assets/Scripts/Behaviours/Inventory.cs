@@ -169,4 +169,24 @@ public class InventorySlot {
     this.item = item;
     this.count = count;
   }
+
+  /**
+   * \brief
+   * Produces a textual representation of the count of items in the
+   * slot.
+   *
+   * If there is no item in the slot, the the text is empty.
+   * If the Item in the slot has a Item#stackingSize of 1, then the
+   * text is also empty.
+   */
+  public string CountText {
+    get {
+      if(null == item)
+        return "";
+      if(item.stackingSize == 1)
+        return "";
+      else
+        return count.ToString();
+    }
+  }
 }

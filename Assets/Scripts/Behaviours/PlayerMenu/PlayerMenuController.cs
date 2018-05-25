@@ -1,11 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+
 using UnityEngine;
 using UnityEngine.UI;
+
+using TMPro;
 
 public class PlayerMenuController : MonoBehaviour {
   public HUDController hudController;
   public Button closeButton;
+  public TextMeshProUGUI title;
 
   void OnEnable () {
     hudController.gameObject.SetActive(false);

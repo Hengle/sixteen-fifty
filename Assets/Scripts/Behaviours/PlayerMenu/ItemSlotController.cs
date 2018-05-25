@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+using TMPro;
+
 public class ItemSlotController : MonoBehaviour {
   /**
    * \brief
@@ -11,21 +13,47 @@ public class ItemSlotController : MonoBehaviour {
    */
   public Image iconRenderer;
 
+  /**
+   * \brief
+   * Used to show the count of the item in the slot.
+   */
+  public TextMeshProUGUI countText;
+
   private InventorySlot slot;
+
+  /**
+   * \brief
+   * The model associated with this controller.
+   */
   public InventorySlot BackingSlot {
     get {
       return slot;
     }
     set {
       slot = value;
-      UpdateSprite();
+      Refresh();
     }
   }
 
-  public void UpdateSprite() {
-    iconRenderer.enabled = BackingSlot != null && BackingSlot.item != null;
-    if(iconRenderer.enabled)
-      iconRenderer.sprite = BackingSlot.item.icon;
+  /**
+   * \brief
+   * Refreshes the view according to the model.
+   */
+  public void Refresh() {
+    RefreshSprite();
+    RefreshCount();
+  }
+
+  private void RefreshSprite() {
+    iconRenderer.sprite = BackingSlot?.item?.icon;
+    iconRenderer.enabled = iconRenderer.sprite != null;
+  }
+
+  private void RefreshCount() {
+    if(null == BackingSlot)
+      countText.text = "";
+    else
+      countText.text = BackingSlot.CountText;
   }
 
   /**
@@ -52,6 +80,6 @@ public class ItemSlotController : MonoBehaviour {
   }
 
   void Start () {
-    UpdateSprite();
+    Refresh();
   }
 }

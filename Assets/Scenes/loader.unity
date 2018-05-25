@@ -368,6 +368,12 @@ MonoBehaviour:
     CRotation: {x: 0, y: 0, z: 0, w: 0}
     CSize: 0
     COrtho: 0
+  - OReference: {fileID: 2800000, guid: 44cb8643606ae42b48cb83d69fabe49a, type: 3}
+    OType: 1
+    CPosition: {x: 0, y: 0, z: 0}
+    CRotation: {x: 0, y: 0, z: 0, w: 0}
+    CSize: 0
+    COrtho: 0
   Forward: []
 --- !u!4 &178956333
 Transform:
