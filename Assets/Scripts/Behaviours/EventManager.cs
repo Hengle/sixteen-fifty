@@ -99,11 +99,14 @@ public class EventManager : MonoBehaviour {
 	// Use this for initialization
 	void Awake () {
     // we become the current event manager upon initialization;
-    StateManager.Instance.eventManager = this;
     RectTransform = GetComponent<RectTransform>();
     Debug.Assert(null != RectTransform, "EventManager RectTransform is not null.");
-    BlocksRaycasts = false;
 	}
+
+  void OnEnable() {
+    StateManager.Instance.eventManager = this;
+    BlocksRaycasts = false;
+  }
 
 	// Update is called once per frame
 	void Update () {

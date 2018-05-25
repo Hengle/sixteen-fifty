@@ -8,6 +8,8 @@ using UnityEngine;
 public class ClickToInteract : MonoBehaviour {
   MapEntity mapEntity;
   bool interactionsEnabled;
+  InteractionMenu interactionMenu;
+  EventManager eventManager;
 
   void Awake() {
     interactionsEnabled = false;
@@ -28,6 +30,10 @@ public class ClickToInteract : MonoBehaviour {
     EnableInteractions();
     mapEntity.BeginMove += OnBeginMove;
     mapEntity.EndMove += OnEndMove;
+
+    eventManager = StateManager.Instance.eventManager;
+
+    interactionMenu = StateManager.Instance.eventManager.interactionMenu;
   }
 
   void OnDisable() {
@@ -75,14 +81,20 @@ public class ClickToInteract : MonoBehaviour {
       .Where(ictb => null != ictb)
       // fish out the interactions from each interactable
       .SelectMany(ictb => ictb.npcData.interactions)
-      .ToList();
+      .ToArray();
 
-    if(interactions.Count == 0)
+    if(interactions.Length == 0)
       return;
 
-    StateManager.Instance.eventManager.BeginScript(
-      mapEntity.Grid,
-      new ControlInteractionMenu(this.transform.position, interactions));
+    interactionMenu.Show(interactions, OnMenuInteracted);
+  }
+
+  void OnMenuInteracted(Interaction interaction) {
+    // unregister ourselves from the menu.
+    interactionMenu.Interacted -= OnMenuInteracted;
+    if(interaction == null)
+      return;
+    eventManager.BeginScript(mapEntity.Grid, interaction.script);
   }
 
   /**
