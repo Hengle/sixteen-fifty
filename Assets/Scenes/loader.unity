@@ -142,12 +142,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DataVersion: 123
   CurrentSelection:
-    OReference: {fileID: 0}
-    OType: 0
-    CPosition: {x: 0, y: 0, z: 0}
-    CRotation: {x: 0, y: 0, z: 0, w: 0}
-    CSize: 0
-    COrtho: 0
+    OReference: {fileID: 11400000, guid: bd3c48a6ac7ae49e9b4c7bf49ff58022, type: 2}
+    OType: 1
+    CPosition: {x: 4.6092987, y: 2.9873154, z: -57.164654}
+    CRotation: {x: 0, y: 0, z: 0, w: 1}
+    CSize: 7.0651827
+    COrtho: 1
   Back:
   - OReference: {fileID: 2800000, guid: 6ea9ae69a9be94a0c86e7647f776c289, type: 3}
     OType: 1
@@ -422,6 +422,30 @@ MonoBehaviour:
     CRotation: {x: 0, y: 0, z: 0, w: 1}
     CSize: 7.3454123
     COrtho: 1
+  - OReference: {fileID: 102900000, guid: dae27b3086deb439292b44eb474c8e0f, type: 3}
+    OType: 1
+    CPosition: {x: 0, y: 0, z: 0}
+    CRotation: {x: 0, y: 0, z: 0, w: 0}
+    CSize: 0
+    COrtho: 0
+  - OReference: {fileID: 11400000, guid: 8ba59238c986347a2a4c3478681c0f28, type: 2}
+    OType: 1
+    CPosition: {x: 0, y: 0, z: 0}
+    CRotation: {x: 0, y: 0, z: 0, w: 0}
+    CSize: 0
+    COrtho: 0
+  - OReference: {fileID: 21300000, guid: 44cb8643606ae42b48cb83d69fabe49a, type: 3}
+    OType: 1
+    CPosition: {x: 0, y: 0, z: 0}
+    CRotation: {x: 0, y: 0, z: 0, w: 0}
+    CSize: 0
+    COrtho: 0
+  - OReference: {fileID: 2800000, guid: 44cb8643606ae42b48cb83d69fabe49a, type: 3}
+    OType: 1
+    CPosition: {x: 4.6092987, y: 2.9873154, z: -57.164654}
+    CRotation: {x: 0, y: 0, z: 0, w: 1}
+    CSize: 7.0651827
+    COrtho: 1
   Forward: []
 --- !u!4 &178956333
 Transform:
@@ -574,3 +598,9 @@ MonoBehaviour:
   icon: {fileID: 0}
   name: 
   stackingSize: 0
+  equipment:
+    type: 0
+    stats:
+      warmth: 0
+      protection: 0
+      weight: 0
