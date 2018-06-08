@@ -59,7 +59,7 @@ public class EquipmentStatDictionaryPropertyDrawer : PropertyDrawer {
 
     for(var i = 0; i < keysProp.arraySize; i++) {
       // position for the foldout and the delete button
-      var ps = lmgr.NextLine.WithHeight(lineHeight).SplitX(2);
+      var ps = lmgr.NextLine().WithHeight(lineHeight).SplitX(2);
 
       var niceName = keysProp.GetArrayElementAtIndex(i).displayName;
 
@@ -101,17 +101,18 @@ public class EquipmentStatDictionaryPropertyDrawer : PropertyDrawer {
     var countProp = property.FindPropertyRelative("count");
     Debug.Assert(null != countProp, "the count property exists");
 
-    EditorGUI.LabelField(lmgr.NextLine, "Add another!");
+    EditorGUI.LabelField(lmgr.NextLine(), "Add another!");
 
     DrawNextKeyEditor(lmgr);
     DrawNextValueEditor(lmgr);
 
-    if(GUI.Button(lmgr.NextLine.WithHeight(lineHeight), "Add")) {
+    if(GUI.Button(lmgr.NextLine().WithHeight(lineHeight), "Add")) {
       Debug.Log("button clicked!");
       AddNewKeyValuePair(countProp, keysProp, valuesProp);
     }
 
-    lastHeight = lmgr.Position.y + lineHeight - initialY;
+    // update our understanding of how big the property is
+    lastHeight = lmgr.Position.y - initialY;
   }
 
   private void AddNewKeyValuePair(
@@ -135,7 +136,7 @@ public class EquipmentStatDictionaryPropertyDrawer : PropertyDrawer {
   private void DrawNextKeyEditor(LineRectManager lmgr) {
     nextStat =
       EditorGUI.ObjectField(
-        lmgr.NextLine.WithHeight(lmgr.LineHeight),
+        lmgr.NextLine().WithHeight(lmgr.LineHeight),
         "key",
         nextStat,
         typeof(EquipmentStat))

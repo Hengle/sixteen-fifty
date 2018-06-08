@@ -8,13 +8,13 @@ public static class SixteenFiftyGUI {
    */
   public static void StatValueField(LineRectManager lmgr, StatValue value) {
     value.value = EditorGUI.FloatField(
-      lmgr.NextLine.WithHeight(lmgr.LineHeight),
+      lmgr.NextLine().WithHeight(lmgr.LineHeight),
       "stat value",
       value.value);
 
     value.statFormatter =
       EditorGUI.ObjectField(
-        lmgr.NextLine.WithHeight(lmgr.LineHeight),
+        lmgr.NextLine().WithHeight(lmgr.LineHeight),
         "stat formatter",
         value.statFormatter,
         typeof(StatValueFormatter))
