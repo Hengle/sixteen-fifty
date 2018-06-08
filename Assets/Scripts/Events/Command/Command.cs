@@ -160,11 +160,21 @@ namespace Commands {
     private Func<S, Command<T>> continuation;
     private Command<S> command;
   
+    /**
+     * \brief
+     * Constructs a command that runs the given one, and uses its
+     * result to compute the next command to run.
+     */
     public BindCommand(Command<S> cmd, Func<S, Command<T>> continuation) {
       command = cmd;
       this.continuation = continuation;
     }
   
+    /**
+     * \brief
+     * Gets the Coroutine that runs the first command, chains its
+     * result to compute the next command, and runs the next command.
+     */
     public override IEnumerator GetCoroutine() {
       foreach(var obj in new TrivialEnumerable(command.GetCoroutine())) {
         yield return obj;
@@ -197,11 +207,19 @@ namespace Commands {
     private Command<S> sCmd;
     private Command<T> tCmd;
   
+    /**
+     * \brief
+     * Constructor.
+     */
     public Race(Command<S> cmd1, Command<T> cmd2) {
       sCmd = cmd1;
       tCmd = cmd2;
     }
   
+    /**
+     * \brief
+     * Gets the Coroutine that implements the racing of the two constituent commands.
+     */
     public override IEnumerator GetCoroutine() {
       var coro1 = sCmd.GetCoroutine();
       var coro2 = tCmd.GetCoroutine();

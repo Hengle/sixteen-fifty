@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 /**
  * \brief
- * Extends IEnumerable<T> with the #Numbering method, which numbers
+ * Extends IEnumerable<T> with the #Numbered method, which numbers
  * each element of the sequence.
  */
 public static class NumberingExt {
