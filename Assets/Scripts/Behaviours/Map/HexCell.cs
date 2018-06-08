@@ -15,6 +15,14 @@ public class HexCell : MonoBehaviour {
   private ISet<MapEntity> entitiesHere;
   public ISet<MapEntity> EntitiesHere => entitiesHere;
 
+  /**
+   * \brief
+   * Are there any MapEntities here?
+   */
+  public bool IsNonEmpty => 0 < EntitiesHere.Count;
+
+  public bool IsEmpty => 0 == EntitiesHere.Count;
+
   public event Action<MapEntity> EntityAdded;
   public event Action<MapEntity> EntityRemoved;
 

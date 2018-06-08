@@ -19,6 +19,11 @@ public struct HexCoordinates {
   
   public int Z => -X - Y;
 
+  public static int Distance(HexCoordinates a, HexCoordinates b) =>
+    (Math.Abs(a.X - b.X) + Math.Abs(a.Y - b.Y) + Math.Abs(a.Z - b.Z)) / 2;
+
+  public int DistanceTo(HexCoordinates dst) => Distance(this, dst);
+
   public HexCoordinates (int x, int y) {
     this.x = x;
     this.y = y;
