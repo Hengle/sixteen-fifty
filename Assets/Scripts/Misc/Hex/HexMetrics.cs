@@ -3,8 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
+/**
+ * \brief
+ * Contains constants and functions for managing hexagons.
+ */
 public static class HexMetrics {
-  public const int PIXELS_PER_UNIT = 27;
+  /**
+   * \brief
+   * The pixels-per-unit value that must be used on all art assets.
+   */
+  public const int PIXELS_PER_UNIT = 64;
 
   /**
    * The half-width of the ellipse into which we inscribe our hexagon.

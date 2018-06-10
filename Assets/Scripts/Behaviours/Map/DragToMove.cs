@@ -5,6 +5,10 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 
 /**
+ * \brief
+ * Moves the camera in response to dragging on the object with this
+ * behaviour.
+ *
  * Apply to the HexGrid.
  *
  * Idea:
@@ -36,6 +40,6 @@ public class DragToMove : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDr
   }
 
   public void OnDrag(PointerEventData data) {
-    mainCamera.transform.position -= (.38f / HexMetrics.PIXELS_PER_UNIT) * data.delta.Upgrade();
+    mainCamera.transform.position -= (1f / HexMetrics.PIXELS_PER_UNIT) * data.delta.Upgrade();
   }
 }
