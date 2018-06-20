@@ -9,7 +9,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f1f6300b5bdd148cf98c57591d56c807, type: 3}
-  m_Name: New Equipment Item
+  m_Name: Leather Helmet
   m_EditorClassIdentifier: 
   icon: {fileID: 0}
   name: 

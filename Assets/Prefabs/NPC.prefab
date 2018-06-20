@@ -55,7 +55,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2accf4eba40d348499dadf3a0359bfae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  grid: {fileID: 0}
 --- !u!114 &114168490539359622
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -94,7 +93,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hexMapEntity: {fileID: 0}
   renderer: {fileID: 0}
-  registered: 0
   mapEntity: {fileID: 0}
 --- !u!212 &212912495707856158
 SpriteRenderer:
@@ -109,8 +107,9 @@ SpriteRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RenderingLayerMask: 4294967295
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: ff53fd5d10b37475b85f565854b3522a, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

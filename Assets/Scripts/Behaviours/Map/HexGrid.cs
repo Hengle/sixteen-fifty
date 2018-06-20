@@ -101,15 +101,17 @@ public class HexGrid : MonoBehaviour, IPointerClickHandler {
   }
 
   HexCell CreateCell (int x , int y, HexTile tile) {
-    // define the position for our tile
-    HexCoordinates coordinates = HexCoordinates.FromOffsetCoordinates(x, y);
-    Vector2 position = coordinates.ToPosition();
+    var obj = Instantiate(cellPrefab, transform);
+    var cell = obj.GetComponent<HexCell>();
+    Debug.Assert(null != cell, "HexCell component of newly instantiated cell prefab exists");
+    cell.tile = tile;
 
-    var cell = HexCell.Construct(cellPrefab, tile);
+    // define the position for our tile
+    var coordinates = HexCoordinates.FromOffsetCoordinates(x, y);
+    var position = coordinates.ToPosition();
 
     // make the cell belong to the grid, by reparenting its transform
     cell.coordinates = coordinates;
-    cell.transform.SetParent(transform, false);
     cell.transform.localPosition = position.Upgrade();
 
     return cell;
