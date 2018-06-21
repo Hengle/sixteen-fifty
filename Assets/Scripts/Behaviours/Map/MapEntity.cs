@@ -30,9 +30,9 @@ public class MapEntity : MonoBehaviour {
    * \brief
    * The cell the entity is currently occupying.
 
-   * While the player is in motion, this value becomes stale until the
-   * player enters at a new cell.
-   * Every time the player passes through a cell, this value gets
+   * While the entity is in motion, this value becomes stale until the
+   * entity enters at a new cell.
+   * Every time the entity passes through a cell, this value gets
    * updated.
    */
   public HexCell CurrentCell {
@@ -125,7 +125,7 @@ public class MapEntity : MonoBehaviour {
   public void Warp(HexCell cell) {
     Debug.Assert(null != cell);
     CurrentCell = cell;
-    transform.localPosition = cell.coordinates.ToPosition();
+    transform.localPosition = cell.coordinates.Box.Center;
   }
 
   /**
@@ -208,7 +208,12 @@ public class MapEntity : MonoBehaviour {
   }
 
   class DoMoveFollowingPath : Command<object> {
+    /**
+     * \brief
+     * The default speed for moving a MapEntity.
+     */
     public const float DEFAULT_MOVE_SPEED = 0.4f;
+
     IEnumerable<HexCell> path;
     float moveSpeed;
     MapEntity self;
@@ -236,7 +241,7 @@ public class MapEntity : MonoBehaviour {
         if(null != self.LeaveCell) {
           self.LeaveCell(self);
         }
-        Vector3 target = cell.coordinates.ToPosition();
+        Vector3 target = cell.coordinates.Box.Center;
 
         if(null != self.ChangeDirection) {
           var d = self.CurrentCell.coordinates.WhichNeighbour(cell.coordinates);

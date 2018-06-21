@@ -41,9 +41,12 @@ public class HexGridManager : MonoBehaviour {
    */
   public GameObject gridPrefab;
 
+  public HexMetrics hexMetrics;
+
   void Awake () {
     Debug.Assert(null != StateManager.Instance, "state manager exists");
     StateManager.Instance.hexGridManager = this;
+    hexMetrics = HexMetrics.Default;
     LoadMap(initialMap);
   }
 
@@ -63,6 +66,7 @@ public class HexGridManager : MonoBehaviour {
     var obj = GameObject.Instantiate(gridPrefab, transform);
     CurrentGrid = obj.GetComponent<HexGrid>();
     Debug.Assert(CurrentGrid != null, "gridPrefab GameObject contains a HexGrid component.");
+    CurrentGrid.hexMetrics = hexMetrics;
     CurrentGrid.Setup(map);
     return CurrentGrid;
   }
@@ -80,7 +84,8 @@ public class HexGridManager : MonoBehaviour {
       me.Warp(
         HexCoordinates.FromOffsetCoordinates(
           CurrentGrid.Map.initialPlayerX,
-          CurrentGrid.Map.initialPlayerY));
+          CurrentGrid.Map.initialPlayerY,
+          CurrentGrid.hexMetrics));
 
       // if there's a script to run in the new map, then run it.
       if(null != CurrentGrid.Map.mapLoad)

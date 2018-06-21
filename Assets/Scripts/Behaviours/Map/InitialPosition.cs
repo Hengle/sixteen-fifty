@@ -6,8 +6,8 @@ using UnityEngine;
 public class InitialPosition : MonoBehaviour {
   public int x, y;
 
-  void Awake() {
+  void Start() {
     var me = this.GetComponentNotNull<MapEntity>();
-    me.Warp(new HexCoordinates(x, y));
+    me.Warp(new HexCoordinates(x, y, me.Grid.hexMetrics));
   }
 }

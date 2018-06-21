@@ -8,6 +8,12 @@ using UnityEngine.EventSystems;
 public class HexGrid : MonoBehaviour, IPointerClickHandler {
   /**
    * \brief
+   * The metrics to use for this hex grid.
+   */
+  public HexMetrics hexMetrics;
+  
+  /**
+   * \brief
    * The HexMap represented by this grid.
    */
   public HexMap Map {
@@ -45,11 +51,6 @@ public class HexGrid : MonoBehaviour, IPointerClickHandler {
    */
   public event Action<HexCell> CellDown;
 
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
 	// Update is called once per frame
 	void Update () {
 		
@@ -92,12 +93,12 @@ public class HexGrid : MonoBehaviour, IPointerClickHandler {
       // they're on.
     }
 
-    var bounds = HexMetrics.Bounds(map.width, map.height);
+    var bounds = hexMetrics.Bounds(map.width, map.height);
 
     // compute the bounding box of our hex-map
     collider.size = bounds;
     // and shift it over so it actually contains our hex whose center is at the origin.
-    collider.center = bounds * (1/2f) - new Vector2(HexMetrics.OUTER_WIDTH, HexMetrics.FULL_HEIGHT);
+    collider.center = bounds * (1/2f) - new Vector2(hexMetrics.INNER_HALF_WIDTH, hexMetrics.INNER_HEIGHT);
   }
 
   HexCell CreateCell (int x , int y, HexTile tile) {
@@ -107,8 +108,9 @@ public class HexGrid : MonoBehaviour, IPointerClickHandler {
     cell.tile = tile;
 
     // define the position for our tile
-    var coordinates = HexCoordinates.FromOffsetCoordinates(x, y);
-    var position = coordinates.ToPosition();
+    var coordinates = HexCoordinates.FromOffsetCoordinates(x, y, hexMetrics);
+    var position = coordinates.Box.BottomLeft;
+    Debug.Log(String.Format("Creating cell {0} @ {1}", coordinates, position));
 
     // make the cell belong to the grid, by reparenting its transform
     cell.coordinates = coordinates;
@@ -163,7 +165,7 @@ public class HexGrid : MonoBehaviour, IPointerClickHandler {
     var position = transform.InverseTransformPoint(worldPosition);
     // then we convert from grid-origin cartesian coordinates to hex
     // coordinates.
-    var coordinates = HexCoordinates.FromPosition(position);
+    var coordinates = HexCoordinates.FromPosition(position, hexMetrics);
     // Get the cell at those hex coordinates.
     var cell = this[coordinates];
     if(cell == null) {

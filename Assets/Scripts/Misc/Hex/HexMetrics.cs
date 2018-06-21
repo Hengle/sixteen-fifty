@@ -3,95 +3,133 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-/**
- * \brief
- * Contains constants and functions for managing hexagons.
- */
-public static class HexMetrics {
+[Serializable]
+public struct HexMetrics {
   /**
    * \brief
-   * The pixels-per-unit value that must be used on all art assets.
+   * Gets the default HexMetrics object, whose hexagons are one unit
+   * wide and one unit high.
+   */
+  public static HexMetrics Default =>
+    new HexMetrics(1.0f, 0.5f);
+
+  /**
+   * \brief
+   * Constructs a HexMetrics object with a given full hex width and
+   * height.
+   */
+  public HexMetrics(float hexWidth, float hexHeight) {
+    INNER_HALF_WIDTH = hexWidth / 2;
+    INNER_HALF_HEIGHT = hexHeight / 2;
+  }
+
+  /**
+   * \brief
+   * The PPU value used on *all* art assets.
    */
   public const int PIXELS_PER_UNIT = 64;
-
+  
   /**
-   * The half-width of the ellipse into which we inscribe our hexagon.
-   * Mathematically, this is paramater _a_ of the ellipse.
-   * Since each hexagon sprite is 64 pixels across, the outer width
-   * needs to be 65px / PIXELS_PER_UNIT / 2 units.
+   * \brief
+   * The half-width of the ellipse into which the hexagon is
+   * inscribed.
+   * This is parameter _a_ of the ellipse.
    */
-  public const float OUTER_WIDTH = 64f / PIXELS_PER_UNIT / 2;
+  public float OUTER_HALF_WIDTH =>
+    // because our hexagons are flat-topped, the outer half-width and
+    // the inner half-width are the same.
+    INNER_HALF_WIDTH;
 
   /**
-   * The half-height of the hexagon.
-   * Our hexagons are squished so that they're twice as wide as they
-   * are tall, so we simply divide the outer width by two.
+   * \brief
+   * The half-height of the ellipse into which the hexagon is
+   * inscribed.
+   * this is parameter _b_ of the ellipse.
    */
-  public const float INNER_HEIGHT = OUTER_WIDTH / 2;
+  public float OUTER_HALF_HEIGHT =>
+    INNER_HALF_HEIGHT / Mathf.Sin(Mathf.PI / 3);
 
   /**
-   * The half-height of the ellipse into which we inscribe our hexagon.
-   * Mathematically, this is parameter _b_ of the ellipse.
+   * \brief
+   * Half the width of a hexagon.
    */
-  public static readonly float OUTER_HEIGHT = INNER_HEIGHT / Mathf.Sin(Mathf.PI/3);
+  public float INNER_HALF_WIDTH;
 
   /**
-   * The width of a hexagon.
+   * \brief
+   * Half the height of a hexagon.
    */
-  public const float FULL_WIDTH = OUTER_WIDTH * 2;
+  public float INNER_HALF_HEIGHT;
 
   /**
-   * The height of a hexagon.
+   * \brief
+   * The full height of a hexagon.
    */
-  public static readonly float FULL_HEIGHT = INNER_HEIGHT * 2;
+  public float INNER_HEIGHT =>
+    INNER_HALF_HEIGHT * 2;
 
   /**
-   * The half-width of the hexagon.
-   * This coincides with the half-width of the circumscribed ellipse.
+   * \brief
+   * The full width of a hexagon.
    */
-  public static readonly float INNER_WIDTH = OUTER_WIDTH;
-
+  public float INNER_WIDTH =>
+    INNER_HALF_WIDTH * 2;
+    
   /**
-   * The half-width of the top edge of the hexagon.
+   * \brief
+   * The width of the top edge of the hexagon.
    */
-  public static readonly float TOP_WIDTH = (float) Ecos(Mathf.PI / 3);
+  public float TOP_WIDTH =>
+    Ecos(Mathf.PI / 3);
 
   /**
+   * \brief
    * The x-distance between two adjacent (on the x-axis) hexes.
    */
-  public static readonly float CENTER_DISTANCE_X = OUTER_WIDTH + TOP_WIDTH;
+  public float CENTER_DISTANCE_X =>
+    OUTER_HALF_WIDTH + TOP_WIDTH;
 
   /**
-   * The determinant of the matrix H that converts hex-space to pixel-space.
+   * \brief
+   * The determinant of the matrix `H` that converts hex-space to
+   * unity-space.
    */
-  public static readonly float D =
-    INNER_WIDTH * (1 + (float) Math.Cos(-Math.PI/3)) * 2 * INNER_HEIGHT;
+  public float D =>
+    INNER_HALF_WIDTH * (1 + Mathf.Cos(-Mathf.PI/3)) * INNER_HEIGHT;
 
-  /** The corners of the hexagons. */
-  public static Vector2[] corners;
-
-  /** Compute an elliptic sine. */
-  public static float Esin(float theta) {
-    return Mathf.Sin(theta) * OUTER_HEIGHT;
-  }
-
-  /** Compute an elliptic cos. */
-  public static float Ecos(float theta) {
-    return Mathf.Cos(theta) * OUTER_WIDTH;
+  public Vector2[] Corners {
+    get {
+      var self = this;
+      return Enumerable.Range(0, 6)
+        .Select(i => -i * Mathf.PI / 3)
+        .Select(t => new Vector2(self.Ecos(t), self.Esin(t)))
+        .ToArray();
+    }
   }
 
   /**
-   * Computes a rectangle that encloses the hex-map with the given width and height.
-   * Remark: the rectangle will have the correct *size* but might not be in the correct *place*.
-   * (It should typically be off by one rectangle half-width and half-height.)
+   * \brief
+   * Computes a sine on the ellipse associated with this hex.
    */
-  public static Vector2 Bounds(int width, int height) {
+  public float Esin(float theta) {
+    return Mathf.Sin(theta) * OUTER_HALF_HEIGHT;
+  }
+
+  /**
+   * \brief
+   * Computes a cosine on the ellipse associated with this hex.
+   */
+  public float Ecos(float theta) {
+    return Mathf.Cos(theta) * OUTER_HALF_WIDTH;
+  }
+
+  public Vector2 Bounds(int width, int height) {
     // idea: pretend like the hexagons are arranged one next to the
     // other (not with nice offsetting)
-    float w = width * FULL_WIDTH;
+    float w = width * INNER_WIDTH;
     // now because we have to squish the hexagons, we have to account
     // for the overlapping regions
-    w -= (width - 1) * (OUTER_WIDTH - TOP_WIDTH);
+    w -= (width - 1) * (OUTER_HALF_WIDTH - TOP_WIDTH);
     // account for the possibility that width is zero, which would
     // cause the product with (width - 1) to give a negative value of
     // w.
@@ -100,22 +138,24 @@ public static class HexMetrics {
 
     // there's no interlocking in the y dimension, so we don't need to
     // subtract for overlapping regions.
-    float h = height * FULL_HEIGHT;
+    float h = height * INNER_HEIGHT;
     // however, if width > 1, then offsetting will occur, so we need
     // to bump up the height by one half-height.
     if(width > 1)
-      h += INNER_HEIGHT;
+      h += INNER_HALF_HEIGHT;
 
     return new Vector2(w, h);
   }
 
   /**
+   * \brief
    * Determines whether the given point is enclosed within a hexagon at the origin.
    */
-  public static bool Contains(Vector2 p) {
+  public bool Contains(Vector2 p) {
     // We traverse all the corners of the basic hexagon and check that
     // the point we're verifying lies on the RHS of each segment.
     // (We can check this using a cross product.)
+    var corners = Corners;
     var l = corners.Length;
     for(int i = 0; i < l; i++) {
       var c = corners[i];
@@ -128,7 +168,7 @@ public static class HexMetrics {
 
       // Since we're crossing x-y vectors, the resulting vector will
       // have only a z-component, which we pull out.
-      var z = Vector3.Cross(new Vector3(q.x, q.y, 0), new Vector3(s.x, s.y, 0)).z;
+      var z = Vector3.Cross(q.Upgrade(), s.Upgrade()).z;
 
       // The sign of this z component tells us whether p is to the
       // right or to the left of the segment, due to the right-hand
@@ -142,13 +182,154 @@ public static class HexMetrics {
     // otherwise, it's to the right every time, so we can return true.
     return true;
   }
-
-  static HexMetrics() {
-    corners = Enumerable.Range(0, 6)
-      .Select(i => -i * Mathf.PI / 3)
-      .Select(t => new Vector2(Ecos(t), Esin(t)))
-      .ToArray();
-
-    Debug.Log("Initialized hex metrics.");
-  }
 }
+
+// /**
+//  * \brief
+//  * Contains constants and functions for managing hexagons.
+//  */
+// public static class HexMetrics {
+//   /**
+//    * \brief
+//    * The pixels-per-unit value that must be used on all art assets.
+//    */
+//   public const int PIXELS_PER_UNIT = 64;
+// 
+//   /**
+//    * The half-width of the ellipse into which we inscribe our hexagon.
+//    * Mathematically, this is paramater _a_ of the ellipse.
+//    * Since each hexagon sprite is 64 pixels across, the outer width
+//    * needs to be 65px / PIXELS_PER_UNIT / 2 units.
+//    */
+//   public const float OUTER_WIDTH = 64f / PIXELS_PER_UNIT / 2;
+// 
+//   /**
+//    * The half-height of the hexagon.
+//    * Our hexagons are squished so that they're twice as wide as they
+//    * are tall, so we simply divide the outer width by two.
+//    */
+//   public const float INNER_HEIGHT = OUTER_WIDTH / 2;
+// 
+//   /**
+//    * The half-height of the ellipse into which we inscribe our hexagon.
+//    * Mathematically, this is parameter _b_ of the ellipse.
+//    */
+//   public static readonly float OUTER_HEIGHT = INNER_HEIGHT / Mathf.Sin(Mathf.PI/3);
+// 
+//   /**
+//    * The width of a hexagon.
+//    */
+//   public const float FULL_WIDTH = OUTER_WIDTH * 2;
+// 
+//   /**
+//    * The height of a hexagon.
+//    */
+//   public static readonly float FULL_HEIGHT = INNER_HEIGHT * 2;
+// 
+//   /**
+//    * The half-width of the hexagon.
+//    * This coincides with the half-width of the circumscribed ellipse.
+//    */
+//   public static readonly float INNER_WIDTH = OUTER_WIDTH;
+// 
+//   /**
+//    * The half-width of the top edge of the hexagon.
+//    */
+//   public static readonly float TOP_WIDTH = (float) Ecos(Mathf.PI / 3);
+// 
+//   /**
+//    * The x-distance between two adjacent (on the x-axis) hexes.
+//    */
+//   public static readonly float CENTER_DISTANCE_X = OUTER_WIDTH + TOP_WIDTH;
+// 
+//   /**
+//    * The determinant of the matrix H that converts hex-space to pixel-space.
+//    */
+//   public static readonly float D =
+//     INNER_WIDTH * (1 + (float) Math.Cos(-Math.PI/3)) * 2 * INNER_HEIGHT;
+// 
+//   /** The corners of the hexagons. */
+//   public static Vector2[] corners;
+// 
+//   /** Compute an elliptic sine. */
+//   public static float Esin(float theta) {
+//     return Mathf.Sin(theta) * OUTER_HEIGHT;
+//   }
+// 
+//   /** Compute an elliptic cos. */
+//   public static float Ecos(float theta) {
+//     return Mathf.Cos(theta) * OUTER_WIDTH;
+//   }
+// 
+//   /**
+//    * Computes a rectangle that encloses the hex-map with the given width and height.
+//    * Remark: the rectangle will have the correct *size* but might not be in the correct *place*.
+//    * (It should typically be off by one rectangle half-width and half-height.)
+//    */
+//   public static Vector2 Bounds(int width, int height) {
+//     // idea: pretend like the hexagons are arranged one next to the
+//     // other (not with nice offsetting)
+//     float w = width * FULL_WIDTH;
+//     // now because we have to squish the hexagons, we have to account
+//     // for the overlapping regions
+//     w -= (width - 1) * (OUTER_WIDTH - TOP_WIDTH);
+//     // account for the possibility that width is zero, which would
+//     // cause the product with (width - 1) to give a negative value of
+//     // w.
+//     if(w < 0)
+//       w = 0;
+// 
+//     // there's no interlocking in the y dimension, so we don't need to
+//     // subtract for overlapping regions.
+//     float h = height * FULL_HEIGHT;
+//     // however, if width > 1, then offsetting will occur, so we need
+//     // to bump up the height by one half-height.
+//     if(width > 1)
+//       h += INNER_HEIGHT;
+// 
+//     return new Vector2(w, h);
+//   }
+// 
+//   /**
+//    * Determines whether the given point is enclosed within a hexagon at the origin.
+//    */
+//   public static bool Contains(Vector2 p) {
+//     // We traverse all the corners of the basic hexagon and check that
+//     // the point we're verifying lies on the RHS of each segment.
+//     // (We can check this using a cross product.)
+//     var l = corners.Length;
+//     for(int i = 0; i < l; i++) {
+//       var c = corners[i];
+//       // construct the vector representing the segment (which takes us
+//       // from the current corner to the next corner.
+//       var s = corners[(i + 1) % l] - c;
+//       // construct the vector that takes us from the current corner to
+//       // the point to verify.
+//       var q = p - c;
+// 
+//       // Since we're crossing x-y vectors, the resulting vector will
+//       // have only a z-component, which we pull out.
+//       var z = Vector3.Cross(new Vector3(q.x, q.y, 0), new Vector3(s.x, s.y, 0)).z;
+// 
+//       // The sign of this z component tells us whether p is to the
+//       // right or to the left of the segment, due to the right-hand
+//       // rule.  Since our corners are in clockwise order, we need p to
+//       // be to the right every time.
+//       // So if it's to the left at any iteration, we can abort with false.
+//       if(z < 0)
+//         return false;
+//     }
+// 
+//     // otherwise, it's to the right every time, so we can return true.
+//     return true;
+//   }
+// 
+//   static HexMetrics() {
+//     corners = Enumerable.Range(0, 6)
+//       .Select(i => -i * Mathf.PI / 3)
+//       .Select(t => new Vector2(Ecos(t), Esin(t)))
+//       .ToArray();
+// 
+//     Debug.Log("Initialized hex metrics.");
+//   }
+// }
