@@ -6,7 +6,7 @@ import sys
 
 V = [20, 30, 45, 58, 70, 78, 85, 92, 100]
 S = [30, 45, 55, 65, 75, 63, 45, 30, 15]
-H = [350, 30, 61, 100, 140, 180, 220, 265]
+H = [350, 30, 45, 61, 90, 120, 150, 180, 220, 265]
 
 H_ADJ = 0
 
@@ -40,7 +40,9 @@ def main(dst):
 
             im.putpixel((i, y), (int (r * 255), int (g *255), int (b * 255)))
 
-            (r, g, b) = colorsys.hsv_to_rgb(hh/360, s/300, v/100)
+            # adjust what s and v are divided by to affect the
+            # desaturation and darkening
+            (r, g, b) = colorsys.hsv_to_rgb(hh/360, s/200, v/110)
 
             im.putpixel((W - 1 - i, y), (int(r * 255), int(g * 255), int(b * 255)))
 
