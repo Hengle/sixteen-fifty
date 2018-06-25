@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Name: other map
   m_EditorClassIdentifier: 
   mapLoad: {fileID: 0}
+  metrics: {fileID: 11400000, guid: d9fcc751fd14046b8b2be0faa607c4a4, type: 2}
   width: 5
   initialPlayerX: 0
   initialPlayerY: 0

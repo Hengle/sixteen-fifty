@@ -8,7 +8,7 @@ public class HexCoordinatesDrawer : PropertyDrawer {
     var coordinates = new HexCoordinates(
       property.FindPropertyRelative("x").intValue,
       property.FindPropertyRelative("y").intValue,
-      HexMetrics.Default);
+      property.FindPropertyRelative("metrics").objectReferenceValue as HexMetrics);
 
     position = EditorGUI.PrefixLabel(position, label);
     GUI.Label(position, coordinates.ToString());

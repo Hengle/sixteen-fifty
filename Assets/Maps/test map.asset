@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Name: test map
   m_EditorClassIdentifier: 
   mapLoad: {fileID: 0}
+  metrics: {fileID: 11400000, guid: d9fcc751fd14046b8b2be0faa607c4a4, type: 2}
   width: 8
   initialPlayerX: 2
   initialPlayerY: 2
@@ -30,9 +31,9 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 3ba9c4fdae6a24cf190a7733634c3571, type: 2}
   - {fileID: 11400000, guid: 3ba9c4fdae6a24cf190a7733634c3571, type: 2}
   - {fileID: 11400000, guid: 7a14d52cb426e48da8dd9618fc166bdb, type: 2}
-  - {fileID: 11400000, guid: 3ba9c4fdae6a24cf190a7733634c3571, type: 2}
-  - {fileID: 11400000, guid: 3ba9c4fdae6a24cf190a7733634c3571, type: 2}
-  - {fileID: 11400000, guid: 7a14d52cb426e48da8dd9618fc166bdb, type: 2}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   - {fileID: 11400000, guid: 54d3f116a03e24a2baff19b3dc9c270c, type: 2}
   - {fileID: 11400000, guid: 2bb474be21b8e44ffa5f3099fa931b59, type: 2}
   - {fileID: 11400000, guid: 3ba9c4fdae6a24cf190a7733634c3571, type: 2}

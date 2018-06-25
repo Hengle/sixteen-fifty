@@ -20,6 +20,7 @@ using UnityEngine.EventSystems;
  */ 
 public class DragToMove : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHandler {
   public Vector2 initialWorldPosition;
+  public IntVariable pixelsPerUnit;
 
   public Camera mainCamera;
 
@@ -40,6 +41,6 @@ public class DragToMove : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDr
   }
 
   public void OnDrag(PointerEventData data) {
-    mainCamera.transform.position -= (1f / HexMetrics.PIXELS_PER_UNIT) * data.delta.Upgrade();
+    mainCamera.transform.position -= (1f / pixelsPerUnit.value) * data.delta.Upgrade();
   }
 }

@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
+
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -12,6 +13,8 @@ public class HexCell : MonoBehaviour {
    */
   public HexCoordinates coordinates;
 
+  private HexTile tile;
+
   /**
    * \brief
    * The tile represented by the HexCell.
@@ -19,7 +22,15 @@ public class HexCell : MonoBehaviour {
    * The tile type determines the properties of this cell such as
    * movement costs and the sprite to render.
    */
-  public HexTile tile;
+  public HexTile Tile {
+    get {
+      return tile;
+    }
+    set {
+      tile = value;
+      UpdateTile();
+    }
+  }
 
   /**
    * \brief
@@ -119,9 +130,13 @@ public class HexCell : MonoBehaviour {
 
   void Start () {
     Debug.Assert(null != tile, "tile of HexCell is set before Start");
-    renderer.sprite = tile.sprite;
+    UpdateTile();
     grid = GetComponentInParent<HexGrid>();
     Debug.Assert(null != grid, "owning grid of cell is not null");
+  }
+
+  void UpdateTile() {
+    renderer.sprite = tile?.sprite;
   }
 
   public override string ToString() {

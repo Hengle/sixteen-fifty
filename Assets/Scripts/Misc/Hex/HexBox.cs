@@ -39,9 +39,21 @@ public struct HexBox {
      * The math in this function is an inlined matrix multiplication by
      * this matrix, which we call H.
      */
-    centerX = x * (metrics.OUTER_HALF_WIDTH + metrics.Ecos(-Mathf.PI / 3));
-    centerY = x * metrics.Esin(-Mathf.PI/3) + y * metrics.INNER_HEIGHT;
-    Debug.Log(String.Format("Constructing HexBox ({0}, {1}) -> ({2}, {3})", x, y, centerX, centerY));
+
+    // we only do the coordinate conversion if a hexmetrics object is
+    // really given to us.
+    // In the editor we get null, and this completely breaks the
+    // inspector for scripts that construct HexBox objects,
+    // e.g. HexCell.
+    if(metrics == null) {
+      centerX = 0;
+      centerY = 0;
+    }
+    else {
+      centerX = x * (metrics.OUTER_HALF_WIDTH + metrics.Ecos(-Mathf.PI / 3));
+      centerY = x * metrics.Esin(-Mathf.PI/3) + y * metrics.INNER_HEIGHT;
+    }
+
     this.metrics = metrics;
   }
 

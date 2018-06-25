@@ -8,17 +8,32 @@ using UnityEngine.EventSystems;
 public class HexGrid : MonoBehaviour, IPointerClickHandler {
   /**
    * \brief
-   * The metrics to use for this hex grid.
+   * The metrics of the map represented by this hex grid.
    */
-  public HexMetrics hexMetrics;
+  public HexMetrics hexMetrics =>
+    map.metrics;
   
+  private HexMap map;
+
   /**
    * \brief
    * The HexMap represented by this grid.
    */
   public HexMap Map {
-    get;
-    private set;
+    get {
+      return map;
+    }
+    set {
+      if(null != map)
+        map.TileChanged -= OnTileChanged;
+      map = value;
+      if(null != map)
+        map.TileChanged += OnTileChanged;
+    }
+  }
+
+  void OnTileChanged(int i, HexTile tile) {
+    cells[i].Tile = tile;
   }
   
   /**
@@ -51,14 +66,12 @@ public class HexGrid : MonoBehaviour, IPointerClickHandler {
    */
   public event Action<HexCell> CellDown;
 
-	// Update is called once per frame
-	void Update () {
-		
-	}
+  void Start() {
+    Debug.Assert(map == null, "Map has been set up only once.");
+    Setup();
+  }
 
-  public void Setup (HexMap map) {
-    Debug.Assert(Map == null, "Map has been set up only once.");
-    Map = map;
+  public void Setup() {
     SetupGrid(map);
     SetupNPCs(map.npcs);
   }
@@ -74,24 +87,26 @@ public class HexGrid : MonoBehaviour, IPointerClickHandler {
   }
 
   void SetupGrid(HexMap map) {
-    // our cell grid is as big as the map
-    cells = new HexCell[map.tiles.Length];
-
-    for(int i = 0; i < map.tiles.Length; i++) {
-      var x = i % map.width;
-      var y = i / map.width;
-      var tile = map.tiles[i];
-      cells[i] = CreateCell(x, y, tile);
-      cells[i].SortingOrder = (map.height - y - 1) * 4 + (x % 2) * 2;
-      // we set the sorting order to 0 for the top row,
-      // 2 for the offset row, 4 for the next row, and so on.
-      // The idea is to put the player on the odd-numbered orders in
-      // between, so that the player can appear *behind* parts of the
-      // map.
-      // This is easy, when a player enters a cell, we set the
-      // player's sorting order to be one greater than the cell
-      // they're on.
-    }
+    cells =
+      map.tiles.Numbering()
+      .Select(
+        nt => {
+          var x = nt.number % map.width;
+          var y = nt.number / map.width;
+          var coordinates = HexCoordinates.FromOffsetCoordinates(x, y, map.metrics);
+          var cell = CreateCell(coordinates, nt.value);
+          cell.SortingOrder = (map.height - y - 1) * 4 + (x % 2) * 2;
+          // we set the sorting order to 0 for the top row,
+          // 2 for the offset row, 4 for the next row, and so on.
+          // The idea is to put the player on the odd-numbered orders in
+          // between, so that the player can appear *behind* parts of the
+          // map.
+          // This is easy, when a player enters a cell, we set the
+          // player's sorting order to be one greater than the cell
+          // they're on.
+          return cell;
+        })
+      .ToArray();
 
     var bounds = hexMetrics.Bounds(map.width, map.height);
 
@@ -101,19 +116,15 @@ public class HexGrid : MonoBehaviour, IPointerClickHandler {
     collider.center = bounds * (1/2f) - new Vector2(hexMetrics.INNER_HALF_WIDTH, hexMetrics.INNER_HEIGHT);
   }
 
-  HexCell CreateCell (int x , int y, HexTile tile) {
+  HexCell CreateCell (HexCoordinates coordinates, HexTile tile) {
     var obj = Instantiate(cellPrefab, transform);
     var cell = obj.GetComponent<HexCell>();
     Debug.Assert(null != cell, "HexCell component of newly instantiated cell prefab exists");
-    cell.tile = tile;
+    cell.Tile = tile;
 
     // define the position for our tile
-    var coordinates = HexCoordinates.FromOffsetCoordinates(x, y, hexMetrics);
-    var position = coordinates.Box.BottomLeft;
-    Debug.Log(String.Format("Creating cell {0} @ {1}", coordinates, position));
-
-    // make the cell belong to the grid, by reparenting its transform
     cell.coordinates = coordinates;
+    var position = coordinates.Box.BottomLeft;
     cell.transform.localPosition = position.Upgrade();
 
     return cell;
@@ -155,11 +166,19 @@ public class HexGrid : MonoBehaviour, IPointerClickHandler {
     
     Debug.Log("Clicked on grid!");
     if(data.button == 0) {
-      TouchCell(data.pointerPressRaycast.worldPosition);
+      var cell = GetCellAt(data.pointerPressRaycast.worldPosition);
+      if(null == cell)
+        Debug.Log("Touched bogus position.");
+      else
+        TouchCell(cell);
     }
   }
 
-  void TouchCell (Vector3 worldPosition) {
+  /**
+   * \brief
+   * Gets the cell in the map at the given world position.
+   */
+  public HexCell GetCellAt(Vector3 worldPosition) {
     // the input position is in world-space, so we inverse transform
     // it to obtain coordinates relative to our hexgrid.
     var position = transform.InverseTransformPoint(worldPosition);
@@ -167,18 +186,15 @@ public class HexGrid : MonoBehaviour, IPointerClickHandler {
     // coordinates.
     var coordinates = HexCoordinates.FromPosition(position, hexMetrics);
     // Get the cell at those hex coordinates.
-    var cell = this[coordinates];
-    if(cell == null) {
-      Debug.LogWarning("touched bogus position");
-      return;
-    }
+    return this[coordinates];
+  }
 
-    Debug.Log("Touched at " + coordinates.ToString() + "; raising CellDown");
+  void TouchCell (HexCell cell) {
     // raise the CellDown event passing in the cell that was clicked.
-
     if(CellDown != null)
         CellDown(cell);
   }
+
   /**
    * \brief
    * A pathfinding algorithm from a source HexCoordinates to a

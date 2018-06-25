@@ -41,33 +41,53 @@ public class HexGridManager : MonoBehaviour {
    */
   public GameObject gridPrefab;
 
-  public HexMetrics hexMetrics;
+  /**
+   * \brief
+   * Gets the metrics of the current map.
+   */
+  public HexMetrics hexMetrics => CurrentGrid?.Map.metrics;
 
   void Awake () {
     Debug.Assert(null != StateManager.Instance, "state manager exists");
     StateManager.Instance.hexGridManager = this;
-    hexMetrics = HexMetrics.Default;
     LoadMap(initialMap);
   }
 
-  private void DestroyMap() {
-    Destroy(CurrentGrid.gameObject);
+  /**
+   * \brief
+   * Destroys the currently loaded map.
+   *
+   * This is a no-op if there is no loaded map.
+   */
+  public void DestroyMap() {
+    if(null != CurrentGrid)
+      Destroy(CurrentGrid.gameObject);
+  }
+
+  /**
+   * \brief
+   * Calls `DestroyImmediate` on the current HexGrid's GameObject, if the
+   * grid exists. The #CurrentGrid property is nulled out.
+   */
+  public void DestroyMapImmediate() {
+    if(null == CurrentGrid)
+      return;
+    DestroyImmediate(CurrentGrid.gameObject);
+    CurrentGrid = null;
   }
 
   /**
    * \brief
    * Loads a new map.
-   * Destroys the current map, if any.
+   * First destroys the current map, if any.
    */
   public HexGrid LoadMap(HexMap map) {
-    if(CurrentGrid != null)
-      DestroyMap();
+    DestroyMap();
 
     var obj = GameObject.Instantiate(gridPrefab, transform);
     CurrentGrid = obj.GetComponent<HexGrid>();
     Debug.Assert(CurrentGrid != null, "gridPrefab GameObject contains a HexGrid component.");
-    CurrentGrid.hexMetrics = hexMetrics;
-    CurrentGrid.Setup(map);
+    CurrentGrid.Map = map;
     return CurrentGrid;
   }
 

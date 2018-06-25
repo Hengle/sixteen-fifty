@@ -8,10 +8,11 @@ public struct HexCoordinates {
 
   public delegate int Transformation(int coord);
 
+  [SerializeField]
   HexMetrics metrics;
 
   [SerializeField]
-  private int x, y;
+  int x, y;
   
   public int X => x;
 
