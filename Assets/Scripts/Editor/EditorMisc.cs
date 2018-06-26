@@ -17,7 +17,18 @@ namespace SixteenFifty {
   }
   
   namespace Editor {
+    /**
+     * \brief
+     * Utility class for editor extensions.
+     */
     public static class EditorMisc {
+      /**
+       * \brief
+       * Finds all instances of the `ScriptableObject` subtype `T` in
+       * the asset database.
+       *
+       * Example use: enumerating all tiles, items, etc.
+       */
       public static IEnumerable<AssetInfo<T>> GetAllInstances<T>() where T : ScriptableObject {
         var name = typeof(T).Name;
     

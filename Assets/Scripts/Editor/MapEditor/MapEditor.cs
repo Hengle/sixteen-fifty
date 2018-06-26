@@ -13,12 +13,12 @@ namespace SixteenFifty {
         HexMap targetMap;
         
         IDataSet<TileButton> tiles;
-        HexTile selectedTile;
-        HexCell cellUnderMouse;
 
+        AssetInfo<HexTile> selectedTile;
+        HexCell cellUnderCursor;
         HexGridManager hexGridManager;
 
-        bool MapLoaded => null != hexGridManager.CurrentGrid;
+        bool MapLoaded => null != hexGridManager?.CurrentGrid;
         bool ReadyToLoad => null != hexGridManager && null != targetMap;
         
         [MenuItem("Window/Map Editor")]
@@ -44,14 +44,14 @@ namespace SixteenFifty {
           
         }
         
-        void SelectTileForEditing(HexTile tile) {
-          selectedTile = tile;
+        void SelectTileForEditing(AssetInfo<HexTile> tileInfo) {
+          selectedTile = tileInfo;
         }
         
         void DrawTileButton(TileButton t) {
           var g = new GUIContent(t.texture, t.assetInfo.path);
           if(GUILayout.Button(g, GUILayout.MaxWidth(50), GUILayout.MaxHeight(50))) {
-            SelectTileForEditing(t.assetInfo.asset);
+            SelectTileForEditing(t.assetInfo);
           }
         }
         
@@ -87,6 +87,10 @@ namespace SixteenFifty {
             hexGridManager,
             typeof(HexGridManager),
             true) as HexGridManager;
+
+          EditorGUILayout.LabelField(
+            "Selected tile",
+            selectedTile?.path ?? "<none>");
 
           EditorGUILayout.BeginHorizontal();
 
@@ -126,26 +130,48 @@ namespace SixteenFifty {
             HandleUtility.GUIPointToWorldRay(Event.current.mousePosition).origin
             .Downgrade();
 
-          cellUnderMouse = hexGridManager.CurrentGrid.GetCellAt(mousePosition);
+          cellUnderCursor = hexGridManager.CurrentGrid.GetCellAt(mousePosition);
 
           if(Event.current.type == EventType.KeyDown) {
             DispatchKeyEvent(Event.current.keyCode);
           }
         }
 
+        /**
+         * \brief
+         * Dispatches on the `keyCode` to the appropriate function.
+         */
         void DispatchKeyEvent(KeyCode keyCode) {
-          if(keyCode == KeyCode.D)
-            DeleteTileUnderCursor();
+          switch(keyCode) {
+          case KeyCode.D:
+            DeleteTile();
+            break;
+          case KeyCode.Z:
+            PlaceTile();
+            break;
+          }
         }
 
-        void DeleteTileUnderCursor() {
-          if(null == cellUnderMouse) {
-            Debug.Log("Tile under cursor is null; not deleting.");
+        /**
+         * \brief
+         * Places the currently selected tile at the cursor location.
+         */
+        void PlaceTile() {
+          if(!MapLoaded || null == selectedTile || null == cellUnderCursor)
             return;
-          }
-          var t = cellUnderMouse.coordinates.ToOffsetCoordinates();
+          var t = cellUnderCursor.coordinates.ToOffsetCoordinates();
+          hexGridManager.CurrentGrid.Map[t] = selectedTile.asset;
+        }
+
+        /**
+         * \brief
+         * Deletes the tile under the cursor.
+         */
+        void DeleteTile() {
+          if(null == cellUnderCursor)
+            return;
+          var t = cellUnderCursor.coordinates.ToOffsetCoordinates();
           hexGridManager.CurrentGrid.Map[t] = null;
-          Debug.Log("Deleted tile under cursor.");
         }
       }
     }

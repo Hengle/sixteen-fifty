@@ -27,8 +27,9 @@ public class HexGrid : MonoBehaviour, IPointerClickHandler {
       if(null != map)
         map.TileChanged -= OnTileChanged;
       map = value;
-      if(null != map)
+      if(null != map) {
         map.TileChanged += OnTileChanged;
+      }
     }
   }
 
