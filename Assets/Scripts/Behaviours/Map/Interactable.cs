@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-/**
- * Things that the player can interact with in the map.
- */
-[RequireComponent(typeof(SpriteRenderer), typeof(MapEntity), typeof(MapOrientation))]
-public class Interactable : MonoBehaviour {
-  public BasicNPC npcData;
+namespace SixteenFifty.TileMap {
+  /**
+   * Things that the player character can interact with in the map.
+   */
+  [RequireComponent(typeof(SpriteRenderer), typeof(MapEntity), typeof(MapOrientation))]
+  public class Interactable : MonoBehaviour {
+    public BasicNPC npcData;
+  }
 }

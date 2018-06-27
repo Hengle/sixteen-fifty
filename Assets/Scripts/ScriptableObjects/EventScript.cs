@@ -1,13 +1,15 @@
 ﻿using System;
 using UnityEngine;
 
-using Commands;
+namespace SixteenFifty {
+  using Commands;
 
-public interface IScript {
-  Command<object> GetScript(EventRunner runner);
-}
-
-[Serializable]
-public abstract class EventScript : ScriptableObject, IScript {
-  public abstract Command<object> GetScript(EventRunner runner);
+  /**
+   * \brief
+   * A `ScriptableObject` that's an IScript.
+   */
+  [Serializable]
+  public abstract class EventScript : ScriptableObject, IScript {
+    public abstract Command<object> GetScript(EventRunner runner);
+  }
 }

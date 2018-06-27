@@ -6,110 +6,108 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-/**
- * \brief
- * A controller for the HexMap model.
-
- * The HexGrid represents a hexagonal grid map.
- */
-public class HexGridManager : MonoBehaviour {
+namespace SixteenFifty.TileMap {
   /**
-   * \brief
-   * The current managed map.
-   */
-  public HexGrid CurrentGrid {
-    get;
-    private set;
-  }
+  * \brief
+  * A controller for the HexMap model.
 
-  /**
-   * \brief
-   * The initial map to load.
-   * THIS IS FOR TESTING!
-   */
-  public HexMap initialMap;
+  * The HexGrid represents a hexagonal grid map.
+  */
+  public class HexGridManager : MonoBehaviour {
+    /**
+    * \brief
+    * The current managed map.
+    */
+    public HexGrid CurrentGrid {
+      get;
+      private set;
+    }
 
-  /**
-   * \brief
-   * The prefab used to create the player.
-   */
-  public GameObject playerPrefab;
+    /**
+    * \brief
+    * The initial map to load.
+    * THIS IS FOR TESTING!
+    */
+    public HexMap initialMap;
 
-  /**
-   * \brief
-   * The prefab used to create maps.
-   */
-  public GameObject gridPrefab;
+    /**
+    * \brief
+    * The prefab used to create the player.
+    */
+    public GameObject playerPrefab;
 
-  /**
-   * \brief
-   * Gets the metrics of the current map.
-   */
-  public HexMetrics hexMetrics => CurrentGrid?.Map.metrics;
+    /**
+    * \brief
+    * The prefab used to create maps.
+    */
+    public GameObject gridPrefab;
 
-  void Awake () {
-    Debug.Assert(null != StateManager.Instance, "state manager exists");
-    StateManager.Instance.hexGridManager = this;
-    LoadMap(initialMap);
-  }
+    /**
+    * \brief
+    * Gets the metrics of the current map.
+    */
+    public HexMetrics hexMetrics => CurrentGrid?.Map.metrics;
 
-  /**
-   * \brief
-   * Destroys the currently loaded map.
-   *
-   * This is a no-op if there is no loaded map.
-   */
-  public void DestroyMap() {
-    if(null != CurrentGrid)
-      Destroy(CurrentGrid.gameObject);
-  }
+    void Awake () {
+      Debug.Assert(null != StateManager.Instance, "state manager exists");
+      StateManager.Instance.hexGridManager = this;
+      LoadMap(initialMap);
+    }
 
-  /**
-   * \brief
-   * Calls `DestroyImmediate` on the current HexGrid's GameObject, if the
-   * grid exists. The #CurrentGrid property is nulled out.
-   */
-  public void DestroyMapImmediate() {
-    if(null == CurrentGrid)
-      return;
-    DestroyImmediate(CurrentGrid.gameObject);
-    CurrentGrid = null;
-  }
+    /**
+    * \brief
+    * Destroys the currently loaded map.
+    *
+    * This is a no-op if there is no loaded map.
+    */
+    public void DestroyMap() {
+      if(null != CurrentGrid)
+        Destroy(CurrentGrid.gameObject);
+    }
 
-  /**
-   * \brief
-   * Loads a new map.
-   * First destroys the current map, if any.
-   */
-  public HexGrid LoadMap(HexMap map) {
-    DestroyMap();
+    /**
+    * \brief
+    * Calls `DestroyImmediate` on the current HexGrid's GameObject, if the
+    * grid exists. The #CurrentGrid property is nulled out.
+    */
+    public void DestroyMapImmediate() {
+      if(null == CurrentGrid)
+        return;
+      DestroyImmediate(CurrentGrid.gameObject);
+      CurrentGrid = null;
+    }
 
-    var obj = GameObject.Instantiate(gridPrefab, transform);
-    CurrentGrid = obj.GetComponent<HexGrid>();
-    Debug.Assert(CurrentGrid != null, "gridPrefab GameObject contains a HexGrid component.");
-    CurrentGrid.Map = map;
-    return CurrentGrid;
-  }
+    /**
+    * \brief
+    * Loads a new map.
+    * First destroys the current map, if any.
+    */
+    public HexGrid LoadMap(HexMap map) {
+      DestroyMap();
 
-  public PlayerController SpawnPlayer() {
-    var obj = Instantiate(playerPrefab, CurrentGrid.transform);
-    return obj.GetComponent<PlayerController>();
-  }
+      var obj = GameObject.Instantiate(gridPrefab, transform);
+      CurrentGrid = obj.GetComponent<HexGrid>();
+      Debug.Assert(CurrentGrid != null, "gridPrefab GameObject contains a HexGrid component.");
+      CurrentGrid.Map = map;
+      return CurrentGrid;
+    }
 
-  void Start() {
-    if(CurrentGrid != null) {
-      var player = SpawnPlayer();
-      var me = player.GetComponent<MapEntity>();
+    public PlayerController SpawnPlayer() {
+      var obj = Instantiate(playerPrefab, CurrentGrid.transform);
+      return obj.GetComponent<PlayerController>();
+    }
 
-      me.Warp(
-        HexCoordinates.FromOffsetCoordinates(
-          CurrentGrid.Map.initialPlayerX,
-          CurrentGrid.Map.initialPlayerY,
-          CurrentGrid.hexMetrics));
+    void Start() {
+      if(CurrentGrid != null) {
+        var player = SpawnPlayer();
+        var me = player.GetComponent<MapEntity>();
 
-      // if there's a script to run in the new map, then run it.
-      if(null != CurrentGrid.Map.mapLoad)
-        StateManager.Instance.eventManager.BeginScript(CurrentGrid, CurrentGrid.Map.mapLoad);
+        me.Warp(
+          HexCoordinates.FromOffsetCoordinates(
+            CurrentGrid.Map.initialPlayerX,
+            CurrentGrid.Map.initialPlayerY,
+            CurrentGrid.hexMetrics));
+      }
     }
   }
 }

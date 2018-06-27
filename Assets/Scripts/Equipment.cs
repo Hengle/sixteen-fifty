@@ -4,6 +4,8 @@ using System.Linq;
 
 using UnityEngine;
 
+using SixteenFifty.Serialization;
+
 public class EquipmentDictionary : SerializableDictionary<EquipmentType, EquipmentItem> {
   public EquipmentDictionary() : base() {
   }

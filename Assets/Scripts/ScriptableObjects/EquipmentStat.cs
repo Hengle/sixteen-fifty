@@ -4,6 +4,8 @@ using System.Collections.Generic;
 
 using UnityEngine;
 
+using SixteenFifty.Serialization;
+
 /**
  * \brief
  * Dummy interface for equipment stats.
@@ -14,7 +16,7 @@ public class EquipmentStat : Stat {
 
 [Serializable]
 public class EquipmentStatDictionary :
-SerializableDictionary<EquipmentStat, StatValue> {
+    SerializableDictionary<EquipmentStat, StatValue> {
   public EquipmentStatDictionary() : base() {
   }
   public EquipmentStatDictionary(IDictionary<EquipmentStat, StatValue> stats) : base(stats) {
