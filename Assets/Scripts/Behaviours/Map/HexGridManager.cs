@@ -61,8 +61,10 @@ namespace SixteenFifty.TileMap {
     * This is a no-op if there is no loaded map.
     */
     public void DestroyMap() {
-      if(null != CurrentGrid)
+      if(null != CurrentGrid) {
+        CurrentGrid.OnDisable();
         Destroy(CurrentGrid.gameObject);
+      }
     }
 
     /**
