@@ -130,5 +130,22 @@ namespace SixteenFifty.TileMap {
     * The integer is the index of the tile in #tiles.
     */
     public event Action<int, HexTile> TileChanged;
+
+    /**
+     * \brief
+     * Clears all subscriptions to #TileChanged.
+     *
+     * This should only be used when the map is not in use.
+     */
+    public void ClearTileChanged() {
+      if(null == TileChanged)
+        return;
+      Debug.Log(
+        String.Format(
+          "Cleared {0} subscriptions to TileChanged for HexMap {1}",
+          TileChanged.GetInvocationList().Length,
+          name));
+      TileChanged = null;
+    }
   }
 }
