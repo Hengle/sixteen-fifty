@@ -20,7 +20,7 @@ namespace SixteenFifty {
       HexGridManager hexGridManager;
 
       bool MapLoaded => null != hexGridManager?.CurrentGrid;
-      bool ReadyToLoad => null != hexGridManager && null != targetMap;
+      bool ReadyToLoad => null != hexGridManager && null != targetMap && !MapLoaded;
 
       [MenuItem("Window/Map Editor")]
       public static void ShowWindow() {
