@@ -90,7 +90,7 @@ namespace SixteenFifty.TileMap {
       coordinates
       .Neighbours
       .Select(i => grid[i])
-      .Where(o => null != o);
+      .NotNull();
 
     /**
     * \brief
