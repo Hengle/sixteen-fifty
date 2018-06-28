@@ -16,7 +16,6 @@ namespace SixteenFifty {
       IDataSet<TileButton> tiles;
 
       AssetInfo<HexTile> selectedTile;
-      HexCell cellUnderCursor;
       HexGridManager hexGridManager;
 
       bool MapLoaded => null != hexGridManager?.CurrentGrid;
@@ -131,24 +130,23 @@ namespace SixteenFifty {
           HandleUtility.GUIPointToWorldRay(Event.current.mousePosition).origin
           .Downgrade();
 
-        cellUnderCursor = hexGridManager.CurrentGrid.GetCellAt(mousePosition);
+        var cell = hexGridManager.CurrentGrid.GetCellAt(mousePosition);
 
-        if(Event.current.type == EventType.KeyDown) {
-          DispatchKeyEvent(Event.current.keyCode);
-        }
+        if(Event.current.type == EventType.KeyDown)
+          DispatchKeyEvent(Event.current.keyCode, cell);
       }
 
       /**
         * \brief
         * Dispatches on the `keyCode` to the appropriate function.
         */
-      void DispatchKeyEvent(KeyCode keyCode) {
+      void DispatchKeyEvent(KeyCode keyCode, HexCell cell) {
         switch(keyCode) {
         case KeyCode.D:
-          DeleteTile();
+          DeleteTile(cell);
           break;
         case KeyCode.Z:
-          PlaceTile();
+          PlaceTile(cell);
           break;
         }
       }
@@ -157,10 +155,10 @@ namespace SixteenFifty {
         * \brief
         * Places the currently selected tile at the cursor location.
         */
-      void PlaceTile() {
-        if(!MapLoaded || null == selectedTile || null == cellUnderCursor)
+      void PlaceTile(HexCell cell) {
+        if(!MapLoaded || null == selectedTile || null == cell)
           return;
-        var t = cellUnderCursor.coordinates.ToOffsetCoordinates();
+        var t = cell.coordinates.ToOffsetCoordinates();
         hexGridManager.CurrentGrid.Map[t] = selectedTile.asset;
       }
 
@@ -168,10 +166,12 @@ namespace SixteenFifty {
         * \brief
         * Deletes the tile under the cursor.
         */
-      void DeleteTile() {
-        if(null == cellUnderCursor)
+      void DeleteTile(HexCell cell) {
+        Debug.Log(String.Format("DELETE {0}.", cell));
+        if(null == cell) {
           return;
-        var t = cellUnderCursor.coordinates.ToOffsetCoordinates();
+        }
+        var t = cell.coordinates.ToOffsetCoordinates();
         hexGridManager.CurrentGrid.Map[t] = null;
       }
     }
