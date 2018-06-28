@@ -35,6 +35,22 @@ namespace SixteenFifty.TileMap {
       }
     }
 
+    void OnEnable() {
+      // sets up event handlers appropriately, but looks weird.
+      Map = Map;
+      Debug.Log("hello");
+    }
+
+    /**
+     * Public because HexGridManager will call this before
+     * DestroyImmediate-ing the HexGrid to make sure the subscription
+     * to TileChanged is removed.
+     */
+    public void OnDisable() {
+      if(null != map)
+        map.TileChanged -= OnTileChanged;
+    }
+
     void OnTileChanged(int i, HexTile tile) {
       cells[i].Tile = tile;
     }
@@ -70,7 +86,6 @@ namespace SixteenFifty.TileMap {
     public event Action<HexCell> CellDown;
 
     void Start() {
-      Debug.Assert(map == null, "Map has been set up only once.");
       Setup();
     }
 
@@ -144,7 +159,9 @@ namespace SixteenFifty.TileMap {
       get {
         var oc = p.ToOffsetCoordinates();
         var i = oc.Item1 + oc.Item2 * Map.width;
-        return i >= 0 && i < cells.Length ? cells[i] : null;
+        // bounds-check the index and return the HexCell object.
+        var cell = i >= 0 && i < cells.Length ? cells[i] : null;
+        return cell;
       }
     }
 
