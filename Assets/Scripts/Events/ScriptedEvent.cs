@@ -66,6 +66,7 @@ namespace SixteenFifty {
 
     public override void Call(EventRunner runner) {
       runner.Player.inventory.AddItem(item, count);
+      Debug.Log("Gave item.");
     }
   }
 }
