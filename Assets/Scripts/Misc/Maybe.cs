@@ -2,48 +2,85 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-public class Maybe<T> : IEnumerable<T> {
-  public static Maybe<R> Just<R>(R value) {
-    return new Maybe<R>(value);
+namespace SixteenFifty {
+  public class Maybe<T> : IEnumerable<T> {
+    public static Maybe<T> Just(T value) {
+      return new Maybe<T>(value);
+    }
+
+    public static Maybe<T> Nothing() {
+      return new Maybe<T>();
+    }
+
+    public static Maybe<R> FromNullable<R>(R value) where R : class =>
+      null == value ? Maybe<R>.Nothing() : Maybe<R>.Just(value);
+
+    private T value;
+    private bool hasValue;
+
+    public Maybe() {
+      value = default(T);
+      hasValue = false;
+    }
+
+    public Maybe(T value) {
+      this.value = value;
+      hasValue = true;
+    }
+
+    public R Eliminate<R>(Func<R> ifNothing, Func<T, R> ifJust) {
+      if(hasValue)
+        return ifJust(value);
+      else
+        return ifNothing();
+    }
+
+    public Maybe<R> Then<R>(Func<T, Maybe<R>> continuation) {
+      return Eliminate(() => Maybe<R>.Nothing(), continuation);
+    }
+
+    public Maybe<U> Map<U>(Func<T, U> f) =>
+      Eliminate(
+        () => Maybe<U>.Nothing(),
+        t => Maybe<U>.Just(f(t)));
+
+    public IEnumerator<T> GetEnumerator() {
+      if(hasValue)
+        yield return value;
+      else
+        yield break;
+    }
+
+    IEnumerator IEnumerable.GetEnumerator() {
+      IEnumerator<T> e = GetEnumerator();
+      return (IEnumerator)e;
+    }
   }
 
-  public static Maybe<R> Nothing<R>() {
-    return new Maybe<R>();
-  }
+  public static class IEnumerableMaybeExt {
+    /**
+     * \brief
+     * Transforms and filters a sequence at one.
+     *
+     * Transforms the elements of the IEnumerable according to the
+     * given function, and preserving the element in the output only
+     * if it is Just.
+     */
+    public static IEnumerable<T> SelectWhere<S, T>(this IEnumerable<S> self, Func<S, Maybe<T>> f) {
+      // have to assign default because our code is too complicated
+      // for the definite-assignment checker
+      T t = default(T);
+      bool go = false;
 
-  private T value;
-  private bool hasValue;
-
-  public Maybe() {
-    value = default(T);
-    hasValue = false;
-  }
-
-  public Maybe(T value) {
-    this.value = value;
-    hasValue = true;
-  }
-
-  public R Eliminate<R>(Func<R> ifNothing, Func<T, R> ifJust) {
-    if(hasValue)
-      return ifJust(value);
-    else
-      return ifNothing();
-  }
-
-  public Maybe<R> Then<R>(Func<T, Maybe<R>> continuation) {
-    return Eliminate(() => Nothing<R>(), continuation);
-  }
-
-  public IEnumerator<T> GetEnumerator() {
-    if(hasValue)
-      yield return value;
-    else
-      yield break;
-  }
-
-  IEnumerator IEnumerable.GetEnumerator() {
-    IEnumerator<T> e = GetEnumerator();
-    return (IEnumerator)e;
+      foreach(var s in self) {
+        f(s).Eliminate(
+          () => go = false,
+          r => {
+            t = r;
+            return go = true;
+          });
+        if(go) yield return t;
+      }
+    }
   }
 }

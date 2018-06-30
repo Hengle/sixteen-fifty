@@ -1,6 +1,8 @@
 using System;
 using System.Runtime.Serialization;
 
+using UnityEngine;
+
 namespace SixteenFifty.Serialization {
   public class UnityObjectSurrogate : ISerializationSurrogate {
     StrObjDict objectFields;
@@ -19,6 +21,9 @@ namespace SixteenFifty.Serialization {
         SerializationInfo info,
         StreamingContext context) {
       string fieldName = context.Context as string;
+      Debug.LogFormat(
+        "UnityObjectSurrogate is serializing {0}.",
+        fieldName);
       // because of the way the surrogate is registered, it is linked
       // to the UnityEngine.Object type:
       // that's the only type `obj` could ever really have.

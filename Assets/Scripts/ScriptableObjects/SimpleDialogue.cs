@@ -1,6 +1,8 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+
 using UnityEngine;
 
 namespace SixteenFifty {
@@ -10,6 +12,7 @@ namespace SixteenFifty {
   * In a simple dialogue, speakers don't appear and disappear during the text.
   * Speakers appear, at the very beginning, some text is played out, and then the speakers disappear.
   */
+  [Serializable]
   [EventAttribute(friendlyName = "Simple Dialogue")]
   [CreateAssetMenu(menuName = "1650/Events/Simple Dialogue")]
   public class SimpleDialogue : EventScript {

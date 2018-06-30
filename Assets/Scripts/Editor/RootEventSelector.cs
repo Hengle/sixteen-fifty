@@ -6,6 +6,8 @@ using UnityEngine;
 using UnityEditor;
 
 namespace SixteenFifty {
+  using Reflection;
+  
   public class EventSelectorEditor {
     private static Type[] knownScripts;
 

@@ -22,6 +22,7 @@ namespace SixteenFifty {
    * \brief
    * A script that's made up of a predetermined sequence of other scripts.
    */
+  [EventAttribute(friendlyName = "Sequence")]
   public class SequenceScript : IScript {
     public List<IScript> items = new List<IScript>();
 
@@ -59,6 +60,7 @@ namespace SixteenFifty {
     }
   }
 
+  [Serializable]
   [EventAttribute(friendlyName = "Give Item")]
   public class GiveItem : ImmediateScript {
     public Item item;
