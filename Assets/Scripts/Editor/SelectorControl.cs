@@ -17,10 +17,19 @@ public class SelectorControl {
 
   /**
     * \brief
-    * Gets the selected index in the choices array that was passed to
-    * the constructor, or -1 if nothing is selected yet.
+    * Gets or sets the selected index in the choices array that was
+    * passed to the constructor, or `-1` if nothing is selected yet.
+    *
+    * To *deselect*, assign `-1`.
     */
-  public int Selected => selected - 1;
+  public int Selected {
+    get {
+      return selected - 1;
+    }
+    set {
+      selected = value + 1;
+    }
+  }
 
   public event Action<int> Changed;
 
@@ -30,11 +39,11 @@ public class SelectorControl {
   [SerializeField]
   string label;
 
-  public SelectorControl(string label, string[] choices) {
+  public SelectorControl(string label, string[] choices, int initialChoice = -1) {
     this.choices = new [] { "Select" }.Concat(choices).ToArray();
     this.label = label;
 
-    selected = 0;
+    selected = initialChoice + 1;
   }
 
   public void Draw() {

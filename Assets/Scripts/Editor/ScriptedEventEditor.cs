@@ -135,11 +135,21 @@ namespace SixteenFifty.Editor {
     public override void OnInspectorGUI() {
       DrawDefaultInspector();
 
-      this.target = base.target as ScriptedEvent;
+      // types ftw
+      target = base.target as ScriptedEvent;
       Debug.Assert(
         null != target,
         "ScriptedEventEditor target is a ScriptedEvent.");
 
+      var rootType = target.root?.GetType();
+      rootSelector.Selected =
+        Array.IndexOf(supportedEventTypes, rootType);
+      if(rootSelector.Selected == -1 && target.root != null) {
+        EditorGUILayout.LabelField(
+          String.Format(
+            "Root event has unsupported type {0}.",
+            rootType));
+      }
       rootSelector.Draw();
 
       // if there's no event selected, then there's nothing left to do.
