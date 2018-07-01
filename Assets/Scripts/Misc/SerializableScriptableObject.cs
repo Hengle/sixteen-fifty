@@ -42,7 +42,7 @@ namespace SixteenFifty.Serialization {
         var selector = new SurrogateSelector();
 
         Action<Type, ISerializationSurrogate> addSurrogate = (type, surrogate) => {
-          selector.AddSurrogate(type, new StreamingContext(), surrogate);
+          selector.AddSurrogate(type, new StreamingContext(StreamingContextStates.All), surrogate);
           Debug.LogFormat(
             "Registered surrogate: {0} -> {1}.",
             type,
@@ -134,7 +134,7 @@ namespace SixteenFifty.Serialization {
         // try to retrieve the field value as a custom-serialized byte
         // array.
         else if(dataFields.TryGetValue(name, out data))
-          using(var stream = new MemoryStream())
+          using(var stream = new MemoryStream(data))
             result = Serializer.Deserialize(stream);
         
         // now result is either the Unity Object, OR the deserialized
