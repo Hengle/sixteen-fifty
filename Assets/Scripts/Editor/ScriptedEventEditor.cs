@@ -63,7 +63,6 @@ namespace SixteenFifty.Editor {
         GetEditorTypes()
         .Map<Dictionary<Type, ScriptedEventItemEditor>, Type, Type, ScriptedEventItemEditor>(
           t => t.DefaultConstruct<ScriptedEventItemEditor>());
-      Debug.Log("instantiated editors");
     }
 
     /**

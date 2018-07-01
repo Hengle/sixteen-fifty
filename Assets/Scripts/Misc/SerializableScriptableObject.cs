@@ -43,10 +43,10 @@ namespace SixteenFifty.Serialization {
 
         Action<Type, ISerializationSurrogate> addSurrogate = (type, surrogate) => {
           selector.AddSurrogate(type, new StreamingContext(StreamingContextStates.All), surrogate);
-          Debug.LogFormat(
-            "Registered surrogate: {0} -> {1}.",
-            type,
-            surrogate);
+          // Debug.LogFormat(
+          //   "Registered surrogate: {0} -> {1}.",
+          //   type,
+          //   surrogate);
         };
 
         var unityObject = typeof(UnityEngine.Object);
