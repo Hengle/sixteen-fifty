@@ -52,9 +52,6 @@ namespace SixteenFifty.Serialization {
         var unityObject = typeof(UnityEngine.Object);
         var unitySurrogate = new UnityObjectSurrogate(objectFields);
 
-        // add the surrogate for raw UnityEngine.Object
-        // addSurrogate(unityObject, unitySurrogate);
-
         // now to add the surrogate for every subclass of
         // UnityEngine.Object.
 
@@ -64,6 +61,7 @@ namespace SixteenFifty.Serialization {
           .Concat(GetType().Assembly.GetTypes())
           .Where(t => unityObject.IsAssignableFrom(t));
 
+        // and then add for each
         foreach(var type in unityTypes) {
           addSurrogate(type, unitySurrogate);
         }
@@ -129,6 +127,11 @@ namespace SixteenFifty.Serialization {
         byte[] data;
         
         // try to retrieve the field value as a unity object.
+        // it's crucial that we do this first, because when
+        // serializing a nested unity object, (e.g. a unity object
+        // field inside a serializable basic object,) an entry will
+        // be added to both objectFields and dataFields!
+        // But the associated value in dataFields will be garbage.
         if(objectFields.TryGetValue(name, out obj))
           result = obj;
         // try to retrieve the field value as a custom-serialized byte
