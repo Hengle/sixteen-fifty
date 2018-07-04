@@ -9,17 +9,18 @@ namespace SixteenFifty.Reflection {
   public static class SubtypeReflector {
     /**
     * \brief
-    * Enumerates all types in the assembly that contains the SubtypeReflector class.
+    * Enumerables all types in the assembly containing type `A`.
     */
-    public static IEnumerable<Type> GetTypes() =>
-      typeof(SubtypeReflector).Assembly.GetTypes();
+    public static IEnumerable<Type> GetTypes<A>() =>
+      typeof(A).Assembly.GetTypes();
 
     /**
     * \brief
-    * Enumerates all subclasses of a given class type `T`.
+    * Enumerates all subclasses of a given class type `T` that reside
+    * in the same assembly as type `A`.
     */
-    public static IEnumerable<Type> GetSubtypes<T>() where T : class =>
-      GetSubtypes(typeof(T));
+    public static IEnumerable<Type> GetSubtypes<T, A>() where T : class =>
+      GetSubtypes<A>(typeof(T));
 
     /**
     * \brief
@@ -29,15 +30,23 @@ namespace SixteenFifty.Reflection {
     * of this method, since this method does not check that `type`
     * refers to a class type.
     */
-    public static IEnumerable<Type> GetSubtypes(Type type) =>
-      GetTypes().Where(t => t.IsClass && t.IsSubclassOf(type));
+    public static IEnumerable<Type> GetSubtypes<A>(Type type) =>
+      GetTypes<A>().Where(t => t.IsClass && t.IsSubclassOf(type));
+
+    /**
+     * \brief
+     * Enumerates all implementations of the interface type `T` that
+     * reside in the same assembly as `T`.
+    public static IEnumerable<Type> GetImplementations<T>() where T : class =>
+      GetImplementations<T, T>(typeof(T));
 
     /**
     * \brief
-    * Enumerates all implementations of the interface `T`.
+    * Enumerates all implementations of the interface `T` that reside
+    * in the same assembly as `A`.
     */
-    public static IEnumerable<Type> GetImplementations<T>() where T : class =>
-      GetImplementations(typeof(T));
+    public static IEnumerable<Type> GetImplementations<T, A>() where T : class =>
+      GetImplementations<A>(typeof(T));
 
     /**
     * \brief
@@ -47,12 +56,27 @@ namespace SixteenFifty.Reflection {
     * instead of this method, since this method does not check that
     * `type` refers to an interface type.
     */
-    public static IEnumerable<Type> GetImplementations(Type type) =>
-      GetTypes().Where(t => t.IsClass && type.IsAssignableFrom(t));
+    public static IEnumerable<Type> GetImplementations<A>(Type type) =>
+      GetTypes<A>().Where(t => t.IsClass && type.IsAssignableFrom(t));
 
-    public static IEnumerable<Type> WithAttribute<T>(this IEnumerable<Type> self) =>
+    /**
+     * \brief
+     * Filters an `IEnumerable<Type>` to contain only those types with
+     * the given attribute type `T`.
+     */
+    public static IEnumerable<Type>
+    WithAttribute<T>(this IEnumerable<Type> self) where T : Attribute =>
       self.WithAttribute(typeof(T));
 
+    /**
+     * \brief
+     * Filters an `IEnumerable<Type>` to contain only those types with
+     * the given attribute type `T`.
+     *
+     * It is preferable to use the generic version of this method,
+     * since it statically verifies that the attribute type is a
+     * subclass of `Attribute`.
+     */
     public static IEnumerable<Type> WithAttribute(this IEnumerable<Type> self, Type attrType) =>
       self.Where(
         type =>
@@ -91,7 +115,7 @@ namespace SixteenFifty.Reflection {
     * TypeMismatch exception is thrown.
     *
     * \returns
-    * The well-typed value of the named argument.
+    * The well-typed value of the named argument, boxed in a Maybe.
     * If there is no such named argument, then `Nothing`.
     *
     * \sa
@@ -109,7 +133,6 @@ namespace SixteenFifty.Reflection {
             throw new TypeMismatch(val.GetType(), typeof(T));
         })
       .FirstOrSentinel(Maybe<T>.Nothing());
-
 
     /**
      * \brief
@@ -132,21 +155,17 @@ namespace SixteenFifty.Reflection {
         throw new TypeMismatch(t, typeof(T));
       return (T)t.GetConstructor(Type.EmptyTypes).Invoke(null);
     }
-  }
 
-  public class TypeMismatch : SixteenFiftyException {
-    public static string Format(Type actual, Type expected) =>
-      String.Format(
-        "Type mismatch: expected type '{0}'; actual type is '{1}'",
-        expected,
-        actual);
-
-    public Type actual;
-    public Type expected;
-
-    public TypeMismatch(Type actual, Type expected) : base(Format(actual, expected)) {
-      this.actual = actual;
-      this.expected = expected;
+    /**
+     * \brief
+     * Invokes the default constructor for the type.
+     *
+     * If the type `t` (or a supertype of it) is statically known,
+     * then it is preferable to call the generic version of this
+     * method, as it returns a well-typed result, instead of `object`.
+     */
+    public static object DefaultConstruct(this Type t) {
+      return t.GetConstructor(Type.EmptyTypes).Invoke(null);
     }
   }
 }

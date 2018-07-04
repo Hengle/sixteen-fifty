@@ -14,25 +14,15 @@ namespace SixteenFifty {
     public IScript root;
   }
 
-  public interface IScript {
-    Command<object> GetScript(EventRunner runner);
-  }
-
   /**
    * \brief
-   * A script that's made up of a predetermined sequence of other scripts.
+   * Scripted event code.
+   *
+   * This code is compiled into the Command monad, and ultimately
+   * executed as a coroutine.
    */
-  [EventAttribute(friendlyName = "Sequence")]
-  public class SequenceScript : IScript {
-    public List<IScript> items = new List<IScript>();
-
-    public Command<object> GetScript(EventRunner runner) {
-      var cmd = Command<object>.Empty;
-      foreach(var s in items) {
-        cmd = cmd.Then(_ => s.GetScript(runner));
-      }
-      return cmd;
-    }
+  public interface IScript {
+    Command<object> GetScript(EventRunner runner);
   }
 
   /**

@@ -9,11 +9,17 @@ using UnityEditor;
   * Used to draw a drop-down menu with choices.
   *
   * This class contains state to represent the currently selected choice.
+  *
+  * There are two primary ways of interacting with the selector.
+  * 1. Registering a listener on #Changed to be notified when the
+  *    selected index changes.
+  * 2. Monitoring #IsChanged, which becomes true on the frames where a
+  *    change occurs.
   */
 [Serializable]
 public class SelectorControl {
   [SerializeField]
-  int selected;
+  protected int selected;
 
   /**
     * \brief
@@ -31,25 +37,50 @@ public class SelectorControl {
     }
   }
 
+  /**
+   * \brief
+   * Raised when the selected index changes.
+   *
+   * The newly selected index is the parameter.
+   *
+   * Note that this event is raised during #Draw.
+   */
   public event Action<int> Changed;
 
-  [SerializeField]
-  string[] choices;
+  /**
+   * \brief
+   * Was the selected index changed in the last frame?
+   */
+  public bool IsChanged {
+    get;
+    protected set;
+  }
 
   [SerializeField]
-  string label;
+  protected string[] choices;
+
+  [SerializeField]
+  protected string label;
 
   public SelectorControl(string label, string[] choices, int initialChoice = -1) {
     this.choices = new [] { "Select" }.Concat(choices).ToArray();
     this.label = label;
 
     selected = initialChoice + 1;
+    IsChanged = false;
   }
 
-  public void Draw() {
+  /**
+   * \brief
+   * Draws the selector, and returns a boolean indicating whether the
+   * selection changed.
+   */
+  public bool Draw() {
     var old = selected;
     selected = EditorGUILayout.Popup(label, selected, choices);
-    if(old != selected)
+    IsChanged = old != selected;
+    if(IsChanged)
       Changed?.Invoke(Selected);
+    return IsChanged;
   }
 }
