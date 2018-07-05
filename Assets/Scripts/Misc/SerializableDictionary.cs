@@ -8,12 +8,15 @@ using UnityEngine;
 namespace SixteenFifty.Serialization {
   [Serializable]
   public class SerializableDictionary<K, V> : Dictionary<K, V>, ISerializationCallbackReceiver {
+    [HideInInspector]
     [SerializeField]
     private List<K> keys = new List<K>();
   
+    [HideInInspector]
     [SerializeField]
     private List<V> values = new List<V>();
   
+    [HideInInspector]
     [SerializeField]
     private int count = 0;
   
@@ -22,7 +25,7 @@ namespace SixteenFifty.Serialization {
   
     public SerializableDictionary(IDictionary<K, V> dict) : base(dict) {
     }
-  
+
     [Obsolete("Manual call not supported.", true)]
     public void OnBeforeSerialize() {
       keys.Clear();
@@ -35,7 +38,7 @@ namespace SixteenFifty.Serialization {
       }
       count = Count;
     }
-  
+
     public void OnAfterDeserialize() {
       Clear();
   

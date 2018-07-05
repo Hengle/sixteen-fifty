@@ -97,10 +97,15 @@ namespace SixteenFifty.Editor {
 
     public Type SelectedType {
       get {
+        // why -1? There's an extra choice in the selector for null.
+        var l1 = choices.Length - 1;
+        var l2 = ScriptedEventEditorContext.SupportedEvents.Length;
         Debug.Assert(
-          // why -1? There's an extra choice in the selector for null.
-          choices.Length - 1 == ScriptedEventEditorContext.SupportedEvents.Length,
-          "Number of choices in EventSelectorControl matches number of supported events.");
+          l1 == l2,
+          String.Format(
+            "Number of choices {0} in EventSelectorControl " +
+            "matches number of supported events {1}.",
+            l1, l2));
         if(Selected == -1)
           return null;
         else

@@ -111,10 +111,14 @@ namespace SixteenFifty.Serialization {
             // implementation is changed so that it no longer extends
             // Unity Object.
             objectFields.Remove(name);
-            dataFields[name] = stream.ToArray();
+            dataFields[name] = new ByteArray { value = stream.ToArray() };
           }
         }
       }
+
+      Debug.LogFormat(
+        "Data fields: {0}; Object fields: {1}.",
+        dataFields.Count, objectFields.Count);
     }
     
     void Deserialize() {
@@ -124,7 +128,7 @@ namespace SixteenFifty.Serialization {
         
         // for storing what we get out of the dictionaries.
         UnityEngine.Object obj;
-        byte[] data;
+        ByteArray data;
         
         // try to retrieve the field value as a unity object.
         // it's crucial that we do this first, because when
@@ -132,13 +136,28 @@ namespace SixteenFifty.Serialization {
         // field inside a serializable basic object,) an entry will
         // be added to both objectFields and dataFields!
         // But the associated value in dataFields will be garbage.
-        if(objectFields.TryGetValue(name, out obj))
+        if(objectFields.TryGetValue(name, out obj)) {
           result = obj;
+          Debug.LogFormat(
+            "Deserialized field {0} -> {1} from objectFields",
+            name, result);
+        }
         // try to retrieve the field value as a custom-serialized byte
         // array.
-        else if(dataFields.TryGetValue(name, out data))
-          using(var stream = new MemoryStream(data))
+        else if(dataFields.TryGetValue(name, out data)) {
+          using(var stream = new MemoryStream(data.value)) {
             result = Serializer.Deserialize(stream);
+          }
+          Debug.LogFormat(
+            "Deserialized field {0} -> {1} from dataFields",
+            name, result);
+        }
+        else {
+          Debug.LogFormat(
+            "Failed to deserialize field {0}. It may have been lost, or null.",
+            name);
+
+        }
         
         // now result is either the Unity Object, OR the deserialized
         // object, OR null in case the field name did not appear in
@@ -150,6 +169,7 @@ namespace SixteenFifty.Serialization {
       }
     }
     
+
     /**
      * \brief
      * Enumerates the fields of interface type in this object.

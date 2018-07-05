@@ -43,40 +43,58 @@ namespace SixteenFifty.Editor {
 
       // make the selector select the right thing.
       selector.Update(type);
+
       // if the selection has changed, or there is no editor, or the
       // current editor cannot edit the target script, then we need to
       // instantiate a new editor, but only if we *should* instantiate
       // one.
-      if(selector.Draw() || editor == null || !editor.CanEdit(type)) {
-        if(selector.ShouldInstantiate) {
-          // if after instantiation there still isn't an editor, it's
-          // because there just isn't one for the desired type!
-          if(null == (editor = selector.InstantiateEditor())) {
-            EditorGUILayout.LabelField(
-              String.Format(
-                "No editor for type `{0}`.",
-                type));
-            return target;
-          }
+      if(selector.Draw()) {
+        // if there is no selected type, then the event item is
+        // dead.
+        var selectedType = selector.SelectedType;
+        if(selectedType == null) {
+          return null;
         }
-        else {
-          editor = null;
+
+        if(selectedType != type) {
+          target = selectedType?.DefaultConstruct<IScript>();
+          Debug.Assert(
+            null != target,
+            "Target object exists after default construction.");
+          type = selectedType;
+        }
+      }
+      else if(type == null)
+        return null;
+
+      // from here on, we're sure that:
+      // - type is not null
+      // - target is not null
+      // - type is the type of target
+      // with this, we can construct and draw the editor for the
+      // target.
+
+      // if we have no editor, or the current editor is inappropriate,
+      if(editor == null || !editor.CanEdit(type)) {
+        // then we need to construct a new one
+        if(null == (editor = ScriptedEventEditorContext.GetEditor(type))) {
+          // but if after construction it's still null, that means
+          // that we couldn't find an appropriate editor, so we draw a
+          // warning in the inspector.
+          EditorGUILayout.LabelField(
+            String.Format(
+              "No editor for type {0}.", type));
           return target;
         }
+
+        Debug.Assert(
+          editor.CanEdit(type),
+          "Newly created editor can edit the target object.");
       }
 
-      // if there is no selected type, then the event item is
-      // dead.
-      var selectedType = selector.SelectedType;
-      if(selectedType == null) {
-        return null;
-      }
-
-      // if the selected type of event item differs from the current
-      // target object, then we need to make a new target object.
-      if(selectedType != type) {
-        target = selectedType.DefaultConstruct<IScript>();
-      }
+      // from here on, we're certain that:
+      // - editor is not null
+      // - editor can edit target
 
       // finally we can edit the target, and return it.
       editor.DrawInspector(target);
