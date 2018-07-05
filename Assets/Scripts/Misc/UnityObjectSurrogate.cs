@@ -17,14 +17,19 @@ namespace SixteenFifty.Serialization {
     }
 
     public void GetObjectData(
-        object obj,
+        object _obj,
         SerializationInfo info,
         StreamingContext context) {
-      string fieldName = context.Context as string;
-      // because of the way the surrogate is registered, it is linked
-      // to the UnityEngine.Object type:
-      // that's the only type `obj` could ever really have.
-      objectFields[fieldName] = obj as UnityEngine.Object;
+      var obj = _obj as UnityEngine.Object;
+      Debug.Assert(
+        obj != null,
+        "UnityObjectSurrogate's target is a Unity Object.");
+
+      // we use the instance ID of the key, since context.Context is
+      // null. Once again, vexe's code is bogus.
+      var id = obj.GetInstanceID();
+      objectFields[id.ToString()] = obj;
+      info.AddValue("id", id);
     }
 
     public object SetObjectData(
@@ -32,8 +37,9 @@ namespace SixteenFifty.Serialization {
         SerializationInfo info,
         StreamingContext context,
         ISurrogateSelector selector) {
-      string fieldName = context.Context as string;
-      return objectFields[fieldName];
+      var id = info.GetValue("id", typeof(int));
+      return objectFields[id.ToString()];
+
     }
   }
 }
