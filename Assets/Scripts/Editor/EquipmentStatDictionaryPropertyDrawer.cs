@@ -4,19 +4,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
-// public static class ListDictionaryPropertyDrawer<K, V> {
-//   public static void DrawListDictionary(Rect position, ListDictionary<K, V> dict) {
-//     for(var i = 0; i < dict.Count; i++) {
-//       var p = dict[i];
-//       position = EditorGUI.PrefixLabel(position, "Element " + i.ToString())
-// 
-//       EditorGUI.BeginHorizontal();
-// 
-//       EditorGUI.EndHorizontal();
-//     }
-//   }
-// }
-
 [CustomPropertyDrawer(typeof(EquipmentStatDictionary))]
 public class EquipmentStatDictionaryPropertyDrawer : PropertyDrawer {
   EquipmentStat nextStat = null;
