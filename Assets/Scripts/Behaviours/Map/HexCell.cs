@@ -12,6 +12,7 @@ namespace SixteenFifty.TileMap {
     * \brief
     * The hexadecimal coordinates of this cell.
     */
+    [ReadonlyHexCoordinatesAttribute]
     public HexCoordinates coordinates;
 
     private HexTile tile;
@@ -130,7 +131,6 @@ namespace SixteenFifty.TileMap {
     }
 
     void Start () {
-      Debug.Assert(null != tile, "tile of HexCell is set before Start");
       UpdateTile();
       grid = GetComponentInParent<HexGrid>();
       Debug.Assert(null != grid, "owning grid of cell is not null");

@@ -12,7 +12,6 @@ public class EquipmentStatDictionaryPropertyDrawer : PropertyDrawer {
   bool[] foldoutStates = null;
   List<int> toDelete = new List<int>();
 
-
   float lastHeight = 0f;
 
   public override void OnGUI(

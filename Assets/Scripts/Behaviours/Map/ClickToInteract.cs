@@ -10,14 +10,22 @@ namespace SixteenFifty {
   
   [RequireComponent(typeof(MapEntity))]
   public class ClickToInteract : MonoBehaviour {
+    [HideInInspector] [SerializeField]
     MapEntity mapEntity;
+
+    [HideInInspector] [SerializeField]
     bool interactionsEnabled;
     InteractionMenu InteractionMenu => eventManager.interactionMenu;
+
+    [HideInInspector] [SerializeField]
     EventManager eventManager;
 
     void Awake() {
       interactionsEnabled = false;
       mapEntity = GetComponent<MapEntity>();
+      Debug.Assert(
+        null != mapEntity,
+        "MapEntity component exists.");
     }
 
     void OnBeginMove(MapEntity me) {
@@ -100,6 +108,13 @@ namespace SixteenFifty {
     * Event handler for cell clicks.
     */
     void OnCellDown(HexCell cell) {
+      Debug.Assert(
+        cell != null,
+        "Clicked cell is not null.");
+      Debug.Assert(
+        mapEntity.CurrentCell != null,
+        "Cell the MapEntity is on is not null.");
+
       var d = cell.coordinates.DistanceTo(mapEntity.CurrentCell.coordinates);
 
       // did we click on ourselves?

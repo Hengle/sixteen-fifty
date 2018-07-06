@@ -7,6 +7,8 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 
 namespace SixteenFifty.TileMap {
+  using Variables;
+  
   public class HexGrid : MonoBehaviour, IPointerClickHandler {
     /**
     * \brief
@@ -43,7 +45,6 @@ namespace SixteenFifty.TileMap {
     void OnEnable() {
       // sets up event handlers appropriately, but looks weird.
       Map = Map;
-      Debug.Log("hello");
     }
 
     /**
@@ -90,6 +91,19 @@ namespace SixteenFifty.TileMap {
     */
     public event Action<HexCell> CellDown;
 
+    /**
+     * \brief
+     * Raised once the map is initialized.
+     */
+    public event Action<HexGrid> Loaded;
+
+    /**
+     * \brief
+     * The variable that determines where the player positions itself
+     * when it loads.
+     */
+    public HexCoordinatesVariable playerDestination;
+
     void Awake() {
       Manager = this.GetComponentInParent<HexGridManager>();
       Debug.Assert(
@@ -102,8 +116,16 @@ namespace SixteenFifty.TileMap {
     }
 
     public void Setup() {
+      playerDestination.Value =
+        HexCoordinates.FromOffsetCoordinates(
+          map.initialPlayerX,
+          map.initialPlayerY,
+          hexMetrics);
+
       SetupGrid(map);
       SetupNPCs(map.npcs);
+
+      Loaded?.Invoke(this);
     }
 
     /**
@@ -172,6 +194,9 @@ namespace SixteenFifty.TileMap {
         var oc = p.ToOffsetCoordinates();
         var i = oc.Item1 + oc.Item2 * Map.width;
         // bounds-check the index and return the HexCell object.
+        Debug.Assert(
+          null != cells,
+          "The cells array exists.");
         var cell = i >= 0 && i < cells.Length ? cells[i] : null;
         return cell;
       }

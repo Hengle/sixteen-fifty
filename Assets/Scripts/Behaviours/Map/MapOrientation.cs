@@ -50,22 +50,18 @@ namespace SixteenFifty.TileMap {
     private MapEntity mapEntity;
 
     void Awake() {
-      renderer = this.GetComponentNotNull<SpriteRenderer>();
       // to set the sprite
       Orientation = Orientation;
     }
 
     void OnEnable() {
-      mapEntity = GetComponent<MapEntity>();
-      if(null != mapEntity) {
+      if(null != mapEntity)
         mapEntity.ChangeDirection += OnChangeDirection;
-      }
     }
 
     void OnDisable() {
       if(null != mapEntity)
-        return;
-      mapEntity.ChangeDirection -= OnChangeDirection;
+        mapEntity.ChangeDirection -= OnChangeDirection;
     }
 
     /**

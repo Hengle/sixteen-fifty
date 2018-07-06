@@ -7,38 +7,52 @@ using UnityEngine;
 namespace SixteenFifty {
   using Commands;
   using TileMap;
+  using Variables;
 
   [RequireComponent(typeof(ClickToInteract))]
   [RequireComponent(typeof(MapEntity))]
   [RequireComponent(typeof(Inventory))]
   public class PlayerController : MonoBehaviour {
     /**
-    * The map properties of the player.
-    */
+     * \brief
+     * The map properties of the player.
+     * Set in the inspector.
+     */
     public MapEntity mapEntity;
 
+    /**
+     * \brief
+     * The player's inventory.
+     */
     public Inventory inventory;
 
-    public ClickToInteract clickToInteract;
+    /**
+     * \brief
+     * Indicates where the player should be positioned when it loads.
+     */
+    public HexCoordinatesVariable destination;
+
+    [SerializeField] [HideInInspector]
+    HexGridManager manager;
+
+    void Awake() {
+      manager = GetComponentInParent<HexGridManager>();
+      Debug.Assert(
+        null != manager,
+        "PlayerController is instantiated in a map context.");
+    }
 
     void OnEnable() {
-      StateManager.Instance.playerController = this;
+      manager.GridLoaded += OnGridLoaded;
     }
 
     void OnDisable() {
-      StateManager.Instance.playerController = null;
+      manager.GridLoaded -= OnGridLoaded;
     }
 
-    // Use this for initialization
-    void Awake() {
-    }
-
-    void Start() {
-    }
-
-    // Update is called once per frame
-    void Update () {
-
+    void OnGridLoaded(HexGrid grid) {
+      if(null != destination)
+        mapEntity.Warp(destination.Value);
     }
   }
 }

@@ -50,6 +50,27 @@ namespace SixteenFifty.TileMap {
 
     /**
      * \brief
+     * Raised when a HexGrid finishes loading.
+     *
+     * Internally, the way this works is that when HexGridManager
+     * loads a map, it registers a callback on the ::HexGrid::Loaded
+     * event, and then just proxies it through this #GridLoaded event.
+     *
+     * This way, parties that care about maps loading and unloading
+     * can just register a callback on HexGridManager (which doesn't
+     * go anywhere) rather than have to worry about the HexGrid
+     * objects coming and going.
+     */
+    public event Action<HexGrid> GridLoaded;
+
+    /**
+     * \brief
+     * Proxies the loaded event from the current grid.
+     */
+    void OnGridLoaded(HexGrid grid) => GridLoaded?.Invoke(grid);
+
+    /**
+     * \brief
      * Gets the current player.
      */
     public PlayerController Player {
@@ -60,7 +81,6 @@ namespace SixteenFifty.TileMap {
     void Awake () {
       Debug.Assert(null != StateManager.Instance, "state manager exists");
       StateManager.Instance.hexGridManager = this;
-      LoadMap(initialMap);
     }
 
     /**
@@ -68,23 +88,20 @@ namespace SixteenFifty.TileMap {
     * Destroys the currently loaded map.
     *
     * This is a no-op if there is no loaded map.
+    *
+    * \param immediate
+    * Determines whether to use `DestroyImmediate`.
     */
-    public void DestroyMap() {
-      if(null != CurrentGrid) {
-        CurrentGrid.OnDisable();
-        Destroy(CurrentGrid.gameObject);
-      }
-    }
-
-    /**
-    * \brief
-    * Calls `DestroyImmediate` on the current HexGrid's GameObject, if the
-    * grid exists. The #CurrentGrid property is nulled out.
-    */
-    public void DestroyMapImmediate() {
-      if(null == CurrentGrid)
+    public void DestroyMap(bool immediate = false) {
+      if(null == CurrentGrid) 
         return;
-      DestroyImmediate(CurrentGrid.gameObject);
+
+      CurrentGrid.Loaded -= OnGridLoaded;
+      CurrentGrid.OnDisable();
+      if(immediate)
+        DestroyImmediate(CurrentGrid.gameObject);
+      else
+        Destroy(CurrentGrid.gameObject);
       CurrentGrid = null;
     }
 
@@ -100,6 +117,7 @@ namespace SixteenFifty.TileMap {
       CurrentGrid = obj.GetComponent<HexGrid>();
       Debug.Assert(CurrentGrid != null, "gridPrefab GameObject contains a HexGrid component.");
       CurrentGrid.Map = map;
+      CurrentGrid.Loaded += OnGridLoaded;
       return CurrentGrid;
     }
 
@@ -114,17 +132,13 @@ namespace SixteenFifty.TileMap {
     }
 
     void Start() {
+      if(null != initialMap)
+        LoadMap(initialMap);
+
       if(CurrentGrid == null)
         return;
 
-      var player = SpawnPlayer();
-      var me = player.GetComponent<MapEntity>();
-
-      me.Warp(
-        HexCoordinates.FromOffsetCoordinates(
-          CurrentGrid.Map.initialPlayerX,
-          CurrentGrid.Map.initialPlayerY,
-          CurrentGrid.hexMetrics));
+      SpawnPlayer();
     }
   }
 }

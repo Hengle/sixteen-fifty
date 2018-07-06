@@ -116,7 +116,7 @@ namespace SixteenFifty {
         EditorGUILayout.EndHorizontal();
 
         if(unloadClicked)
-          hexGridManager.DestroyMapImmediate();
+          hexGridManager.DestroyMap(immediate: true);
 
         DrawTileButtons();
       }
