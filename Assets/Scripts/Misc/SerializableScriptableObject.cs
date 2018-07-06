@@ -115,10 +115,9 @@ namespace SixteenFifty.Serialization {
           }
         }
       }
-
-      Debug.LogFormat(
-        "Data fields: {0}; Object fields: {1}.",
-        dataFields.Count, objectFields.Count);
+      // Debug.LogFormat(
+      //   "Data fields: {0}; Object fields: {1}.",
+      //   dataFields.Count, objectFields.Count);
     }
     
     void Deserialize() {
@@ -138,9 +137,9 @@ namespace SixteenFifty.Serialization {
         // But the associated value in dataFields will be garbage.
         if(objectFields.TryGetValue(name, out obj)) {
           result = obj;
-          Debug.LogFormat(
-            "Deserialized field {0} -> {1} from objectFields",
-            name, result);
+          // Debug.LogFormat(
+          //   "Deserialized field {0} -> {1} from objectFields",
+          //   name, result);
         }
         // try to retrieve the field value as a custom-serialized byte
         // array.
@@ -148,15 +147,14 @@ namespace SixteenFifty.Serialization {
           using(var stream = new MemoryStream(data.value)) {
             result = Serializer.Deserialize(stream);
           }
-          Debug.LogFormat(
-            "Deserialized field {0} -> {1} from dataFields",
-            name, result);
+          // Debug.LogFormat(
+          //   "Deserialized field {0} -> {1} from dataFields",
+          //   name, result);
         }
         else {
-          Debug.LogFormat(
-            "Failed to deserialize field {0}. It may have been lost, or null.",
-            name);
-
+          // Debug.LogFormat(
+          //   "Failed to deserialize field {0}. It may have been lost, or null.",
+          //   name);
         }
         
         // now result is either the Unity Object, OR the deserialized
