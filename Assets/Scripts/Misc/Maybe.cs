@@ -28,6 +28,23 @@ namespace SixteenFifty {
       hasValue = true;
     }
 
+    /**
+     * \brief
+     * Eliminates according to a function, or returns `null`.
+     */
+    public R Nullify<R>(Func<T, R> ifJust) where R : class =>
+      Eliminate<R>(() => null, ifJust);
+
+    /**
+     * \brief
+     * Eliminates by converting `Nothing` into `default(T)`.
+     */
+    public T Nullify() => Eliminate(() => default(T), x => x);
+
+    /**
+     * \brief
+     * Eliminates into another type using a pair of functions.
+     */
     public R Eliminate<R>(Func<R> ifNothing, Func<T, R> ifJust) {
       if(hasValue)
         return ifJust(value);

@@ -17,6 +17,11 @@ namespace SixteenFifty.TileMap {
 
     private HexMap map;
 
+    public HexGridManager Manager {
+      get;
+      private set;
+    }
+
     /**
     * \brief
     * The HexMap represented by this grid.
@@ -84,6 +89,13 @@ namespace SixteenFifty.TileMap {
     * Raised when a HexCell is tapped by the user.
     */
     public event Action<HexCell> CellDown;
+
+    void Awake() {
+      Manager = this.GetComponentInParent<HexGridManager>();
+      Debug.Assert(
+        null != Manager,
+        "HexGrid is inside a HexGridmanager.");
+    }
 
     void Start() {
       Setup();

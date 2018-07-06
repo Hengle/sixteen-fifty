@@ -7,22 +7,12 @@ using SixteenFifty.Serialization;
 
 namespace SixteenFifty {
   using Commands;
+  using EventItems;
 
   [CreateAssetMenu(menuName = "1650/Scripted Event")]
   public class ScriptedEvent : SerializableScriptableObject {
     new public string name;
     public IScript root;
-  }
-
-  /**
-   * \brief
-   * Scripted event code.
-   *
-   * This code is compiled into the Command monad, and ultimately
-   * executed as a coroutine.
-   */
-  public interface IScript {
-    Command<object> GetScript(EventRunner runner);
   }
 
   /**

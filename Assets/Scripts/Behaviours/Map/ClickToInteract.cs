@@ -93,7 +93,7 @@ namespace SixteenFifty {
       InteractionMenu.Interacted -= OnMenuInteracted;
       if(interaction == null)
         return;
-      eventManager.BeginScript(mapEntity.Grid, interaction.script.root);
+      eventManager.BeginScript(mapEntity.Grid.Manager, interaction.script.root);
     }
 
     /**
@@ -129,16 +129,6 @@ namespace SixteenFifty {
         return;
       }
       mapEntity.MoveFollowingPath(path);
-    }
-
-    // Use this for initialization
-    void Start () {
-
-    }
-
-    // Update is called once per frame
-    void Update () {
-
     }
   }
 }

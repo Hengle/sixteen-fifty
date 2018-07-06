@@ -2,6 +2,8 @@ using System;
 using System.Runtime;
 
 namespace SixteenFifty.Editor {
+  using EventItems;
+  
   [AttributeUsage(AttributeTargets.Class)]
   public class ScriptedEventItemEditorFor : Attribute {
     public Type target;

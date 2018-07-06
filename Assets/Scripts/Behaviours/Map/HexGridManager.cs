@@ -48,6 +48,15 @@ namespace SixteenFifty.TileMap {
     */
     public HexMetrics hexMetrics => CurrentGrid?.Map.metrics;
 
+    /**
+     * \brief
+     * Gets the current player.
+     */
+    public PlayerController Player {
+      get;
+      private set;
+    }
+
     void Awake () {
       Debug.Assert(null != StateManager.Instance, "state manager exists");
       StateManager.Instance.hexGridManager = this;
@@ -94,22 +103,28 @@ namespace SixteenFifty.TileMap {
       return CurrentGrid;
     }
 
+    /**
+     * \brief
+     * Instantiates the player prefab under the current grid.
+     * Sets #Player.
+     */
     public PlayerController SpawnPlayer() {
       var obj = Instantiate(playerPrefab, CurrentGrid.transform);
-      return obj.GetComponent<PlayerController>();
+      return Player = obj.GetComponent<PlayerController>();
     }
 
     void Start() {
-      if(CurrentGrid != null) {
-        var player = SpawnPlayer();
-        var me = player.GetComponent<MapEntity>();
+      if(CurrentGrid == null)
+        return;
 
-        me.Warp(
-          HexCoordinates.FromOffsetCoordinates(
-            CurrentGrid.Map.initialPlayerX,
-            CurrentGrid.Map.initialPlayerY,
-            CurrentGrid.hexMetrics));
-      }
+      var player = SpawnPlayer();
+      var me = player.GetComponent<MapEntity>();
+
+      me.Warp(
+        HexCoordinates.FromOffsetCoordinates(
+          CurrentGrid.Map.initialPlayerX,
+          CurrentGrid.Map.initialPlayerY,
+          CurrentGrid.hexMetrics));
     }
   }
 }

@@ -11,7 +11,7 @@ namespace SixteenFifty.EventItems {
     public int count;
 
     public override void Call(EventRunner runner) {
-      runner.Player.inventory.AddItem(item, count);
+      runner.GridManager.Player.inventory.AddItem(item, count);
       Debug.Log("Gave item.");
     }
   }

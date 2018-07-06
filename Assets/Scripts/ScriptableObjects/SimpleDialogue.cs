@@ -5,7 +5,7 @@ using System.Linq;
 
 using UnityEngine;
 
-namespace SixteenFifty {
+namespace SixteenFifty.EventItems {
   using Commands;
 
   /**
@@ -14,12 +14,11 @@ namespace SixteenFifty {
   */
   [Serializable]
   [EventAttribute(friendlyName = "Simple Dialogue")]
-  [CreateAssetMenu(menuName = "1650/Events/Simple Dialogue")]
-  public class SimpleDialogue : EventScript {
+  public class SimpleDialogue : IScript {
     public SpeakerConfiguration[] speakerConfigurations;
     public string[] messages;
 
-    public override Command<object> GetScript(EventRunner runner) {
+    public Command<object> GetScript(EventRunner runner) {
       var manager = runner.Manager;
 
       var t = manager.GetComponent<RectTransform>();

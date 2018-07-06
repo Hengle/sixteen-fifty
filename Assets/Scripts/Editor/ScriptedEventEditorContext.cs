@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEditor;
 
 namespace SixteenFifty.Editor {
+  using EventItems;
   using Reflection;
   
   public static class ScriptedEventEditorContext {
@@ -14,6 +15,12 @@ namespace SixteenFifty.Editor {
      * Maps IScript types to their editors.
      */
     private static Dictionary<Type, Type> editors;
+
+    private static string GetEventAttributeFriendlyName(Type type) =>
+      type.FindCustomAttribute<EventAttribute>()
+      ?.FindNamedArgument<string>("friendlyName")
+      ?.Nullify();
+      
 
     /**
      * \brief
@@ -24,8 +31,13 @@ namespace SixteenFifty.Editor {
       get {
         if(null != supportedEvents)
           return supportedEvents;
-        supportedEvents = GetSupportedEventTypes().ToArray();
-        return supportedEvents;
+        var types = GetSupportedEventTypes().ToList();
+        types.Sort(
+          (x, y) =>
+          Comparer<string>.Default.Compare(
+            GetEventAttributeFriendlyName(x),
+            GetEventAttributeFriendlyName(y)));
+        return types.ToArray();
       }
     }
 
@@ -43,7 +55,10 @@ namespace SixteenFifty.Editor {
         if(null != supportedEventNames)
           return supportedEventNames;
         supportedEventNames =
-          SupportedEvents.Select(t => t.ToString()).ToArray();
+          SupportedEvents.Select(
+            t =>
+            GetEventAttributeFriendlyName(t))
+          .ToArray();
         return supportedEventNames;
       }
     }

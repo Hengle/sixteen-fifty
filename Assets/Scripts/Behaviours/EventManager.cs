@@ -6,6 +6,7 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
 namespace SixteenFifty {
+  using EventItems;
   using UI;
   using TileMap;
   
@@ -117,14 +118,13 @@ namespace SixteenFifty {
 
     }
 
-    public void BeginScript(HexGrid map, IScript e) {
+    public void BeginScript(HexGridManager gridManager, IScript e) {
       // eventrunners null themselves out of the manager when they
       // finish executing script, so if currentEvent is not null,
       // there's already an event running.
       Debug.Assert(null == currentEvent, "Only one event can be running at once.");
 
-      var player = StateManager.Instance.playerController;
-      currentEvent = new EventRunner(this, map, inventory, player, e);
+      currentEvent = new EventRunner(this, gridManager, e);
       currentEvent.EventComplete += OnEventComplete;
       StartCoroutine(currentEvent.Coroutine);
     }
