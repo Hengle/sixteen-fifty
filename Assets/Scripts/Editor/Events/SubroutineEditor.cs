@@ -8,7 +8,7 @@ namespace SixteenFifty.Editor {
   
   [ScriptedEventItemEditorFor(target = typeof(Subroutine))]
   public class SubroutineEditor : ScriptedEventItemEditor {
-    new Subroutine target;
+    Subroutine target;
     
     public bool CanEdit(Type type) =>
       type == typeof(Subroutine);
@@ -22,9 +22,9 @@ namespace SixteenFifty.Editor {
         EditorGUILayout.ObjectField(
           "Target",
           target.target,
-          typeof(ScriptedEvent),
+          typeof(BasicScriptedEvent),
           false)
-        as ScriptedEvent;
+        as BasicScriptedEvent;
     }
   }
 }

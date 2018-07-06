@@ -9,7 +9,7 @@ namespace SixteenFifty.EventItems {
   [Serializable]
   [EventAttribute(friendlyName = "Other script")]
   public class Subroutine : IScript {
-    public ScriptedEvent target;
+    public BasicScriptedEvent target;
 
     /**
      * \brief
@@ -17,6 +17,6 @@ namespace SixteenFifty.EventItems {
      * Otherwise, does nothing.
      */
     public Command<object> GetScript(EventRunner runner) =>
-      target?.root?.GetScript(runner) ?? Command<object>.Empty;
+      target?.Compile()?.GetScript(runner) ?? Command<object>.Empty;
   }
 }

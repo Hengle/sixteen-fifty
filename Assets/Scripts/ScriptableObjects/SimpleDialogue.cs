@@ -9,15 +9,35 @@ namespace SixteenFifty.EventItems {
   using Commands;
 
   /**
-  * In a simple dialogue, speakers don't appear and disappear during the text.
-  * Speakers appear, at the very beginning, some text is played out, and then the speakers disappear.
-  */
-  [Serializable]
-  [EventAttribute(friendlyName = "Simple Dialogue")]
-  public class SimpleDialogue : IScript {
+   * \brief
+   * Describes a dialogue in which all speakers appear at once,
+   * speaking is unclear, and then everyone disappears.
+   *
+   * In a simple dialogue, speakers don't appear and disappear during
+   * the text.
+   * Speakers appear at the very beginning, some text is played out,
+   * and the speakers disappear.
+   */
+  [CreateAssetMenu(menuName = "1650/Simple Dialogue")]
+  public class SimpleDialogue : BasicScriptedEvent {
     public SpeakerConfiguration[] speakerConfigurations;
     public string[] messages;
 
+    public override IScript Compile() =>
+      new SimpleDialogueScript(speakerConfigurations, messages);
+  }
+
+  public class SimpleDialogueScript : IScript {
+    public SpeakerConfiguration[] speakerConfigurations;
+    public string[] messages;
+
+    public SimpleDialogueScript(
+      SpeakerConfiguration[] speakerConfigurations,
+      string[] messages) {
+      this.speakerConfigurations = speakerConfigurations;
+      this.messages = messages;
+    }
+    
     public Command<object> GetScript(EventRunner runner) {
       var manager = runner.Manager;
 
