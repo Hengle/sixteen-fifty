@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-namespace SixteenFifty {
+namespace SixteenFifty.Behaviours {
   using EventItems;
   using UI;
   using TileMap;

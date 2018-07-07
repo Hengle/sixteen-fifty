@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-namespace SixteenFifty {
+namespace SixteenFifty.Behaviours {
   /**
   * \brief
   * An invisible panel used to capture clicks to make dialogues

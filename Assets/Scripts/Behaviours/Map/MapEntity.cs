@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+
 using UnityEngine;
 
-namespace SixteenFifty.TileMap {
+namespace SixteenFifty.Behaviours {
   using Commands;
+  using TileMap;
 
   /**
   * \brief
@@ -124,9 +126,15 @@ namespace SixteenFifty.TileMap {
     * #LeaveCell or #EnterCell.
     */
     public void Warp(HexCell cell) {
-      Debug.Assert(null != cell);
+      Debug.Assert(
+        null != cell,
+        "Cell to warp to exists.");
       CurrentCell = cell;
       transform.localPosition = cell.coordinates.Box.Center;
+      Debug.LogFormat(
+        "Warped {0} to {1}.",
+        name,
+        cell.coordinates);
     }
 
     /**
@@ -235,8 +243,6 @@ namespace SixteenFifty.TileMap {
             Debug.Log("Movement cancelled!");
             yield break;
           }
-
-          Debug.Log("Moving to next position: " + cell.coordinates.ToString());
 
           // raise an event saying that we're leaving the current cell.
           if(null != self.LeaveCell) {

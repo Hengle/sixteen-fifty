@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-namespace SixteenFifty {
+namespace SixteenFifty.Behaviours {
   public class Loader : MonoBehaviour {
     public GameObject stateManagerPrefab;
     public string initialScene;

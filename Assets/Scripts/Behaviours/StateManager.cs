@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace SixteenFifty {
+namespace SixteenFifty.Behaviours {
   using TileMap;
   
   /**
@@ -15,7 +15,6 @@ namespace SixteenFifty {
     public GameObject selfPrefab;
 
     public EventManager eventManager;
-    public PlayerController playerController;
     public HexGridManager hexGridManager;
 
     private StateManager() {

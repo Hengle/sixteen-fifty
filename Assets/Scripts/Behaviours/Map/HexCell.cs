@@ -6,7 +6,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-namespace SixteenFifty.TileMap {
+namespace SixteenFifty.Behaviours {
+  using TileMap;
+  
   public class HexCell : MonoBehaviour {
     /**
     * \brief

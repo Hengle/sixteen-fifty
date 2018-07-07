@@ -6,7 +6,9 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-namespace SixteenFifty.TileMap {
+namespace SixteenFifty.Behaviours {
+  using TileMap;
+  
   /**
   * \brief
   * A controller for the HexMap model.

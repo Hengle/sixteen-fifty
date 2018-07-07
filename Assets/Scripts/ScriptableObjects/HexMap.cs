@@ -24,14 +24,11 @@ namespace SixteenFifty.TileMap {
     */
     public int width;
 
-    /* In offset coordinates. */
-    public int initialPlayerX, initialPlayerY;
-
     /**
     * \brief
     * Specifications of all the NPCs in the map.
     */
-    public NPCSettings[] npcs;
+    public BasicNPC[] npcs;
 
     /**
     * \brief

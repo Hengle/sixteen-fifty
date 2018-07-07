@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-namespace SixteenFifty.UI {
+namespace SixteenFifty.Behaviours {
   public class InventoryController : MonoBehaviour {
     public GameObject itemSlotPrefab;
     public GameObject inventoryArea;
@@ -35,7 +35,6 @@ namespace SixteenFifty.UI {
     }
 
     void OnEnable() {
-      inventory = StateManager.Instance.playerController.inventory;
       Debug.Assert(null != inventory, "there is an inventory to display");
       CreateInventory(inventory.Size);
       playerMenuController.title.text = "Inventory";

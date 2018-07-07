@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace SixteenFifty {
+  using Behaviours;
   using EventItems;
   using TileMap;
   using UI;

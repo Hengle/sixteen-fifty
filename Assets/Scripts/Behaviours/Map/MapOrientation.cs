@@ -3,7 +3,9 @@ using System.Collections.Generic;
 
 using UnityEngine;
 
-namespace SixteenFifty.TileMap {
+namespace SixteenFifty.Behaviours {
+  using TileMap;
+  
   /**
   * \brief
   * Renders a HexMapEntity in the correct orientation.
@@ -14,6 +16,25 @@ namespace SixteenFifty.TileMap {
     private HexDirection orientation;
 
     public HexMapEntity hexMapEntity;
+
+    /**
+     * \brief
+     * Gets or sets #hexMapEntity.
+     *
+     * Using this setter will update the sprite being rendered in the
+     * correct orientation.
+     */
+    public HexMapEntity HexMapEntity {
+      get {
+        return hexMapEntity;
+      }
+      set {
+        hexMapEntity = value;
+        // cause an orientation update when the underlying map entity
+        // changes.
+        UpdateSprite();
+      }
+    }
 
     /**
     * \brief
@@ -37,21 +58,37 @@ namespace SixteenFifty.TileMap {
     *
     * Initialized in ::Awake.
     */
-    [SerializeField]
+    [SerializeField] [HideInInspector]
     new private SpriteRenderer renderer;
 
     /**
     * \brief
     * The MapEntity to monitor for orientation changes.
     * 
-    * Initialized in ::OnEnable.
+    * Initialized in ::Awake.
     */
-    [SerializeField]
-    private MapEntity mapEntity;
+    [SerializeField] [HideInInspector]
+    MapEntity mapEntity;
+
+    public void UpdateSprite() {
+      Orientation = Orientation;
+    }
 
     void Awake() {
-      // to set the sprite
-      Orientation = Orientation;
+      renderer = GetComponent<SpriteRenderer>();
+      Debug.Assert(
+        null != renderer,
+        "MapOrientation is attached with a SpriteRenderer.");
+
+      mapEntity = GetComponent<MapEntity>();
+      Debug.Assert(
+        null != mapEntity,
+        "MapOrientation is attached with a MapEntity.");
+    }
+
+    void Start() {
+      if(null != hexMapEntity)
+        UpdateSprite();
     }
 
     void OnEnable() {

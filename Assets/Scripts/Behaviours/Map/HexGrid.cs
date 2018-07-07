@@ -6,7 +6,8 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-namespace SixteenFifty.TileMap {
+namespace SixteenFifty.Behaviours {
+  using TileMap;
   using Variables;
   
   public class HexGrid : MonoBehaviour, IPointerClickHandler {
@@ -116,12 +117,6 @@ namespace SixteenFifty.TileMap {
     }
 
     public void Setup() {
-      playerDestination.Value =
-        HexCoordinates.FromOffsetCoordinates(
-          map.initialPlayerX,
-          map.initialPlayerY,
-          hexMetrics);
-
       SetupGrid(map);
       SetupNPCs(map.npcs);
 
@@ -130,11 +125,16 @@ namespace SixteenFifty.TileMap {
 
     /**
     * \brief
-    * Intialize each BasicNPC from map::npcs.
+    * Intialize each BasicNPC from ::map::npcs.
     */
-    void SetupNPCs(IEnumerable<NPCSettings> npcs) {
-      foreach(var npc in npcs) {
-        npc.Construct(npcPrefab, this, transform);
+    void SetupNPCs(IEnumerable<BasicNPC> npcs) {
+      foreach(var data in npcs) {
+        var obj = Instantiate(npcPrefab, transform);
+        var npc = obj.GetComponent<NPC>();
+        Debug.Assert(
+          null != npc,
+          "NPC component of NPC prefab is not null.");
+        npc.NPCData = data;
       }
     }
 

@@ -4,7 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace SixteenFifty {
+namespace SixteenFifty.Behaviours {
   using UI;
   using TileMap;
   
@@ -87,7 +87,7 @@ namespace SixteenFifty {
         .Select(me => me.GetComponent<Interactable>())
         .Where(ictb => null != ictb)
         // fish out the interactions from each interactable
-        .SelectMany(ictb => ictb.npcData.interactions)
+        .SelectMany(ictb => ictb.interactions)
         .ToArray();
 
       if(interactions.Length == 0)
@@ -116,6 +116,8 @@ namespace SixteenFifty {
         "Cell the MapEntity is on is not null.");
 
       var d = cell.coordinates.DistanceTo(mapEntity.CurrentCell.coordinates);
+
+      Debug.LogFormat("Click distance is {0}.", d);
 
       // did we click on ourselves?
       if(0 == d) {
