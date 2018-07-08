@@ -18,12 +18,15 @@ namespace SixteenFifty.Behaviours {
 
     void CreateInventory(int size) {
       Debug.Assert(Slots == null, "there is no inventory");
-      Slots = new ItemSlotController[size];
-      for(int i = 0; i < size; i++) {
-        var obj = Instantiate(itemSlotPrefab, inventoryArea.transform);
-        Slots[i] = obj.GetComponent<ItemSlotController>();
-        Slots[i].BackingSlot = inventory.Slots[i];
-      }
+      Slots =
+        inventory.slots.Select(
+          slot => {
+            var obj = Instantiate(itemSlotPrefab, inventoryArea.transform);
+            var slotController = obj.GetComponent<ItemSlotController>();
+            slotController.BackingSlot = slot;
+            return slotController;
+          })
+        .ToArray();
     }
 
     void DestroyInventory() {
@@ -43,10 +46,6 @@ namespace SixteenFifty.Behaviours {
     void OnDisable() {
       inventory = null;
       DestroyInventory();
-    }
-
-    void Start () {
-
     }
   }
 }

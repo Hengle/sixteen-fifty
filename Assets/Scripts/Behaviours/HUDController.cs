@@ -1,19 +1,28 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class HUDController : MonoBehaviour {
-  public PlayerMenuController playerMenuController;
-  public Button inventoryButton;
+namespace SixteenFifty.Behaviours {
+  public class HUDController : MonoBehaviour {
+    public PlayerMenuController playerMenuController;
+    public Button inventoryButton;
 
-  void OnInventoryButtonClick() {
-    playerMenuController.gameObject.SetActive(true);
-  }
+    void OnInventoryButtonClick() {
+      var inv = playerMenuController.hexGridManager.Player.GetComponent<HasInventory>();
+      Debug.Assert(
+        null != inv,
+        "the current player has an inventory.");
 
-  void OnEnable() {
-    inventoryButton.onClick.AddListener(OnInventoryButtonClick);
-  }
+      playerMenuController.inventoryController.inventory = inv.inventory;
 
-  void OnDisable() {
-    inventoryButton.onClick.RemoveListener(OnInventoryButtonClick);
+      playerMenuController.gameObject.SetActive(true);
+    }
+
+    void OnEnable() {
+      inventoryButton.onClick.AddListener(OnInventoryButtonClick);
+    }
+
+    void OnDisable() {
+      inventoryButton.onClick.RemoveListener(OnInventoryButtonClick);
+    }
   }
 }

@@ -1,9 +1,11 @@
 using UnityEngine;
 
-public class LevelController : MonoBehaviour {
-  public PlayerMenuController playerMenuController;
+namespace SixteenFifty.Behaviours {
+  public class LevelController : MonoBehaviour {
+    public PlayerMenuController playerMenuController;
 
-  void Awake () {
+    void Awake () {
 
+    }
   }
 }
