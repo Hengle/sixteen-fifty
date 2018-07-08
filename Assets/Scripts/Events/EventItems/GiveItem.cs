@@ -9,9 +9,10 @@ namespace SixteenFifty.EventItems {
   public class GiveItem : ImmediateScript {
     public Item item;
     public int count;
+    public Inventory target;
 
     public override void Call(EventRunner runner) {
-      runner.GridManager.Player.inventory.AddItem(item, count);
+      target.AddItem(item, count);
       Debug.Log("Gave item.");
     }
   }

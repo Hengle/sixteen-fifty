@@ -35,6 +35,14 @@ namespace SixteenFifty.Editor {
         EditorGUILayout.IntField(
           "Count",
           target.count);
+
+      target.target =
+        EditorGUILayout.ObjectField(
+          "Target inventory",
+          target.target,
+          typeof(Inventory),
+          false)
+        as Inventory;
     }
   }
 }
