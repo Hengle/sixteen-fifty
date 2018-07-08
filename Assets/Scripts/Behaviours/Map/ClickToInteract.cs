@@ -55,23 +55,29 @@ namespace SixteenFifty.Behaviours {
     /**
     * \brief
     * Enables interactivity for the entity.
-    * This is a no-op if interactivity is already enabled.
+    *
+    * \remark
+    * This method is idempotent.
     */
     void EnableInteractions() {
       if(interactionsEnabled)
         return;
       mapEntity.Grid.CellDown += OnCellDown;
+      interactionsEnabled = true;
     }
 
     /**
     * \brief
     * Disables interactivity for the entity.
-    * This is a no-op if interactivity is already disabled.
+    *
+    * \remark
+    * This method is idempotent.
     */
     void DisableInteractions() {
       if(!interactionsEnabled)
         return;
       mapEntity.Grid.CellDown -= OnCellDown;
+      interactionsEnabled = false;
     }
 
     /**
@@ -99,6 +105,7 @@ namespace SixteenFifty.Behaviours {
     void OnMenuInteracted(Interaction interaction) {
       // unregister ourselves from the menu.
       InteractionMenu.Interacted -= OnMenuInteracted;
+      // we receive null if the menu was simply closed
       if(interaction == null)
         return;
       eventManager.BeginScript(mapEntity.Grid.Manager, interaction.script.root);

@@ -13,17 +13,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   metrics: {fileID: 11400000, guid: d9fcc751fd14046b8b2be0faa607c4a4, type: 2}
   width: 8
-  initialPlayerX: 2
-  initialPlayerY: 2
   npcs:
-  - name: jake
-    npc: {fileID: 11400000, guid: 8ba59238c986347a2a4c3478681c0f28, type: 2}
-    x: 3
-    y: 4
-  - name: eric
-    npc: {fileID: 11400000, guid: b5734f2d568e84e6ba856c357b479e70, type: 2}
-    x: 5
-    y: 7
+  - {fileID: 11400000, guid: 8ba59238c986347a2a4c3478681c0f28, type: 2}
   tiles:
   - {fileID: 11400000, guid: 4f9e3d6378ce54442b62006ab8facef4, type: 2}
   - {fileID: 11400000, guid: 3ba9c4fdae6a24cf190a7733634c3571, type: 2}

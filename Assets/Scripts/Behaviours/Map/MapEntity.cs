@@ -208,12 +208,9 @@ namespace SixteenFifty.Behaviours {
             if(null != EndMove)
               EndMove(this);
             movement = null;
-            Debug.Log("movement nulled out");
             MovementCancelled = false;
           })
         .GetCoroutine());
-
-      Debug.Log("movement set!");
     }
 
     class DoMoveFollowingPath : Command<object> {

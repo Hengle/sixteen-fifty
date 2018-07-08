@@ -9,14 +9,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 65d1980706ef54057b6da5c97cc04196, type: 3}
-  m_Name: Jake
+  m_Name: Jake NPC
   m_EditorClassIdentifier: 
   mapSprite: {fileID: 11400000, guid: 42d63496db79941138db70ad5479f6c8, type: 2}
+  orientation: 3
+  destination: {fileID: 11400000, guid: bd1f99caec81b4d0faca75958f026498, type: 2}
   interactions:
   - name: Talk
-    script: {fileID: 11400000, guid: 8a045c9cdf1d549ad82fb0632de2bf99, type: 2}
-  - name: Leave
-    script: {fileID: 11400000, guid: 7459c0bdd311d4054ac4984f6f06451c, type: 2}
-  - name: Get item
-    script: {fileID: 11400000, guid: 3320122836df64f02a46da15aabb6051, type: 2}
-  orientation: 3
+    script: {fileID: 11400000, guid: 7bae178d2089e475aa06b6955d1e8ed6, type: 2}

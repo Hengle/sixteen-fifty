@@ -10,5 +10,7 @@ namespace SixteenFifty.EventItems {
    */
   public interface IScript {
     Command<object> GetScript(EventRunner runner);
+
+    // T Accept<T>(ScriptVisitor<T> visitor);
   }
 }

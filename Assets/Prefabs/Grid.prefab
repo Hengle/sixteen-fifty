@@ -178,3 +178,4 @@ MonoBehaviour:
   cellPrefab: {fileID: 1898474504515082, guid: 6aa64d2ada5b24037a39e2a775752d3b, type: 2}
   npcPrefab: {fileID: 1630210120392076, guid: 436435f7b28b440dba02b6ac0c7b6260, type: 2}
   collider: {fileID: 65544956024573058}
+  playerDestination: {fileID: 11400000, guid: d3ff7663cc91847299d109c4594248d8, type: 2}

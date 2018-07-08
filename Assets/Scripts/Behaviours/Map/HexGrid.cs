@@ -222,6 +222,7 @@ namespace SixteenFifty.Behaviours {
         return;
 
       Debug.Log("Clicked on grid!");
+
       if(data.button == 0) {
         var cell = GetCellAt(data.pointerPressRaycast.worldPosition);
         if(null == cell)
@@ -248,8 +249,10 @@ namespace SixteenFifty.Behaviours {
 
     void TouchCell (HexCell cell) {
       // raise the CellDown event passing in the cell that was clicked.
-      if(CellDown != null)
-          CellDown(cell);
+      Debug.LogFormat(
+        "Touched cell {0}.",
+        cell?.coordinates);
+      CellDown?.Invoke(cell);
     }
 
     /**

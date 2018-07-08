@@ -138,6 +138,8 @@ namespace SixteenFifty.UI {
       button.Interaction = interaction;
       // this subscription gets removed in DestroyMenu
       button.Interacted += OnButtonInteracted;
+      Debug.LogFormat(
+        "Created button for {0}.", interaction.name);
       return button;
     }
 
@@ -156,9 +158,7 @@ namespace SixteenFifty.UI {
 
     void OnCloseButtonClick() {
       gameObject.SetActive(false);
-      if(null != Interacted) {
-        Interacted(null);
-      }
+      Interacted?.Invoke(null);
     }
   }
 }

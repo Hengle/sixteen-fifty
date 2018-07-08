@@ -9,6 +9,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d4d4bd276d56a40e49d10e292f7b06b9, type: 3}
-  m_Name: Martlet
+  m_Name: Martlet Speaker
   m_EditorClassIdentifier: 
   sprite: {fileID: 21300000, guid: 8f697b0d8aba94963bfa48f235225733, type: 3}

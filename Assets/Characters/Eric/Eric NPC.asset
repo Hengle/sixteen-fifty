@@ -9,12 +9,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 65d1980706ef54057b6da5c97cc04196, type: 3}
-  m_Name: Eric
+  m_Name: Eric NPC
   m_EditorClassIdentifier: 
   mapSprite: {fileID: 11400000, guid: 230c9d533806c4f6e848af645be9b1da, type: 2}
+  orientation: 0
+  destination: {fileID: 11400000, guid: 20a197fea5e584c689ab7e1c7ea54e4b, type: 2}
   interactions:
   - name: Talk
-    script: {fileID: 11400000, guid: 321b6d3b29e25479992e9dd8e763c9f8, type: 2}
+    script: {fileID: 0}
   - name: Quit
-    script: {fileID: 11400000, guid: 557a14865a0a34b358a6cfd0cea0d89c, type: 2}
-  orientation: 0
+    script: {fileID: 0}

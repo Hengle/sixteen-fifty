@@ -35,6 +35,11 @@ namespace SixteenFifty.UI {
       InteractionChanged += OnInteractionChanged;
     }
 
+    void Start() {
+      // sets the text of the button.
+      OnInteractionChanged();
+    }
+
     void OnEnable() {
       button.onClick.AddListener(OnClick);
     }

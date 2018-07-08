@@ -19,9 +19,10 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4621690110174786}
+  - component: {fileID: 114687232919961888}
   - component: {fileID: 114168490539359622}
   - component: {fileID: 114111789595584998}
-  - component: {fileID: 114346803583162672}
+  - component: {fileID: 114513899913751744}
   - component: {fileID: 114952665026921720}
   - component: {fileID: 212912495707856158}
   m_Layer: 0
@@ -66,8 +67,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 88aa48d05394b45d49da3b8c3320dbae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  npcData: {fileID: 0}
---- !u!114 &114346803583162672
+  interactions: []
+--- !u!114 &114513899913751744
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -75,11 +76,27 @@ MonoBehaviour:
   m_GameObject: {fileID: 1630210120392076}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c5210a98f140e479aa1906fec2e6a555, type: 3}
+  m_Script: {fileID: 11500000, guid: 643d9318135c640069643e2e847699b2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  x: 0
-  y: 0
+  destination: {fileID: 0}
+  hexGridManager: {fileID: 0}
+  mapEntity: {fileID: 0}
+--- !u!114 &114687232919961888
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1630210120392076}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 96f377ca83784497aabd644268647838, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  interactable: {fileID: 0}
+  initialPosition: {fileID: 0}
+  mapOrientation: {fileID: 0}
+  npcData: {fileID: 0}
 --- !u!114 &114952665026921720
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -92,8 +109,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hexMapEntity: {fileID: 0}
-  renderer: {fileID: 0}
-  mapEntity: {fileID: 0}
+  renderer: {fileID: 212912495707856158}
+  mapEntity: {fileID: 114111789595584998}
 --- !u!212 &212912495707856158
 SpriteRenderer:
   m_ObjectHideFlags: 1
@@ -134,7 +151,7 @@ SpriteRenderer:
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 0.234375, y: 0.453125}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 0

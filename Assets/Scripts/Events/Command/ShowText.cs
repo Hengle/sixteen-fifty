@@ -38,7 +38,7 @@ namespace SixteenFifty.Commands {
         if(clicked)
           break;
         emgr.dialogueText.text += c;
-        yield return new WaitForSeconds(CHARACTER_TIME);
+        yield return null; // ;; new WaitForSeconds(CHARACTER_TIME);
       }
 
       emgr.dialogueText.text = text;

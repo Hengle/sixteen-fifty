@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Name: Player Destination
   m_EditorClassIdentifier: 
   value:
-    metrics: {fileID: 0}
-    x: 0
-    y: 0
+    metrics: {fileID: 11400000, guid: d9fcc751fd14046b8b2be0faa607c4a4, type: 2}
+    x: 2
+    y: 3
     Box:
-      centerX: 0
-      centerY: 0
-      metrics: {fileID: 0}
+      centerX: 1.5
+      centerY: 1
+      metrics: {fileID: 11400000, guid: d9fcc751fd14046b8b2be0faa607c4a4, type: 2}

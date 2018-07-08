@@ -119,10 +119,15 @@ namespace SixteenFifty.Behaviours {
     }
 
     public void BeginScript(HexGridManager gridManager, IScript e) {
+      Debug.LogFormat(
+        "Beginning event script {0}.",
+        e?.GetType());
       // eventrunners null themselves out of the manager when they
       // finish executing script, so if currentEvent is not null,
       // there's already an event running.
-      Debug.Assert(null == currentEvent, "Only one event can be running at once.");
+      Debug.Assert(
+        null == currentEvent,
+        "Trying to run a new event while one is running.");
 
       currentEvent = new EventRunner(this, gridManager, e);
       currentEvent.EventComplete += OnEventComplete;
@@ -130,6 +135,9 @@ namespace SixteenFifty.Behaviours {
     }
 
     void OnEventComplete(IScript e) {
+      Debug.LogFormat(
+        "Event {0} complete.",
+        e.GetType());
       currentEvent.EventComplete -= OnEventComplete;
       currentEvent = null;
     }
