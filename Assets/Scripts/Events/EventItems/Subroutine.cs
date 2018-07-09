@@ -7,7 +7,7 @@ namespace SixteenFifty.EventItems {
   using Commands;
   
   [Serializable]
-  [EventAttribute(friendlyName = "Other script")]
+  [SelectableSubtype(friendlyName = "Other script")]
   public class Subroutine : IScript {
     public BasicScriptedEvent target;
 

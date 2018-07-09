@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 
 namespace SixteenFifty {
+  using Reflection;
+
   public class Maybe<T> : IEnumerable<T> {
     public static Maybe<T> Just(T value) {
       return new Maybe<T>(value);
@@ -74,7 +76,16 @@ namespace SixteenFifty {
     }
   }
 
-  public static class IEnumerableMaybeExt {
+  public static class MaybeExt {
+    public static Maybe<T> FromNull<T>(this object obj) where T : class {
+      SubtypeReflector.Typecheck(typeof(T), obj?.GetType());
+
+      if(null == obj)
+        return Maybe<T>.Nothing();
+      else
+        return Maybe<T>.Just((T)obj);
+    }
+
     /**
      * \brief
      * Transforms and filters a sequence at one.

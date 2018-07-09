@@ -7,16 +7,19 @@ namespace SixteenFifty.Editor {
   using EventItems;
   
   [Serializable]
-  [ScriptedEventItemEditorFor(target = typeof(GiveItem))]
+  [SubtypeEditorFor(target = typeof(GiveItem))]
   public class GiveItemEditor : ScriptedEventItemEditor {
     [SerializeField]
     new GiveItem target;
 
-    public bool CanEdit(Type type) {
+    public GiveItemEditor(SubtypeSelectorContext<IScript> context) {
+    }
+
+    public override bool CanEdit(Type type) {
       return type == typeof(GiveItem);
     }
 
-    public void DrawInspector(IScript _target) {
+    public override void Draw(IScript _target) {
       target = _target as GiveItem;
       Debug.Assert(
         null != target,
@@ -29,7 +32,6 @@ namespace SixteenFifty.Editor {
           typeof(Item),
           false)
         as Item;
-
 
       target.count =
         EditorGUILayout.IntField(

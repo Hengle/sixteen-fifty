@@ -11,13 +11,17 @@ namespace SixteenFifty.Editor {
   
   /**
    * \brief
-   * A selector control specialized for selecting IScript
-   * types.
+   * A selector control specialized for selecting subtypes of a given
+   * type `T`.
    */
   [Serializable]
-  public class EventSelectorControl : SelectorControl {
-    public EventSelectorControl(string label) :
-        base(label, ScriptedEventEditorContext.SupportedEventNames) {
+  public class SubtypeSelectorControl<T> : SelectorControl where T : class {
+    [SerializeField]
+    SubtypeSelectorContext<T> context;
+
+    public SubtypeSelectorControl(string label, SubtypeSelectorContext<T> context) :
+        base(label, context.SelectableTypeNames) {
+      this.context = context;
     }
 
     /**
@@ -34,7 +38,7 @@ namespace SixteenFifty.Editor {
      *
      * \param T The event type to select.
      */
-    public void Update<T>() where T : IScript => UnsafeUpdate(typeof(T));
+    public void Update<S>() where S : T => UnsafeUpdate(typeof(S));
 
     /**
      * \brief
@@ -57,9 +61,9 @@ namespace SixteenFifty.Editor {
      * \param eventType The event type to select.
      */
     public void Update(Type type) {
-      var iscript = typeof(IScript);
-      if(type != null && !iscript.IsAssignableFrom(type))
-        throw new TypeMismatch(type, iscript);
+      var t = typeof(T);
+      if(type != null && !t.IsAssignableFrom(type))
+        throw new TypeMismatch(type, t);
 
       UnsafeUpdate(type);
     }
@@ -68,22 +72,15 @@ namespace SixteenFifty.Editor {
      * \brief
      * Internal machinery for implementing Update.
      */
-    void UnsafeUpdate(Type eventType) {
-      var supportedEvents =
-        ScriptedEventEditorContext.SupportedEvents;
+    void UnsafeUpdate(Type type) {
+      var selectableTypes = context.SelectableTypes;
       Debug.Assert(
-        null != supportedEvents,
-        "Events are supported.");
-      // Debug.LogFormat(
-      //   "Looking for {0} in list: {1}.",
-      //   eventType,
-      //   String.Join(
-      //     ", ",
-      //     supportedEvents.Select(e => e.ToString())));
+        null != selectableTypes,
+        "There are some supported types are supported.");
           
       Selected = Array.IndexOf(
-        supportedEvents,
-        eventType);
+        selectableTypes,
+        type);
     }
 
     /**
@@ -100,7 +97,7 @@ namespace SixteenFifty.Editor {
       get {
         // why -1? There's an extra choice in the selector for null.
         var l1 = choices.Length - 1;
-        var l2 = ScriptedEventEditorContext.SupportedEvents.Length;
+        var l2 = context.SelectableTypes.Length;
         Debug.Assert(
           l1 == l2,
           String.Format(
@@ -110,7 +107,7 @@ namespace SixteenFifty.Editor {
         if(Selected == -1)
           return null;
         else
-          return ScriptedEventEditorContext.SupportedEvents[Selected];
+          return context.SelectableTypes[Selected];
       }
     }
 
@@ -122,26 +119,31 @@ namespace SixteenFifty.Editor {
      * The ScriptedEventItemEditor for the selected event type.
      * If there is no selected event type, then returns null.
      */
-    public ScriptedEventItemEditor InstantiateEditor() {
+    public ISubtypeEditor<T> InstantiateEditor() {
       var i = Selected;
       if(i == -1)
         return null;
-      return ScriptedEventEditorContext.GetEditor(i);
+      return context.GetEditor(i);
     }
 
     /**
      * \brief
-     * Creates a new event item according to the selected type.
+     * Creates a new event item according to the currently selected
+     * type.
      *
      * \returns
      * The new event item object, or null if there is currently no
      * selected event item class.
+     *
+     * \exception TypeMismatch
+     * This is raised if the currently selected type is in fact not
+     * `S`.
      */
-    public T Instantiate<T>() where T : class, IScript {
+    public S Instantiate<S>() where S : class, T {
       var i = Selected;
       if(i == -1)
         return null;
-      return ScriptedEventEditorContext.SupportedEvents[i].DefaultConstruct<T>();
+      return context.SelectableTypes[i].Construct<S>();
     }
   }
 }

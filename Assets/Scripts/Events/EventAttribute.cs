@@ -2,10 +2,9 @@ using System;
 
 /**
  * \brief
- * Applied to classes that derive from BasicScript and can be used in
- * the event system.
+ * Used for populating SubtypeSelector popups.
  */
 [AttributeUsage(AttributeTargets.Class)]
-public class EventAttribute : Attribute {
+public class SelectableSubtype : Attribute {
   public string friendlyName;
 }

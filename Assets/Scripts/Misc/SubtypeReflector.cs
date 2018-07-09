@@ -34,13 +34,6 @@ namespace SixteenFifty.Reflection {
       GetTypes<A>().Where(t => t.IsClass && t.IsSubclassOf(type));
 
     /**
-     * \brief
-     * Enumerates all implementations of the interface type `T` that
-     * reside in the same assembly as `T`.
-    public static IEnumerable<Type> GetImplementations<T>() where T : class =>
-      GetImplementations<T, T>(typeof(T));
-
-    /**
     * \brief
     * Enumerates all implementations of the interface `T` that reside
     * in the same assembly as `A`.
@@ -150,10 +143,37 @@ namespace SixteenFifty.Reflection {
      * If the constructed value is not assignable to type `T`, a
      * TypeMismatch error is raised.
      */
-    public static T DefaultConstruct<T>(this Type t) {
-      if(!typeof(T).IsAssignableFrom(t))
-        throw new TypeMismatch(t, typeof(T));
+    public static T Construct<T>(this Type t) {
+      Debug.Assert(
+        null != t,
+        "Type to instantiate must be not null.");
+      Typecheck(typeof(T), t);
       return (T)t.GetConstructor(Type.EmptyTypes).Invoke(null);
+    }
+
+    /**
+     * \brief
+     * Invoke the single-argument constructor for this type.
+     *
+     * \remark
+     * The argument `obj` must be not null, as its `GetType` method is
+     * used to perform method resolution.
+     *
+     * \exception TypeMismatch
+     * This exception is raised if the type `t` is not assignable to type `T`.
+     */
+    public static T Construct<T>(this Type t, object obj) {
+      Typecheck(typeof(T), t);
+      return (T)t.GetConstructor(new [] { obj.GetType() }).Invoke(new [] { obj });
+    }
+
+    public static T Construct<S, T>(this Type t, S s) {
+      Typecheck(typeof(T), t);
+      var ctor = t.GetConstructor(new [] { typeof(S) });
+      Debug.Assert(
+        null != ctor,
+        "The constructor exists.");
+      return (T)ctor.Invoke(new object[] { s });
     }
 
     /**
@@ -166,6 +186,22 @@ namespace SixteenFifty.Reflection {
      */
     public static object DefaultConstruct(this Type t) {
       return t.GetConstructor(Type.EmptyTypes).Invoke(null);
+    }
+
+    /**
+     * \brief
+     * Decides whether the type `src` is assignable to the type `dst`.
+     *
+     * \param src
+     * The source type. This may be `null`, in which case the check
+     * will always succeed.
+     *
+     * \param dst
+     * The destination type. This must not be `null`.
+     */
+    public static void Typecheck(Type dst, Type src) {
+      if(src != null && !dst.IsAssignableFrom(src))
+        throw new TypeMismatch(src, dst);
     }
   }
 }

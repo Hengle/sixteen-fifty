@@ -16,12 +16,4 @@ namespace SixteenFifty {
 
     public override IScript Compile() => root;
   }
-
-  // [Serializable]
-  // [EventAttribute(friendlyName = "Play Dialogue")]
-  // public class PlayDialogue : IScript {
-  //   public Command<object> GetScript(EventRunner runner) {
-  //     throw new SixteenFiftyException("not implemented");
-  //   }
-  // }
 }

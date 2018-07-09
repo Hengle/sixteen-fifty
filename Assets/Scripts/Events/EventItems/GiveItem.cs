@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace SixteenFifty.EventItems {
   [Serializable]
-  [EventAttribute(friendlyName = "Give Item")]
+  [SelectableSubtype(friendlyName = "Give Item")]
   public class GiveItem : ImmediateScript {
     public Item item;
     public int count;

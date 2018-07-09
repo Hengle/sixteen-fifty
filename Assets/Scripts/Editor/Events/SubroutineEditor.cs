@@ -6,14 +6,17 @@ using UnityEditor;
 namespace SixteenFifty.Editor {
   using EventItems;
   
-  [ScriptedEventItemEditorFor(target = typeof(Subroutine))]
+  [SubtypeEditorFor(target = typeof(Subroutine))]
   public class SubroutineEditor : ScriptedEventItemEditor {
     Subroutine target;
+
+    public SubroutineEditor(SubtypeSelectorContext<IScript> context) {
+    }
     
-    public bool CanEdit(Type type) =>
+    public override bool CanEdit(Type type) =>
       type == typeof(Subroutine);
 
-    public void DrawInspector(IScript _target) {
+    public override void Draw(IScript _target) {
       target = _target as Subroutine;
       Debug.Assert(
         null != target,

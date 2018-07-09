@@ -9,17 +9,29 @@ namespace SixteenFifty.Editor {
   using SixteenFifty.EventItems;
   using Reflection;
 
-  [ScriptedEventItemEditorFor(target = typeof(ListScript))]
+  [SubtypeEditorFor(target = typeof(ListScript))]
   public class ListScriptEditor : ScriptedEventItemEditor {
+    [SerializeField]
     ListScript target;
-    List<EventItemControl> itemControls = new List<EventItemControl>();
+
+    [SerializeField]
+    List<SubtypeControl<IScript>> itemControls = new List<SubtypeControl<IScript>>();
+
+    [SerializeField]
     List<FoldoutControl> foldouts = new List<FoldoutControl>();
 
-    public bool CanEdit(Type type) {
+    [SerializeField]
+    SubtypeSelectorContext<IScript> context;
+
+    public ListScriptEditor(SubtypeSelectorContext<IScript> context) {
+      this.context = context;
+    }
+
+    public override bool CanEdit(Type type) {
       return type == typeof(ListScript);
     }
 
-    public void DrawInspector(IScript _target) {
+    public override void Draw(IScript _target) {
       target = _target as ListScript;
       Debug.Assert(
         null != target,
@@ -44,7 +56,7 @@ namespace SixteenFifty.Editor {
     void UpdateItemControls() {
       itemControls.Resize(
         target.scripts.Count,
-        _ => new EventItemControl("Event type"));
+        _ => new EventItemControl("Event type", context));
       foldouts.Resize(
         target.scripts.Count,
         i =>

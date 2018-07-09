@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEditor;
 
 namespace SixteenFifty.Editor {
+  using EventItems;
   using Reflection;
 
   [CustomEditor(typeof(ScriptedEvent))]
@@ -16,10 +17,15 @@ namespace SixteenFifty.Editor {
     new ScriptedEvent target;
 
     ScriptedEventItemEditor editor;
+
+    SubtypeSelectorContext<IScript> context;
     
     void OnEnable() {
+      if(context == null)
+        context = new SubtypeSelectorContext<IScript>();
+
       if(control == null)
-        control = new EventItemControl("Root event");
+        control = new EventItemControl("Root event", context);
     }
 
     void OnDisable() {

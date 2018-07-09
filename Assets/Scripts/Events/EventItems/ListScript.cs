@@ -7,7 +7,7 @@ namespace SixteenFifty.EventItems {
   using Commands;
 
   [Serializable]
-  [EventAttribute(friendlyName = "Event Sequence")]
+  [SelectableSubtype(friendlyName = "Event Sequence")]
   public class ListScript : IScript {
     public List<IScript> scripts;
 
