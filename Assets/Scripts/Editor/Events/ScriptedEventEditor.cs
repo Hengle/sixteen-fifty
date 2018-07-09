@@ -14,9 +14,7 @@ namespace SixteenFifty.Editor {
     [SerializeField]
     EventItemControl control;
 
-    new ScriptedEvent target;
-
-    ScriptedEventItemEditor editor;
+    ScriptedEvent target;
 
     SubtypeSelectorContext<IScript> context;
     

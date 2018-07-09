@@ -353,5 +353,20 @@ namespace SixteenFifty {
         return new Race<T, S>(self, that);
       }
     }
+
+    public static class BranchExt {
+      /**
+       * \brief
+       * Branches on the boolean result of this command.
+       */
+      public static Command<T> Branch<T>(this Command<bool> self, Command<T> ifTrue, Command<T> ifFalse) =>
+        self.Then(
+          b => {
+            if(b)
+              return ifTrue;
+            else
+              return ifFalse;
+          });
+    }
   }
 }

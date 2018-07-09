@@ -39,34 +39,19 @@ namespace SixteenFifty.Serialization {
           return serializer;
 
         serializer = new BinaryFormatter();
-        var selector = new SurrogateSelector();
-
-        Action<Type, ISerializationSurrogate> addSurrogate = (type, surrogate) => {
-          selector.AddSurrogate(type, new StreamingContext(StreamingContextStates.All), surrogate);
-          // Debug.LogFormat(
-          //   "Registered surrogate: {0} -> {1}.",
-          //   type,
-          //   surrogate);
-        };
-
-        var unityObject = typeof(UnityEngine.Object);
-        var unitySurrogate = new UnityObjectSurrogate(objectFields);
-
-        // now to add the surrogate for every subclass of
+        // This selector will succeed for *any* type that derives from
         // UnityEngine.Object.
+        // This includes types from UnityEngine.dll as well as my own
+        // assembly.
+        // Furthermore, by using IsAssignableFrom internally, it works
+        // for generics, e.g.
+        // class Variable<T> : ScriptableObject, IVariable<T> { ... }
+        // is assignable to UnityEngine.Object (via ScriptableObject).
+        serializer.SurrogateSelector =
+          new AssignableSurrogateSelector(
+            typeof(UnityEngine.Object),
+            new UnityObjectSurrogate(objectFields));
 
-        // first, get all the subclasses of UnityEngine.Object in both
-        // the Unity assembly and in my own assembly.
-        var unityTypes = unityObject.Assembly.GetTypes()
-          .Concat(GetType().Assembly.GetTypes())
-          .Where(t => unityObject.IsAssignableFrom(t));
-
-        // and then add for each
-        foreach(var type in unityTypes) {
-          addSurrogate(type, unitySurrogate);
-        }
-
-        serializer.SurrogateSelector = selector;
         return serializer;
       }
     }

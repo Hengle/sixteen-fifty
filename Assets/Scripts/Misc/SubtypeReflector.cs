@@ -45,12 +45,83 @@ namespace SixteenFifty.Reflection {
     * \brief
     * Enumerates all implementations of the interface `type`.
     *
+    * \remark
     * Prefer calling `GetImplementations<T>` using a type argument
     * instead of this method, since this method does not check that
     * `type` refers to an interface type.
+    *
+    * \remark
+    * If `type = A<B>` is a closed, single-parameter generic type,
+    * then a more complex check will be performed to decide whether
+    * another type `S` implements `type`:
+    * - `S` implements the interface `A<B>` directly; or
+    * - If `S = T<U>` is a single-parameter generic type definition, then
+    *   `T<B>` implements `A<B>`.
     */
     public static IEnumerable<Type> GetImplementations<A>(Type type) =>
-      GetTypes<A>().Where(t => t.IsClass && type.IsAssignableFrom(t));
+      GetTypes<A>().SelectWhere(
+        t => {
+          if(!t.IsClass) return Maybe<Type>.Nothing();
+          if(type.IsAssignableFrom(t)) return Maybe<Type>.Just(t);
+          return type.AssignableInstantiationOf(t).FromNull<Type>();
+        });
+
+    /**
+     * \brief
+     * Produces an instantiation of the generic type that is
+     * assignable to a given concrete type.
+     *
+     * \returns
+     * Not null if and only if:
+     * - `generic` is a generic type definition;
+     * - `dst` is a single-argument, closed generic type; and
+     * - `generic`, when instantiated with the argument of `dst` is
+     *   assignable to `dst`.
+     */
+    public static Type AssignableInstantiationOf(this Type dst, Type generic) {
+      // `generic` must be a generic type definition, so that we can
+      // form instantiations.
+      if(!generic.IsGenericTypeDefinition)
+        return null;
+      
+      // the destination type must be closed (have no generic
+      // parameters) and have a unique type argument.
+      var arg = dst.GetSingleTypeArgument();
+      if(dst.ContainsGenericParameters || arg == null)
+        return null;
+
+      Type instance = null;
+
+      try {
+        instance = generic.MakeGenericType(new [] { arg });
+      }
+      // MakeGenericType can throw ArgumentException when trying to
+      // form instantiations that would violate generic constraints.
+      // If such a violation occurs, then naturally the instantiation
+      // is not assignable to `dst`.
+      catch(ArgumentException) {
+        return null;
+      }
+
+      Debug.Assert(
+        null != instance,
+        "Generic type instantiation is not null.");
+      
+      return dst.IsAssignableFrom(instance) ? instance : null;
+    }
+
+    /**
+     * \brief
+     * Gets the Type representing the single type argument of `type`.
+     *
+     * \returns
+     * Returns null if `type` is not a closed generic type with
+     * exactly one argument.
+     */
+    public static Type GetSingleTypeArgument(this Type type) {
+      var args = type.GenericTypeArguments;
+      return args.Length == 1 ? args[0] : null;
+    }
 
     /**
      * \brief
