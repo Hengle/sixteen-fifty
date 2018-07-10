@@ -73,41 +73,93 @@ namespace SixteenFifty.Reflection {
      *
      * \returns
      * Not null if and only if:
+     * - `dst` is a generic interface type.
      * - `generic` is a generic type definition;
-     * - `dst` is a single-argument, closed generic type; and
-     * - `generic`, when instantiated with the argument of `dst` is
-     *   assignable to `dst`.
+     * - Exactly one interface implemented by `generic` successfully
+     *   pattern matches against `dst`.
      */
     public static Type AssignableInstantiationOf(this Type dst, Type generic) {
+      var b = generic == typeof(EventItems.Expressions.Constant<>);
+      if(b)
+        Debug.Log("yoloo");
+
       // `generic` must be a generic type definition, so that we can
       // form instantiations.
       if(!generic.IsGenericTypeDefinition)
         return null;
-      
-      // the destination type must be closed (have no generic
-      // parameters) and have a unique type argument.
-      var arg = dst.GetSingleTypeArgument();
-      if(dst.ContainsGenericParameters || arg == null)
-        return null;
+
+      if(b) Debug.Log("generic is GTD");
+
+      var interfaces = generic.GetInterfaces();
 
       Type instance = null;
-
-      try {
-        instance = generic.MakeGenericType(new [] { arg });
+      foreach(var iface in interfaces) {
+        instance =
+          FormAssignableInstantiation(dst, iface, generic);
+        // decide whether `FormAssignableInstantiation` worked and
+        // double-check that instance can be assigned to dst.
+        if(null != instance && dst.IsAssignableFrom(instance))
+          break;
       }
-      // MakeGenericType can throw ArgumentException when trying to
-      // form instantiations that would violate generic constraints.
-      // If such a violation occurs, then naturally the instantiation
-      // is not assignable to `dst`.
-      catch(ArgumentException) {
+
+      return instance;
+    }
+
+    /**
+     * Tries to form an instantiation of the generic type definition
+     * `generic` that is assignable to the closed generic type `dst`
+     * by pattern matching `dst` against the interface `iface` that is
+     * implemented by `generic`.
+     *
+     * This is a helper function for #AssignableInstantiationOf.
+     */
+    static Type FormAssignableInstantiation(Type dst, Type iface, Type generic) {
+      var b = generic == typeof(EventItems.Expressions.Constant<>);
+      if(b)
+        Debug.LogFormat(
+          "Trying interface {0} : {1} <- {2}.",
+          dst,
+          iface,
+          generic);
+
+      var sub = new Dictionary<int, Type>();
+      // the pattern matching must succeed
+      if(!dst.PatternMatchGenerics(iface, sub, b)) {
+        if(b)
+          Debug.Log("pattern matching failed.");
         return null;
       }
 
-      Debug.Assert(
-        null != instance,
-        "Generic type instantiation is not null.");
-      
-      return dst.IsAssignableFrom(instance) ? instance : null;
+      var l = generic.GetGenericArguments().Length;
+
+      if(b) {
+        sub.DebugLog();
+        Debug.LogFormat(
+          "Substitution count: {0}\nParameter count: {1}",
+          sub.Count,
+          l);
+      }
+
+      // the substitution must be grounding
+      if(sub.Count != l) {
+        Debug.Log("substitution is not grounding");
+        return null;
+      }
+      var substitution = sub.ToIndexList<Type>().ToArray();
+
+      // try to form the instantiation:
+      Type instance = null;
+      try {
+        instance = generic.MakeGenericType(substitution);
+      }
+      catch(ArgumentException) {
+        Debug.Log("instantiation failed.");
+        // this could happen because a generic type constraint
+        // violation could occur when forming `instance`.
+        // In that case, instance is still null, so we can just return
+        // it anyway to indicate failure.
+      }
+      return instance;
     }
 
     /**
@@ -273,6 +325,84 @@ namespace SixteenFifty.Reflection {
     public static void Typecheck(Type dst, Type src) {
       if(src != null && !dst.IsAssignableFrom(src))
         throw new TypeMismatch(src, dst);
+    }
+
+    /**
+     * \brief
+     * Performs pattern matching against a concrete type to find a
+     * generic substitution.
+     *
+     * \returns
+     * A boolean indicating whether the matching suceeded.
+     * If this result is `true`, then `sub` represents the
+     * substitution.
+     * Else, the contents of `sub` is undefined.
+     *
+     * \remark
+     * The returned dictionary might not assign a concrete type to
+     * *every* type parameter.
+     * The dictionary should be converted to a list, with nulls
+     * inserted for the missing indices.
+     * If the list contains no nulls and has the same length as the
+     * type parameter list, then the match has succeeded with a
+     * complete substitution.
+     */
+    public static bool PatternMatchGenerics(
+      this Type self, Type against, IDictionary<int, Type> sub, bool b = false) {
+      if(b)
+        Debug.LogFormat(
+          "Pattern matching {0} ~=~ {1}.",
+          self, against);
+
+      // base case: self is a variable
+      if(against.IsGenericParameter) {
+        var i = against.GenericParameterPosition;
+
+        if(b)
+          Debug.LogFormat(
+            "Matching variable {0} ({1}) -> {2}",
+            self,
+            i,
+            against);
+
+        if(sub.ContainsKey(i)) {
+          if(sub[i] != self)
+            throw new TypeMismatch(sub[i], self);
+        }
+        else
+          sub[i] = self;
+
+      } 
+      else if(
+        // check that the heads match
+        self.IsGenericType && against.IsGenericType
+        && self.GetGenericTypeDefinition()
+        == against.GetGenericTypeDefinition()) {
+        if(b)
+          Debug.Log("Heads match. Recursing.");
+
+        // now we need to recurse
+        Type[] left = self.GetGenericArguments();
+        Type[] right = against.GetGenericArguments();
+        Debug.Assert(
+          left.Length == right.Length,
+          "Generic argument lengths match.");
+
+        foreach(
+          var argt in Enumerable.Zip(left, right, Tuple.Create)) {
+          // if any of the sub-matches fails, then we also fail.
+          if(!argt.Item1.PatternMatchGenerics(argt.Item2, sub, b))
+            return false;
+        }
+        // otherwise we did it!
+      }
+      else {
+        if(b)
+          Debug.Log("Heads don't match.");
+        return false;
+      }
+
+      return true;
     }
   }
 }

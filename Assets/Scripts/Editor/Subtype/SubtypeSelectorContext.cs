@@ -66,12 +66,6 @@ namespace SixteenFifty.Editor {
       }
     }
 
-    public void EnsureEditorsAreReady() {
-      if(null != editors)
-        return;
-      UpdateKnownEditors();
-    }
-
     /**
     * \brief
     * Finds all implementations of `T` with the SelectableSubtype
@@ -97,13 +91,34 @@ namespace SixteenFifty.Editor {
       Debug.LogFormat("l = {0}", foo.ToArray().Length);
 
       foreach(var t in foo) {
-        var target = 
-          t.FindCustomAttribute<SubtypeEditorFor>()
-          ?.FindNamedArgument<Type>("target")
-          .ToArray();
-        if(target.Length > 0)
-          yield return Tuple.Create(target[0], t);
+        var target = GetEditorTargetType(t);
+        if(null != target)
+          yield return Tuple.Create(target, t);
       }
+    }
+
+    private static Type GetEditorTargetType(Type editorType) {
+      var targets =
+        editorType.FindCustomAttribute<SubtypeEditorFor>()
+        ?.FindNamedArgument<Type>("target")
+        .ToArray();
+      if(targets.Length == 0)
+        return null;
+      var target = targets[0];
+      // the target type could be generic, in which case we need to
+      // make an instantiation.
+      if(!target.IsGenericTypeDefinition)
+        // if it isn't a GTD then we can just return it as-is.
+        return target;
+      // the motivating example:
+      // [SubtypeEditorFor(target = Constant<>)]
+      // class ConstantEditor<T> : ISubtypeEditor<IExpression<T>>
+      // By convention, an editor for a generic type must have a
+      // parameter list that matches its target type.
+      // If we have a concrete e.g. ConstantEditor<bool> then we
+      // instantiate the target Constant<> with the same arguments as
+      // its editor type in order to obtain the true target type.
+      return target.MakeGenericType(editorType.GetGenericArguments());
     }
 
     /**
@@ -119,11 +134,18 @@ namespace SixteenFifty.Editor {
         tup => tup.Item1,
         tup => tup.Item2);
 
+    public void EnsureEditorsAreReady() {
+      if(null != editors)
+        return;
+      UpdateKnownEditors();
+    }
+
     private void UpdateKnownEditors() {
       editors = GetEditorDictionary();
       Debug.LogFormat(
-        "Editor map updated.\n" +
-        "{0}",
+        "Editor map for {0} updated.\n" +
+        "{1}",
+        typeof(T),
         String.Join(
           "\n",
           editors.Select(
