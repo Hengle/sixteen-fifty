@@ -15,11 +15,14 @@ namespace SixteenFifty.Variables {
     }
   }
 
+  public abstract class AnyVariable : ScriptableObject {
+  }
+
   /**
    * \brief
    * A variable of type `T`.
    */
-  public class Variable<T> : ScriptableObject, IVariable<T> {
+  public class Variable<T> : AnyVariable, IVariable<T> {
     /**
      * \brief
      * The raw value of the variable.

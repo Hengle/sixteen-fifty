@@ -10,14 +10,13 @@ namespace SixteenFifty.Editor {
   [SubtypeEditorFor(target = typeof(GiveItem))]
   public class GiveItemEditor : ScriptedEventItemEditor {
     [SerializeField]
-    new GiveItem target;
+    GiveItem target;
 
     public GiveItemEditor(SubtypeSelectorContext<IScript> context) {
     }
 
-    public override bool CanEdit(Type type) {
-      return type == typeof(GiveItem);
-    }
+    public override bool CanEdit(Type type) =>
+      type == typeof(GiveItem);
 
     public override void Draw(IScript _target) {
       target = _target as GiveItem;

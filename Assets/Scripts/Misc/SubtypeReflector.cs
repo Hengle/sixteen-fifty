@@ -308,6 +308,7 @@ namespace SixteenFifty.Reflection {
      * method, as it returns a well-typed result, instead of `object`.
      */
     public static object DefaultConstruct(this Type t) {
+
       return t.GetConstructor(Type.EmptyTypes).Invoke(null);
     }
 
