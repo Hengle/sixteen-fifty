@@ -11,4 +11,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b5d141c96c92644b29c1902447f918cc, type: 3}
   m_Name: Player Quest Log
   m_EditorClassIdentifier: 
-  quests: []
+  quests:
+  - {fileID: 11400000, guid: ae0ae44b4b1694ce8b0c1f50fb33d373, type: 2}

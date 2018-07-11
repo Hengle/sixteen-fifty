@@ -16,6 +16,4 @@ MonoBehaviour:
   destination: {fileID: 11400000, guid: 20a197fea5e584c689ab7e1c7ea54e4b, type: 2}
   interactions:
   - name: Talk
-    script: {fileID: 0}
-  - name: Quit
-    script: {fileID: 0}
+    script: {fileID: 11400000, guid: 3819a48b11eda48a2b6c3ff7eb5354f7, type: 2}

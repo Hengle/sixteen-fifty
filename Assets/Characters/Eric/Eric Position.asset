@@ -13,8 +13,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   value:
     metrics: {fileID: 0}
-    x: 0
-    y: 0
+    x: 4
+    y: 3
     Box:
       centerX: 0
       centerY: 0

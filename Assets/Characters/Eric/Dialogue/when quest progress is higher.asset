@@ -20,4 +20,5 @@ MonoBehaviour:
     values: []
     count: 0
   speakerConfigurations: []
-  messages: []
+  messages:
+  - Well, go on already! Go tell him I said hi!!

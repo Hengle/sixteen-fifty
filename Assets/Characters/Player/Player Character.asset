@@ -11,9 +11,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 31767a83b3c46440dab1d9d5ef177d71, type: 3}
   m_Name: Player Character
   m_EditorClassIdentifier: 
-  name: 
-  inventory: {fileID: 0}
-  questLog: {fileID: 0}
+  name: Player
+  inventory: {fileID: 11400000, guid: 412fbf153bba5433a83d41acd0622061, type: 2}
+  questLog: {fileID: 11400000, guid: 564ce5cd62902448b9dde391ef449668, type: 2}
   equipment:
     equipment:
       keys: []

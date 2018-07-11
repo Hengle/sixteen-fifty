@@ -25,7 +25,6 @@ GameObject:
   - component: {fileID: 114933590884988850}
   - component: {fileID: 114163526287482826}
   - component: {fileID: 114904052526100102}
-  - component: {fileID: 114365354515445380}
   - component: {fileID: 212201995614174652}
   m_Layer: 0
   m_Name: Player
@@ -84,18 +83,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2accf4eba40d348499dadf3a0359bfae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &114365354515445380
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1813968912732676}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5eb961b87f27440319eb5d24cc79ca4c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  <Slots>k__BackingField: []
 --- !u!114 &114860618602737832
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -108,7 +95,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mapEntity: {fileID: 114209836436637078}
-  inventory: {fileID: 114365354515445380}
+  character: {fileID: 11400000, guid: e04c6635bffc54805820a0954dd42cac, type: 2}
 --- !u!114 &114904052526100102
 MonoBehaviour:
   m_ObjectHideFlags: 1
