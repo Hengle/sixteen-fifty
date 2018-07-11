@@ -10,7 +10,13 @@ namespace SixteenFifty.Behaviours {
   using TileMap;
   using Variables;
   
-  public class HexGrid : MonoBehaviour, IPointerClickHandler {
+  public class HexGrid : MonoBehaviour, IPointerClickHandler, IMap {
+    /**
+     * \brief
+     * The prefab to use to spawn the player in this map type.
+     */
+    public GameObject playerPrefab;
+    
     /**
     * \brief
     * The metrics of the map represented by this hex grid.
@@ -18,7 +24,7 @@ namespace SixteenFifty.Behaviours {
     public HexMetrics hexMetrics =>
       map.metrics;
 
-    private HexMap map;
+    public event Action<IMap> Ready;
 
     public HexGridManager Manager {
       get;
@@ -29,7 +35,7 @@ namespace SixteenFifty.Behaviours {
     * \brief
     * The HexMap represented by this grid.
     */
-    public HexMap Map {
+    public HexMap HexMap {
       get {
         return map;
       }
@@ -42,10 +48,11 @@ namespace SixteenFifty.Behaviours {
         }
       }
     }
+    private HexMap map;
 
     void OnEnable() {
       // sets up event handlers appropriately, but looks weird.
-      Map = Map;
+      HexMap = HexMap;
     }
 
     /**
@@ -94,16 +101,32 @@ namespace SixteenFifty.Behaviours {
 
     /**
      * \brief
-     * Raised once the map is initialized.
-     */
-    public event Action<HexGrid> Loaded;
-
-    /**
-     * \brief
      * The variable that determines where the player positions itself
      * when it loads.
      */
     public HexCoordinatesVariable playerDestination;
+
+    public BasicMap Map => HexMap;
+
+    public PlayerController Player {
+      get;
+      private set;
+    }
+
+    public void Load(HexGridManager manager, BasicMap _map) {
+      HexMap = _map as HexMap;
+      Debug.Assert(
+        null != HexMap,
+        "HexGrid is loading a HexMap.");
+      Debug.Assert(
+        manager == Manager,
+        "Loading manager is the same as instantiating manager.");
+    }
+
+    public PlayerController SpawnPlayer() =>
+      Player =
+      Instantiate(playerPrefab, transform)
+      .GetComponent<PlayerController>();
 
     void Awake() {
       Manager = this.GetComponentInParent<HexGridManager>();
@@ -120,7 +143,7 @@ namespace SixteenFifty.Behaviours {
       SetupGrid(map);
       SetupNPCs(map.npcs);
 
-      Loaded?.Invoke(this);
+      Ready?.Invoke(this);
     }
 
     /**
@@ -192,7 +215,7 @@ namespace SixteenFifty.Behaviours {
     public HexCell this[HexCoordinates p] {
       get {
         var oc = p.ToOffsetCoordinates();
-        var i = oc.Item1 + oc.Item2 * Map.width;
+        var i = oc.Item1 + oc.Item2 * HexMap.width;
         // bounds-check the index and return the HexCell object.
         Debug.Assert(
           null != cells,

@@ -11,74 +11,49 @@ namespace SixteenFifty.Behaviours {
   
   /**
   * \brief
-  * A controller for the HexMap model.
-
-  * The HexGrid represents a hexagonal grid map.
+  * Loads maps of any kind.
   */
   public class HexGridManager : MonoBehaviour {
     /**
     * \brief
     * The current managed map.
     */
-    public HexGrid CurrentGrid {
+    public IMap CurrentMap {
       get;
       private set;
     }
 
-    /**
-    * \brief
-    * The initial map to load.
-    * THIS IS FOR TESTING!
-    */
-    public HexMap initialMap;
-
-    /**
-    * \brief
-    * The prefab used to create the player.
-    */
-    public GameObject playerPrefab;
-
-    /**
-    * \brief
-    * The prefab used to create maps.
-    */
-    public GameObject gridPrefab;
-
-    /**
-    * \brief
-    * Gets the metrics of the current map.
-    */
-    public HexMetrics hexMetrics => CurrentGrid?.Map.metrics;
+    public BasicMap initialMap;
 
     /**
      * \brief
-     * Raised when a HexGrid finishes loading.
+     * Raised when a map finishes loading.
      *
-     * Internally, the way this works is that when HexGridManager
-     * loads a map, it registers a callback on the ::HexGrid::Loaded
-     * event, and then just proxies it through this #GridLoaded event.
-     *
-     * This way, parties that care about maps loading and unloading
-     * can just register a callback on HexGridManager (which doesn't
-     * go anywhere) rather than have to worry about the HexGrid
-     * objects coming and going.
+     * This proxies the IMap::Ready event.
      */
-    public event Action<HexGrid> GridLoaded;
+    public event Action<IMap> MapReady;
+
+    /**
+     * \brief
+     * The gameobject that represents the current map.
+     */
+    private GameObject currentMapObject;
 
     /**
      * \brief
      * Proxies the loaded event from the current grid.
      */
-    void OnGridLoaded(HexGrid grid) => GridLoaded?.Invoke(grid);
+    void OnMapReady(IMap map) => MapReady?.Invoke(map);
 
     /**
      * \brief
-     * Gets the current player.
+     * Gets the player controller in the current map.
+     *
+     * \returns
+     * Null if there is no map currently loaded.
      */
-    public PlayerController Player {
-      get;
-      private set;
-    }
+    public PlayerController Player =>
+      CurrentMap?.Player;
 
     void Awake () {
       Debug.Assert(null != StateManager.Instance, "state manager exists");
@@ -95,32 +70,40 @@ namespace SixteenFifty.Behaviours {
     * Determines whether to use `DestroyImmediate`.
     */
     public void DestroyMap(bool immediate = false) {
-      if(null == CurrentGrid) 
+      if(CurrentMap == null)
         return;
-
-      CurrentGrid.Loaded -= OnGridLoaded;
-      CurrentGrid.OnDisable();
+      
+      CurrentMap.Ready -= OnMapReady;
+      currentMapObject.SetActive(false); // calls OnDisable
       if(immediate)
-        DestroyImmediate(CurrentGrid.gameObject);
+        DestroyImmediate(currentMapObject);
       else
-        Destroy(CurrentGrid.gameObject);
-      CurrentGrid = null;
+        Destroy(currentMapObject);
+      CurrentMap = null;
+      currentMapObject = null;
     }
 
     /**
     * \brief
-    * Loads a new map.
+    * Loads another map.
     * First destroys the current map, if any.
     */
-    public HexGrid LoadMap(HexMap map) {
+    public IMap LoadMap(BasicMap map) {
+      // decide what kind of map is next to load
       DestroyMap();
 
-      var obj = GameObject.Instantiate(gridPrefab, transform);
-      CurrentGrid = obj.GetComponent<HexGrid>();
-      Debug.Assert(CurrentGrid != null, "gridPrefab GameObject contains a HexGrid component.");
-      CurrentGrid.Map = map;
-      CurrentGrid.Loaded += OnGridLoaded;
-      return CurrentGrid;
+      currentMapObject = Instantiate(map.prefab, transform);
+
+      CurrentMap = currentMapObject.GetComponent(typeof(IMap)) as IMap;
+      Debug.Assert(
+        CurrentMap != null,
+        "instantiated map prefab contains an IMap component.");
+      CurrentMap.Ready += OnMapReady;
+
+      // do early map initialization
+      CurrentMap.Load(this, map);
+
+      return CurrentMap;
     }
 
     /**
@@ -128,16 +111,14 @@ namespace SixteenFifty.Behaviours {
      * Instantiates the player prefab under the current grid.
      * Sets #Player.
      */
-    public PlayerController SpawnPlayer() {
-      var obj = Instantiate(playerPrefab, CurrentGrid.transform);
-      return Player = obj.GetComponent<PlayerController>();
-    }
+    public PlayerController SpawnPlayer() =>
+      CurrentMap.SpawnPlayer();
 
     void Start() {
       if(null != initialMap)
         LoadMap(initialMap);
 
-      if(CurrentGrid == null)
+      if(null == CurrentMap)
         return;
 
       SpawnPlayer();

@@ -10,8 +10,8 @@ namespace SixteenFifty.TileMap {
   * The event associated with map load can be used to set up the map
   * after its HexCells have been created in the HexGrid.
   */
-  [CreateAssetMenu(menuName = "1650/Hex Map")]
-  public class HexMap : ScriptableObject {
+  [CreateAssetMenu(menuName = "1650/Maps/Hex Map")]
+  public class HexMap : BasicMap {
     /**
     * \brief
     * The metrics of the hexagons used in this hex map.
@@ -23,12 +23,6 @@ namespace SixteenFifty.TileMap {
     * The width of the map.
     */
     public int width;
-
-    /**
-    * \brief
-    * Specifications of all the NPCs in the map.
-    */
-    public BasicNPC[] npcs;
 
     /**
     * \brief

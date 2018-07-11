@@ -11,6 +11,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2434b29f969af4952ac3c8ea3af5a30c, type: 3}
   m_Name: River ne-sw
   m_EditorClassIdentifier: 
-  sprite: {fileID: 21300016, guid: ea995ed377ce648f4b99a33139f894b2, type: 3}
+  sprite: {fileID: 21300030, guid: 851b492a6f016465ebd55cf150ad8db5, type: 3}
   movementCost: 0
   tileName: River NE SW

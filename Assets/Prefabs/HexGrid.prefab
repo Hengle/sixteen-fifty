@@ -24,7 +24,7 @@ GameObject:
   - component: {fileID: 114289669108808028}
   - component: {fileID: 82153393341722106}
   m_Layer: 0
-  m_Name: Grid
+  m_Name: HexGrid
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -175,6 +175,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ddc63d15d621d4f028efbbfeab0e1e1e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerPrefab: {fileID: 1813968912732676, guid: 2132d4cc7fa4148959cda16f85d2c445,
+    type: 2}
   cellPrefab: {fileID: 1898474504515082, guid: 6aa64d2ada5b24037a39e2a775752d3b, type: 2}
   npcPrefab: {fileID: 1630210120392076, guid: 436435f7b28b440dba02b6ac0c7b6260, type: 2}
   collider: {fileID: 65544956024573058}

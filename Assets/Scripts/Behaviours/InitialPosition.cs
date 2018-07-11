@@ -29,14 +29,14 @@ namespace SixteenFifty.Behaviours {
     }
 
     public void OnEnable() {
-      hexGridManager.GridLoaded += OnGridLoad;
+      hexGridManager.MapReady += OnMapReady;
     }
 
     public void OnDisable() {
-      hexGridManager.GridLoaded -= OnGridLoad;
+      hexGridManager.MapReady -= OnMapReady;
     }
 
-    void OnGridLoad(HexGrid grid) {
+    void OnMapReady(IMap map) {
       if(null != destination)
         mapEntity.Warp(destination.Value);
     }

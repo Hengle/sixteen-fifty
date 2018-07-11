@@ -17,8 +17,9 @@ namespace SixteenFifty.Editor {
 
     AssetInfo<HexTile> selectedTile;
     HexGridManager hexGridManager;
+    HexGrid target;
 
-    bool MapLoaded => null != hexGridManager?.CurrentGrid;
+    bool MapLoaded => null != hexGridManager?.CurrentMap;
     bool ReadyToLoad => null != hexGridManager && null != targetMap && !MapLoaded;
 
     [MenuItem("Window/Map Editor")]
@@ -105,8 +106,8 @@ namespace SixteenFifty.Editor {
       GUI.enabled = true;
 
       if(loadClicked) {
-        var grid = hexGridManager.LoadMap(targetMap);
-        grid.Setup();
+        target = hexGridManager.LoadMap(targetMap) as HexGrid;
+        target.Setup();
       }
 
       GUI.enabled = MapLoaded;
@@ -130,7 +131,7 @@ namespace SixteenFifty.Editor {
         HandleUtility.GUIPointToWorldRay(Event.current.mousePosition).origin
         .Downgrade();
 
-      var cell = hexGridManager.CurrentGrid.GetCellAt(mousePosition);
+      var cell = target.GetCellAt(mousePosition);
 
       if(Event.current.type == EventType.KeyDown)
         DispatchKeyEvent(Event.current.keyCode, cell);
@@ -159,7 +160,7 @@ namespace SixteenFifty.Editor {
       if(!MapLoaded || null == selectedTile || null == cell)
         return;
       var t = cell.coordinates.ToOffsetCoordinates();
-      hexGridManager.CurrentGrid.Map[t] = selectedTile.asset;
+      target.HexMap[t] = selectedTile.asset;
     }
 
     /**
@@ -172,7 +173,7 @@ namespace SixteenFifty.Editor {
         return;
       }
       var t = cell.coordinates.ToOffsetCoordinates();
-      hexGridManager.CurrentGrid.Map[t] = null;
+      target.HexMap[t] = null;
     }
   }
 }

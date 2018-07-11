@@ -11,6 +11,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2434b29f969af4952ac3c8ea3af5a30c, type: 3}
   m_Name: Plains Tile
   m_EditorClassIdentifier: 
-  sprite: {fileID: 21300002, guid: aa7e5bf5c71614207b86000bbb37edeb, type: 3}
+  sprite: {fileID: 21300002, guid: 851b492a6f016465ebd55cf150ad8db5, type: 3}
   movementCost: 0
   tileName: plains
