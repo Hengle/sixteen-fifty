@@ -15,6 +15,8 @@ namespace SixteenFifty.Behaviours {
     [SerializeField] [HideInInspector]
     PlayerController player;
 
+    Rigidbody2D playerBody;
+
     [SerializeField] [HideInInspector]
     IsoGrid map;
 
@@ -42,6 +44,10 @@ namespace SixteenFifty.Behaviours {
         "Triggering map is the same as registered map.");
 
       player = map.Player;
+      playerBody = player.GetComponent<Rigidbody2D>();
+      Debug.Assert(
+        null != playerBody,
+        "Player has a Rigidbody2D.");
     }
 
     public void OnPointerDown(PointerEventData data) {
@@ -50,17 +56,17 @@ namespace SixteenFifty.Behaviours {
 
     public void OnPointerUp(PointerEventData data) {
       down = false;
+      playerBody.velocity = Vector2.zero;
     }
 
-    void Update() {
+    void FixedUpdate() {
       if(player == null || !down)
         return;
 
-      player.transform.position =
-        Vector3.MoveTowards(
-          player.transform.position,
-          InputUtility.PointerPosition.Upgrade(),
-          moveSpeed * Time.deltaTime);
+      var delta =
+        InputUtility.PointerPosition.Upgrade()
+        - player.transform.position;
+      playerBody.velocity = delta.normalized * moveSpeed;
     }
   }
 }
