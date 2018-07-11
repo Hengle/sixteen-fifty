@@ -7,7 +7,7 @@ namespace SixteenFifty.Behaviours {
    * \brief
    * Common behaviour implemented by all map types.
    */
-  public interface IMap {
+  public interface IMap : IHasInteractables {
     /**
      * \brief
      * Loads the map into the HexGridManager.
@@ -40,5 +40,17 @@ namespace SixteenFifty.Behaviours {
      * initialization once the map is completely ready.
      */
     event Action<IMap> Ready;
+
+    /**
+     * \brief
+     * Fires when the player is spawned in the map.
+     *
+     * Behaviours that need to hook into the player can listen to this
+     * to perform their initialization.
+     *
+     * The guarantee is that when this event fires, #Player is not
+     * null.
+     */
+    event Action<IMap> PlayerSpawned;
   }
 }

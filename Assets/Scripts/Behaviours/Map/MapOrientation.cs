@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace SixteenFifty.Behaviours {
+  using Serialization;
   using TileMap;
   
   /**
@@ -12,7 +13,7 @@ namespace SixteenFifty.Behaviours {
   * This component connects a HexMapEntity to a MapEntity.
   */
   [RequireComponent(typeof(SpriteRenderer))]
-  public class MapOrientation : MonoBehaviour {
+  public class MapOrientation : SerializableBehaviour {
     private HexDirection orientation;
 
     public HexMapEntity hexMapEntity;
@@ -61,14 +62,8 @@ namespace SixteenFifty.Behaviours {
     [SerializeField] [HideInInspector]
     new private SpriteRenderer renderer;
 
-    /**
-    * \brief
-    * The MapEntity to monitor for orientation changes.
-    * 
-    * Initialized in ::Awake.
-    */
-    [SerializeField] [HideInInspector]
-    MapEntity mapEntity;
+    [SerializeField]
+    INotifyDirectionChange entity;
 
     public void UpdateSprite() {
       Orientation = Orientation;
@@ -80,10 +75,12 @@ namespace SixteenFifty.Behaviours {
         null != renderer,
         "MapOrientation is attached with a SpriteRenderer.");
 
-      mapEntity = GetComponent<MapEntity>();
+      entity =
+        GetComponent(typeof(INotifyDirectionChange))
+        as INotifyDirectionChange;
       Debug.Assert(
-        null != mapEntity,
-        "MapOrientation is attached with a MapEntity.");
+        null != entity,
+        "MapOrientation is attached to an INotifyDirectionChange component.");
     }
 
     void Start() {
@@ -92,20 +89,20 @@ namespace SixteenFifty.Behaviours {
     }
 
     void OnEnable() {
-      if(null != mapEntity)
-        mapEntity.ChangeDirection += OnChangeDirection;
+      if(null != entity)
+        entity.DirectionChanged += OnDirectionChanged;
     }
 
     void OnDisable() {
-      if(null != mapEntity)
-        mapEntity.ChangeDirection -= OnChangeDirection;
+      if(null != entity)
+        entity.DirectionChanged -= OnDirectionChanged;
     }
 
     /**
     * \brief
     * Handles ::mapEntity::ChangeDirection.
     */
-    void OnChangeDirection(MapEntity me, HexDirection d) {
+    void OnDirectionChanged(HexDirection d) {
       Orientation = d;
     }
   }

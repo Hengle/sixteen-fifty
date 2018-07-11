@@ -9,6 +9,15 @@ namespace SixteenFifty.TileMap {
   [CreateAssetMenu(menuName = "1650/Hex Metrics")]
   public class HexMetrics : ScriptableObject {
     /**
+     * \brief
+     * Decides which direction is the primary direction of the given
+     * angle according to these metrics.
+     */
+    public static HexDirection DirectionFromAngle(float angle) {
+      throw new SixteenFiftyException("TODO: DirectionFromAngle");
+    }
+
+    /**
     * \brief
     * The PPU value used on *all* art assets.
     */

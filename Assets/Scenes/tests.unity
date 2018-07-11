@@ -334,9 +334,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   initialMap: {fileID: 11400000, guid: 5b2eb575dc91a466a838fb65ad69e970, type: 2}
-  playerPrefab: {fileID: 1813968912732676, guid: 2132d4cc7fa4148959cda16f85d2c445,
-    type: 2}
-  gridPrefab: {fileID: 1854242389497516, guid: 3eb7f28363bcf480981021029691cfd4, type: 2}
 --- !u!4 &201364431
 Transform:
   m_ObjectHideFlags: 0
@@ -1036,6 +1033,8 @@ MonoBehaviour:
   hudController: {fileID: 1189574140}
   closeButton: {fileID: 1635178111}
   title: {fileID: 502678491}
+  hexGridManager: {fileID: 0}
+  inventoryController: {fileID: 0}
 --- !u!1 &926782044
 GameObject:
   m_ObjectHideFlags: 0

@@ -26,6 +26,8 @@ namespace SixteenFifty.Behaviours {
 
     public event Action<IMap> Ready;
 
+    public event Action<IMap> PlayerSpawned;
+
     public HexGridManager Manager {
       get;
       private set;
@@ -106,6 +108,10 @@ namespace SixteenFifty.Behaviours {
      */
     public HexCoordinatesVariable playerDestination;
 
+    [SerializeField] [HideInInspector]
+    List<Interactable> interactables;
+    public List<Interactable> Interactables => interactables;
+
     public BasicMap Map => HexMap;
 
     public PlayerController Player {
@@ -123,12 +129,16 @@ namespace SixteenFifty.Behaviours {
         "Loading manager is the same as instantiating manager.");
     }
 
-    public PlayerController SpawnPlayer() =>
+    public PlayerController SpawnPlayer() {
       Player =
-      Instantiate(playerPrefab, transform)
-      .GetComponent<PlayerController>();
+        Instantiate(playerPrefab, transform)
+        .GetComponent<PlayerController>();
+      PlayerSpawned?.Invoke(this);
+      return Player;
+    }
 
     void Awake() {
+      interactables = new List<Interactable>();
       Manager = this.GetComponentInParent<HexGridManager>();
       Debug.Assert(
         null != Manager,

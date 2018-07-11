@@ -10,14 +10,15 @@ namespace SixteenFifty.EventItems {
 
   [Serializable]
   public class JumpToMap : ImmediateScript {
-    public HexMap map;
-    public HexCoordinates coords;
+    public BasicMap map;
 
     public override void Call(EventRunner runner) {
       var hexGridManager = runner.GridManager;
       hexGridManager.LoadMap(map);
-      var player = hexGridManager.SpawnPlayer();
-      player.mapEntity.Warp(coords);
+      // not clear whether spawn player should be here or whether
+      // spawning should be taken care of by the event script that
+      // performs the jump
+      hexGridManager.SpawnPlayer();
     }
   }
 }

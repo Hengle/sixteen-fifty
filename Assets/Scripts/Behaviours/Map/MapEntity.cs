@@ -21,7 +21,7 @@ namespace SixteenFifty.Behaviours {
   * connect the MapEntity with the HexMapEntity using the
   * MapOrientation behaviour.
   */
-  public class MapEntity : MonoBehaviour {
+  public class MapEntity : MonoBehaviour, INotifyDirectionChange {
     /**
     * \brief
     * How fast the player moves, in units per seconds.
@@ -84,7 +84,7 @@ namespace SixteenFifty.Behaviours {
     * \sa
     * MapOrientation
     */
-    public event Action<MapEntity, HexDirection> ChangeDirection;
+    public event Action<HexDirection> DirectionChanged;
 
     private Coroutine movement;
 
@@ -247,10 +247,10 @@ namespace SixteenFifty.Behaviours {
           }
           Vector3 target = cell.coordinates.Box.Center;
 
-          if(null != self.ChangeDirection) {
+          if(null != self.DirectionChanged) {
             var d = self.CurrentCell.coordinates.WhichNeighbour(cell.coordinates);
             Debug.Assert(d.HasValue, "cell emitted by pathfinding is a neighbour of the current cell");
-            self.ChangeDirection(self, d.Value);
+            self.DirectionChanged(d.Value);
           }
 
           var move = new MoveTransform(self.transform, target, moveSpeed);
