@@ -20,11 +20,7 @@ namespace SixteenFifty.Behaviours {
      */
     public MapEntity mapEntity;
 
-    /**
-     * \brief
-     * The player's inventory.
-     */
-    public Inventory inventory;
+    public Character character;
 
     void Awake() {
     }
