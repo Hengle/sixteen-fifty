@@ -26,9 +26,17 @@ namespace SixteenFifty.Editor {
     [SerializeField]
     SubtypeSelectorContext<T> context;
 
-    public SubtypeControl(string selectorLabel, SubtypeSelectorContext<T> context) {
+    [SerializeField]
+    bool drawEditor;
+
+    public SubtypeControl(
+      string selectorLabel,
+      SubtypeSelectorContext<T> context,
+      bool drawEditor = true) {
+
       this.selectorLabel = selectorLabel;
       this.context = context;
+      this.drawEditor = drawEditor;
     }
 
     /**
@@ -79,6 +87,10 @@ namespace SixteenFifty.Editor {
       // with this, we can construct and draw the editor for the
       // target.
 
+      // if we don't need to worry about editors, then gtfo
+      if(!drawEditor)
+        return target;
+
       // if we have no editor, or the current editor is inappropriate,
       if(editor == null || !editor.CanEdit(type)) {
         // then we need to construct a new one
@@ -102,7 +114,9 @@ namespace SixteenFifty.Editor {
       // - editor can edit target
 
       // finally we can edit the target, and return it.
+      EditorGUI.indentLevel++;
       editor.Draw(target);
+      EditorGUI.indentLevel--;
       return target;
     }
   }

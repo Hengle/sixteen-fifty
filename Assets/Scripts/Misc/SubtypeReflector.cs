@@ -114,7 +114,9 @@ namespace SixteenFifty.Reflection {
      * This is a helper function for #AssignableInstantiationOf.
      */
     static Type FormAssignableInstantiation(Type dst, Type iface, Type generic) {
-      var b = generic == typeof(EventItems.Expressions.Constant<>);
+      var b = false;
+        // generic == typeof(EventItems.Expressions.Constant<>);
+
       if(b)
         Debug.LogFormat(
           "Trying interface {0} : {1} <- {2}.",

@@ -38,6 +38,10 @@ namespace SixteenFifty.Editor {
         null != target,
         "ScriptedEventEditor target is a ScriptedEvent.");
 
+      if(GUILayout.Button("Mark Changed")) {
+        EditorUtility.SetDirty(target);
+      }
+
       target.root = control.Draw(target.root);
     }
   }

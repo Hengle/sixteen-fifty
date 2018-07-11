@@ -9,7 +9,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fa81f5948b75a4ae58ad0bda39afcbd3, type: 3}
-  m_Name: Jake Dialogue
+  m_Name: Jake Demo Dialogue
   m_EditorClassIdentifier: 
   objectFields:
     keys: []

@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa81f5948b75a4ae58ad0bda39afcbd3, type: 3}
+  m_Name: Dialogue when quest is complete
+  m_EditorClassIdentifier: 
+  objectFields:
+    keys: []
+    values: []
+    count: 0
+  dataFields:
+    keys: []
+    values: []
+    count: 0
+  speakerConfigurations: []
+  messages:
+  - Thank you so much!
