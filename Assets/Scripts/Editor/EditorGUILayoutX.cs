@@ -18,7 +18,8 @@ namespace SixteenFifty.Editor {
           lmgr.NextLine().WithHeight(lmgr.LineHeight),
           "stat formatter",
           value.statFormatter,
-          typeof(StatValueFormatter))
+          typeof(StatValueFormatter),
+          false)
         as StatValueFormatter;
     }
   }

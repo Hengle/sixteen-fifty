@@ -126,7 +126,8 @@ namespace SixteenFifty.Editor {
           lmgr.NextLine().WithHeight(lmgr.LineHeight),
           "key",
           nextStat,
-          typeof(EquipmentStat))
+          typeof(EquipmentStat),
+          false)
         as EquipmentStat;
     }
 
