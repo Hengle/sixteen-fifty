@@ -11,13 +11,9 @@ namespace SixteenFifty.Behaviours {
   */
   public class DialogueOverlayPanel : MonoBehaviour, IPointerClickHandler {
     public void OnPointerClick(PointerEventData data) {
-      emgr.RaiseMainPanelClicked(data);
+      eventManager.RaiseMainPanelClicked(data);
     }
 
-    EventManager emgr;
-
-    public void Awake() {
-      emgr = this.GetComponentInParentNotNull<EventManager>();
-    }
+    public EventManager eventManager;
   }
 }
