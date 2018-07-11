@@ -5,7 +5,10 @@ using UnityEngine.EventSystems;
 
 namespace SixteenFifty.Behaviours {
   [RequireComponent(typeof(IsoGrid))]
-  public class PlayerMovesFollowingPointer : MonoBehaviour, IPointerDownHandler {
+  public class PlayerMovesFollowingPointer :
+    MonoBehaviour,
+    IPointerDownHandler,
+    IPointerUpHandler {
     // in units per second
     public float moveSpeed;
 
@@ -15,7 +18,10 @@ namespace SixteenFifty.Behaviours {
     [SerializeField] [HideInInspector]
     IsoGrid map;
 
+    bool down;
+
     void Awake() {
+      down = false;
       map = GetComponent<IsoGrid>();
       Debug.Assert(
         null != map,
@@ -39,13 +45,21 @@ namespace SixteenFifty.Behaviours {
     }
 
     public void OnPointerDown(PointerEventData data) {
-      if(player == null)
+      down = true;
+    }
+
+    public void OnPointerUp(PointerEventData data) {
+      down = false;
+    }
+
+    void Update() {
+      if(player == null || !down)
         return;
 
       player.transform.position =
         Vector3.MoveTowards(
           player.transform.position,
-          data.pointerPressRaycast.worldPosition,
+          InputUtility.PointerPosition.Upgrade(),
           moveSpeed * Time.deltaTime);
     }
   }

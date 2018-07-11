@@ -21,8 +21,8 @@ GameObject:
   - component: {fileID: 4567910276027638}
   - component: {fileID: 114182023397088924}
   - component: {fileID: 114859848109829196}
-  - component: {fileID: 65918579849620816}
   - component: {fileID: 114101976248914214}
+  - component: {fileID: 60411334345948604}
   m_Layer: 0
   m_Name: Quebec Iso Map
   m_TagString: Untagged
@@ -73,18 +73,69 @@ Transform:
   m_Father: {fileID: 4567910276027638}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &65918579849620816
-BoxCollider:
+--- !u!60 &60411334345948604
+PolygonCollider2D:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1484362647138948}
+  m_Enabled: 1
+  m_Density: 1
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Points:
+    m_Paths:
+    - - {x: -6.1875, y: 6}
+      - {x: -6.1875, y: -6}
+      - {x: 6.1875, y: -6}
+      - {x: 6.1875, y: 6}
+    - - {x: -1.5, y: -2.75}
+      - {x: -1.3125, y: -2.5}
+      - {x: -0.9375, y: -2.6875}
+      - {x: -1.3125, y: -3.0625}
+    - - {x: -4.8125, y: 0.1875}
+      - {x: -4.8125, y: 0.375}
+      - {x: -5.0625, y: 0.9375}
+      - {x: -4.9375, y: 1.125}
+      - {x: -5.125, y: 1.5625}
+      - {x: -5.5625, y: 2.0625}
+      - {x: -5.4375, y: 2.25}
+      - {x: -5.5, y: 2.1875}
+      - {x: -5.3125, y: 2}
+      - {x: -5, y: 1.4375}
+      - {x: -4.8125, y: 1.25}
+      - {x: -4.8125, y: 1.1875}
+      - {x: -4.75, y: 1.125}
+      - {x: -4.8125, y: 1.1875}
+      - {x: -5, y: 1}
+      - {x: -5, y: 0.9375}
+      - {x: -4.6875, y: 0.25}
+      - {x: -4.625, y: 0.125}
+      - {x: -4.6875, y: 0.1875}
+    - - {x: -4.9375, y: 0.5}
+      - {x: -4.875, y: 0.3125}
+      - {x: -4.6875, y: 0.3125}
+      - {x: -4.5625, y: 0.4375}
+      - {x: -4.625, y: 0.625}
+      - {x: -4.8125, y: 0.625}
+    - - {x: -5.4375, y: 1.75}
+      - {x: -5.375, y: 1.5625}
+      - {x: -5.1875, y: 1.5625}
+      - {x: -5.0625, y: 1.6875}
+      - {x: -5.125, y: 1.875}
+      - {x: -5.3125, y: 1.875}
 --- !u!114 &114101976248914214
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -112,7 +163,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerPrefab: {fileID: 1106720459475756, guid: 0cb3a8630eda140ce8599a4fc166c8b3,
     type: 2}
-  collider: {fileID: 65918579849620816}
+  collider: {fileID: 60411334345948604}
   interactables: []
   interactableFocus: {fileID: 0}
 --- !u!114 &114859848109829196

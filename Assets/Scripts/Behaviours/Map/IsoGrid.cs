@@ -17,7 +17,7 @@ namespace SixteenFifty.Behaviours {
      * \brief
      * Used to detect clicks on the grid.
      */
-    new public BoxCollider collider;
+    new public Collider2D collider;
 
     public event Action<IMap> Ready;
 
