@@ -134,22 +134,25 @@ namespace SixteenFifty.Editor {
       var cell = target.GetCellAt(mousePosition);
 
       if(Event.current.type == EventType.KeyDown)
-        DispatchKeyEvent(Event.current.keyCode, cell);
+        if(DispatchKeyEvent(Event.current.keyCode, cell))
+          Event.current.Use();
     }
 
     /**
       * \brief
       * Dispatches on the `keyCode` to the appropriate function.
       */
-    void DispatchKeyEvent(KeyCode keyCode, HexCell cell) {
+    bool DispatchKeyEvent(KeyCode keyCode, HexCell cell) {
       switch(keyCode) {
       case KeyCode.D:
         DeleteTile(cell);
-        break;
+        return true;
       case KeyCode.Z:
         PlaceTile(cell);
-        break;
+        return true;
       }
+
+      return false;
     }
 
     /**
