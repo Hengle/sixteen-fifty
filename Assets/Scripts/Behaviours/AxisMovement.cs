@@ -39,11 +39,7 @@ namespace SixteenFifty.Behaviours {
         return;
       }
 
-      var v =
-        new Vector2(
-          Input.GetAxis("Horizontal"),
-          Input.GetAxis("Vertical"));
-
+      var v = InputUtility.PrimaryAxis;
       body.velocity = v * moveSpeed;
     }
   }

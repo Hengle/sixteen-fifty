@@ -334,9 +334,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d08a2e4a9876846e0994f58f66241ca3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  initialMap: {fileID: 11400000, guid: f9eac97a658ec43089930980a04c9e1f, type: 2}
-  eventManager: {fileID: 0}
-  interactionMenu: {fileID: 0}
+  initialMap: {fileID: 11400000, guid: 5b2eb575dc91a466a838fb65ad69e970, type: 2}
+  eventManager: {fileID: 1138619147}
+  interactionMenu: {fileID: 1757542721}
 --- !u!4 &201364431
 Transform:
   m_ObjectHideFlags: 0

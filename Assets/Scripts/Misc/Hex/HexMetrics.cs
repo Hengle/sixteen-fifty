@@ -8,13 +8,33 @@ namespace SixteenFifty.TileMap {
   
   [CreateAssetMenu(menuName = "1650/Hex Metrics")]
   public class HexMetrics : ScriptableObject {
+    private static HexDirection[] directions = new [] {
+        HexDirection.NorthEast,
+        HexDirection.North,
+        HexDirection.NorthWest,
+        HexDirection.SouthWest,
+        HexDirection.South,
+        HexDirection.SouthEast
+      };
+
     /**
      * \brief
      * Decides which direction is the primary direction of the given
      * angle according to these metrics.
+     *
+     * \param angle
+     * The angle in *radians* to reverse, in `[0, 2pi)`.
      */
-    public static HexDirection DirectionFromAngle(float angle) {
-      throw new SixteenFiftyException("TODO: DirectionFromAngle");
+    public HexDirection DirectionFromAngle(float angle) {
+      var t = Mathf.PI / 3f;
+      for(var i = 0; i < 6; i++) {
+        var theta = i * t;
+        if(theta <= angle && angle < theta + t)
+          return directions[i];
+      }
+
+      throw new SixteenFiftyException(
+        String.Format("Impossible hex angle {0}*pi.", angle));
     }
 
     /**

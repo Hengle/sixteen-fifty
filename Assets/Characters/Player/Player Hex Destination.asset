@@ -9,7 +9,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f0c09f874301845959977c079edf5ebe, type: 3}
-  m_Name: Player Destination
+  m_Name: Player Hex Destination
   m_EditorClassIdentifier: 
   value:
     metrics: {fileID: 11400000, guid: d9fcc751fd14046b8b2be0faa607c4a4, type: 2}

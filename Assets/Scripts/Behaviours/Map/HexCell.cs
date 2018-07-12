@@ -86,6 +86,18 @@ namespace SixteenFifty.Behaviours {
     public event Action<MapEntity> EntityRemoved;
 
     /**
+     * \brief
+     * Collects all interactions available in this cell.
+     */
+    public IEnumerable<Interaction> Interactions =>
+      EntitiesHere
+      .SelectWhere(
+        me =>
+        me.GetComponent<Interactable>().FromNull<Interactable>())
+      .SelectMany(
+        interactable => interactable.interactions);
+
+    /**
     * \brief
     * Gets all non-null neighbouring HexCell objects.
     */

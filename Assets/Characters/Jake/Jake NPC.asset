@@ -17,3 +17,5 @@ MonoBehaviour:
   interactions:
   - name: Talk
     script: {fileID: 11400000, guid: 7bae178d2089e475aa06b6955d1e8ed6, type: 2}
+  - name: Warp to Quebec
+    script: {fileID: 11400000, guid: 8a119320e3306488c929329d7f3b0d68, type: 2}

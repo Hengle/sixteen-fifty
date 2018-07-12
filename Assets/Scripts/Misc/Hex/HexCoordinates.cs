@@ -13,6 +13,8 @@ namespace SixteenFifty.TileMap {
     [SerializeField]
     HexMetrics metrics;
 
+    public HexMetrics Metrics => metrics;
+
     [SerializeField]
     int x, y;
 

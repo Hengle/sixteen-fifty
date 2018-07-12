@@ -9,16 +9,14 @@ namespace SixteenFifty.EventItems {
   using TileMap;
 
   [Serializable]
+  [SelectableSubtype(friendlyName = "Jump to Map")]
   public class JumpToMap : ImmediateScript {
     public BasicMap map;
+
 
     public override void Call(EventRunner runner) {
       var hexGridManager = runner.GridManager;
       hexGridManager.LoadMap(map);
-      // not clear whether spawn player should be here or whether
-      // spawning should be taken care of by the event script that
-      // performs the jump
-      hexGridManager.SpawnPlayer();
     }
   }
 }

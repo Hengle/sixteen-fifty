@@ -17,7 +17,7 @@ namespace SixteenFifty.Editor {
       // sets well-typed target
       base.Draw(_target);
 
-      target.value = EditorGUILayout.DelayedIntField("value", target.value);
+      target.value = EditorGUILayout.DelayedIntField("Value", target.value);
     }
   }
 }

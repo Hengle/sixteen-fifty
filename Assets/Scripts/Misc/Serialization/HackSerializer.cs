@@ -144,10 +144,28 @@ namespace SixteenFifty.Serialization {
       // for generics, e.g.
       // class Variable<T> : ScriptableObject, IVariable<T> { ... }
       // is assignable to UnityEngine.Object (via ScriptableObject).
-      serializer.SurrogateSelector =
+      ISurrogateSelector unitySelector =
         new AssignableSurrogateSelector(
           typeof(UnityEngine.Object),
           new UnityObjectSurrogate(objectFields));
+
+      var baseSelector =
+        new SurrogateSelector();
+
+      Action<Type, ISerializationSurrogate> addSurrogate =
+        (type, surrogate) =>
+          baseSelector.AddSurrogate(
+            type,
+            new StreamingContext(StreamingContextStates.All),
+            surrogate);
+
+      addSurrogate(
+        typeof(Vector2),
+        new Vector2Surrogate());
+
+      baseSelector.ChainSelector(unitySelector);
+
+      serializer.SurrogateSelector = baseSelector;
 
       return serializer;
     }
