@@ -8,8 +8,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ed1768f3a7d2749d89068af40a2dfab6, type: 3}
-  m_Name: Quebec Iso Map
+  m_Script: {fileID: 11500000, guid: fa81f5948b75a4ae58ad0bda39afcbd3, type: 3}
+  m_Name: Test dialogue
   m_EditorClassIdentifier: 
-  prefab: {fileID: 1356293134649642, guid: aacb28800fa544420b4ebfd0a77178c6, type: 2}
-  npcs: []
+  objectFields:
+    keys: []
+    values: []
+    count: 0
+  dataFields:
+    keys: []
+    values: []
+    count: 0
+  speakerConfigurations: []
+  messages: []
