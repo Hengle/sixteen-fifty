@@ -20,18 +20,13 @@ namespace SixteenFifty.Serialization {
         object _obj,
         SerializationInfo info,
         StreamingContext context) {
-      var obj = _obj as UnityEngine.Object;
-      // Debug.LogFormat("_obj: {0}; isnull = {1}; type = {2}", _obj, _obj == null, _obj?.GetType());
       Debug.Assert(
-        // this condition is weird:
-        // the original object is allowed to be null, in which case
-        // it's natural for the cast to come out null,
-        // but if _obj is *not null*, then obj had better be not null
-        // too!
-        _obj == null || obj != null,
+        _obj is UnityEngine.Object,
         String.Format(
-          "UnityObjectSurrogate's target `{0}` is a Unity Object.",
-          _obj));
+          "UnityObjectSurrogate's target `{0} : {1}` is a Unity Object.",
+          _obj,
+          _obj?.GetType()));
+      var obj = _obj as UnityEngine.Object;
 
       // we use the instance ID of the key, since context.Context is
       // null. Once again, vexe's code is bogus.
