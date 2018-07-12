@@ -29,9 +29,6 @@ namespace SixteenFifty.Behaviours {
 
     public IEnumerable<Interactable> Interactables => interactables;
 
-    [SerializeField] [HideInInspector]
-    InteractableFocus interactableFocus;
-
     public void AddInteractable(Interactable interactable) {
       interactables.Add(interactable);
       interactable.Clicked += OnInteractableClicked;
@@ -88,7 +85,6 @@ namespace SixteenFifty.Behaviours {
         null != Manager,
         "IsoGrid is instantiated under a HexGridManager.");
 
-      interactableFocus = GetComponent<InteractableFocus>();
     }
   }
 }
