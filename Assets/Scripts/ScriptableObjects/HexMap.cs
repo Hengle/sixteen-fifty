@@ -39,6 +39,12 @@ namespace SixteenFifty.TileMap {
     public bool isRectangular => height * width == tiles.Length;
 
     /**
+     * \brief
+     * Specifications of all the NPCs in the map.
+     */
+    public BasicNPC[] npcs;
+
+    /**
     * \brief
     * The tile data.
     */
