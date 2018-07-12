@@ -78,10 +78,18 @@ namespace SixteenFifty.Behaviours {
         return;
       }
 
+      // you might wonder why we don't make AxisHexMovement implement
+      // INotifyDirectionChange and have it raise the relevant event
+      // here.
+      // The reason is simple: MapEntity already does that for us.
+      // We use MapEntity.MoveFollowingPath (for single-cell paths,
+      // which is somewhat of a degenerate case) and this method
+      // automatically detects direction changes while moving and
+      // fires DirectionChanged.
       var theta = Mathf.Atan2(v.y, v.x);
       if(theta < 0)
         theta += 2 * Mathf.PI;
-      var d = map.hexMetrics.DirectionFromAngle(theta);
+      var d = TileMap.HexMetrics.DirectionFromAngle(theta);
       if(d != lastDirection) {
         progress = 0;
         lastDirection = d;
@@ -90,6 +98,10 @@ namespace SixteenFifty.Behaviours {
 
       // progress increased past 100%
       if(ProgressUp()) {
+        // - figure out what the destination is.
+        // - if it's a nonempty cell, then we try to interact with it.
+        // - otherwise, move there
+
         var destinationCoords =
           mapEntity.CurrentCell.coordinates[lastDirection];
         destination = map[destinationCoords];

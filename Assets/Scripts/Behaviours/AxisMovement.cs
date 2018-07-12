@@ -10,7 +10,7 @@ namespace SixteenFifty.Behaviours {
    * vertical axes.
    */
   [RequireComponent(typeof(Rigidbody2D))]
-  public class AxisMovement : MonoBehaviour {
+  public class AxisMovement : MonoBehaviour, INotifyDirectionChange {
     public float moveSpeed = 1;
 
     [SerializeField] [HideInInspector]
@@ -18,6 +18,11 @@ namespace SixteenFifty.Behaviours {
     
     [SerializeField] [HideInInspector]
     Rigidbody2D body;
+
+    [SerializeField] [HideInInspector]
+    HexDirection lastDirection;
+
+    public event Action<HexDirection> DirectionChanged;
     
     void Awake() {
       body = GetComponent<Rigidbody2D>();
@@ -41,6 +46,19 @@ namespace SixteenFifty.Behaviours {
 
       var v = InputUtility.PrimaryAxis;
       body.velocity = v * moveSpeed;
+
+      // only bother updating direction if someone is listening for it,
+      // and if we're actually moving
+      if(DirectionChanged != null && v.sqrMagnitude < 0.01)
+        return;
+
+      var theta = Mathf.Atan2(v.y, v.x);
+      if(theta < 0) theta += Mathf.PI * 2;
+      var d = TileMap.HexMetrics.DirectionFromAngle(theta);
+      if(d != lastDirection) {
+        lastDirection = d;
+        DirectionChanged(d);
+      }
     }
   }
 }

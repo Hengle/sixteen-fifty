@@ -23,12 +23,11 @@ GameObject:
   - component: {fileID: 114331006365443914}
   - component: {fileID: 114981141498985144}
   - component: {fileID: 114078180460658460}
-  - component: {fileID: 212813432792207896}
-  - component: {fileID: 114014556790825964}
-  - component: {fileID: 50202189298375696}
-  - component: {fileID: 61382340192635068}
   - component: {fileID: 114728857104808100}
   - component: {fileID: 114830282618476796}
+  - component: {fileID: 212813432792207896}
+  - component: {fileID: 50202189298375696}
+  - component: {fileID: 61382340192635068}
   m_Layer: 0
   m_Name: Iso Player
   m_TagString: Player
@@ -94,17 +93,6 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.39, y: 0.15}
   m_EdgeRadius: 0
---- !u!114 &114014556790825964
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1106720459475756}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 172408501e2744a829ed3d35d2e6c182, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &114049780489566936
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -155,6 +143,7 @@ MonoBehaviour:
   moveSpeed: 3
   manager: {fileID: 0}
   body: {fileID: 0}
+  lastDirection: 0
 --- !u!114 &114830282618476796
 MonoBehaviour:
   m_ObjectHideFlags: 1

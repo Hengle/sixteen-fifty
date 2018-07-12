@@ -25,7 +25,7 @@ namespace SixteenFifty.TileMap {
      * \param angle
      * The angle in *radians* to reverse, in `[0, 2pi)`.
      */
-    public HexDirection DirectionFromAngle(float angle) {
+    public static HexDirection DirectionFromAngle(float angle) {
       var t = Mathf.PI / 3f;
       for(var i = 0; i < 6; i++) {
         var theta = i * t;
