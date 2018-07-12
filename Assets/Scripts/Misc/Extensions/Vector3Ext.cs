@@ -12,4 +12,9 @@ public static class Vector3Ext {
   public static Vector2 Downgrade(this Vector3 self) {
     return new Vector2(self.x, self.y);
   }
+
+  public static void MatchXY(this Vector3 self, Vector2 target) {
+    self.x = target.x;
+    self.y = target.y;
+  }
 }
