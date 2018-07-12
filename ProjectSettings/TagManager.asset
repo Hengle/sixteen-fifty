@@ -41,6 +41,9 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: iso background
+    uniqueID: 4136704363
+    locked: 0
   - name: Map
     uniqueID: 3874206795
     locked: 0
@@ -49,4 +52,7 @@ TagManager:
     locked: 0
   - name: Dialogue
     uniqueID: 504553401
+    locked: 0
+  - name: iso foreground
+    uniqueID: 3283860837
     locked: 0
