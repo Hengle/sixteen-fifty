@@ -84,7 +84,10 @@ namespace SixteenFifty.Behaviours {
       Debug.Assert(
         null != Manager,
         "IsoGrid is instantiated under a HexGridManager.");
+    }
 
+    void Start() {
+      Ready?.Invoke(this);
     }
   }
 }
