@@ -124,6 +124,8 @@ namespace SixteenFifty.Behaviours {
         "instantiated map prefab contains an IMap component.");
       CurrentMap.Ready += OnMapReady;
 
+      Camera.main.backgroundColor = map.backgroundColor;
+
       // do early map initialization
       CurrentMap.Load(this, map);
 
