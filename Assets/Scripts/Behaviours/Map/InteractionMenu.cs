@@ -92,6 +92,14 @@ namespace SixteenFifty.UI {
       if(null == onInteracted)
         throw new ArgumentNullException("onInteracted");
 
+      if(interactions.Length == 0)
+        return;
+
+      if(interactions.Length == 1 && interactions[0].automatic) {
+        onInteracted(interactions[0]);
+        return;
+      }
+
       this.interactions = interactions;
       Interacted += onInteracted;
       gameObject.SetActive(true);

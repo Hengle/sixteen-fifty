@@ -22,5 +22,12 @@ namespace SixteenFifty {
      * The code that's executed when the interaction occurs.
      */
     public BasicScriptedEvent script;
+
+    /**
+     * \brief
+     * Whether to immediately run this script if it is the unique
+     * possible interaction.
+     */
+    public bool automatic = false;
   }
 }
