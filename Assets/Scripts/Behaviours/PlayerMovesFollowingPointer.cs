@@ -4,7 +4,6 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 
 namespace SixteenFifty.Behaviours {
-  [RequireComponent(typeof(IsoGrid))]
   public class PlayerMovesFollowingPointer :
     MonoBehaviour,
     IPointerDownHandler,
@@ -24,7 +23,7 @@ namespace SixteenFifty.Behaviours {
 
     void Awake() {
       down = false;
-      map = GetComponent<IsoGrid>();
+      map = GetComponentInParent<IsoGrid>();
       Debug.Assert(
         null != map,
         "PlayerMovesFollowerPointer is attached to an IsoGrid.");

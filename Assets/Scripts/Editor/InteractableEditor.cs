@@ -11,8 +11,6 @@ namespace SixteenFifty.Editor {
     public void OnSceneGUI() {
       var obj = Selection.activeTransform.gameObject;
       // if the object is not in the scene, then we don't do anything
-      if(obj.scene == null)
-        return;
 
       var interactable = obj.GetComponent<Interactable>();
 

@@ -13,12 +13,6 @@ namespace SixteenFifty.Behaviours {
      */
     public GameObject playerPrefab;
 
-    /**
-     * \brief
-     * Used to detect clicks on the grid.
-     */
-    new public Collider2D collider;
-
     public event Action<IMap> Ready;
 
     public event Action<IMap> PlayerSpawned;
@@ -33,10 +27,22 @@ namespace SixteenFifty.Behaviours {
     [SerializeField] [HideInInspector]
     private List<Interactable> interactables = new List<Interactable>();
 
-    public List<Interactable> Interactables => interactables;
+    public IEnumerable<Interactable> Interactables => interactables;
 
     [SerializeField] [HideInInspector]
     InteractableFocus interactableFocus;
+
+    public void AddInteractable(Interactable interactable) {
+      interactables.Add(interactable);
+      interactable.Clicked += OnInteractableClicked;
+    }
+
+    void OnInteractableClicked(Interactable interactable) {
+      if(interactable.focused
+         && interactable.interactions.Length > 0) {
+        Manager.PresentInteractionsMenu(interactable.interactions);
+      }
+    }
 
     public HexGridManager Manager {
       get;

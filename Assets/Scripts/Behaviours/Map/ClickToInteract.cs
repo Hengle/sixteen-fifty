@@ -90,8 +90,9 @@ namespace SixteenFifty.Behaviours {
         cell.EntitiesHere
         // get the interactable component of each mapentity on the cell
         // and throw out the non-interactable ones
-        .Select(me => me.GetComponent<Interactable>())
-        .Where(ictb => null != ictb)
+        .SelectWhere(
+          me =>
+          me.GetComponent<Interactable>().FromNull<Interactable>())
         // fish out the interactions from each interactable
         .SelectMany(ictb => ictb.interactions)
         .ToArray();
@@ -99,16 +100,7 @@ namespace SixteenFifty.Behaviours {
       if(interactions.Length == 0)
         return;
 
-      InteractionMenu.Show(interactions, OnMenuInteracted);
-    }
-
-    void OnMenuInteracted(Interaction interaction) {
-      // unregister ourselves from the menu.
-      InteractionMenu.Interacted -= OnMenuInteracted;
-      // we receive null if the menu was simply closed
-      if(interaction == null)
-        return;
-      eventManager.BeginScript(mapEntity.Grid.Manager, interaction.script.root);
+      mapEntity.Grid.Manager.PresentInteractionsMenu(interactions);
     }
 
     /**

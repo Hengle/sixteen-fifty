@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
+
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -115,6 +116,8 @@ namespace SixteenFifty.UI {
       Debug.Assert(null != buttonPrefab, "The button prefab exists when creating a new menu.");
 
       buttons = interactions.Select(CreateInteractionButton).ToList();
+
+      buttons[0].Button.Select();
     }
 
     /**
@@ -151,9 +154,7 @@ namespace SixteenFifty.UI {
     void OnButtonInteracted(Interaction interaction) {
       Debug.Assert(null != interaction.script, "Interaction script is not null.");
       gameObject.SetActive(false);
-      if(null != Interacted) {
-        Interacted(interaction);
-      }
+      Interacted?.Invoke(interaction);
     }
 
     void OnCloseButtonClick() {

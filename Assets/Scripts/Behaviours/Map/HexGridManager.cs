@@ -8,6 +8,7 @@ using UnityEngine.UI;
 
 namespace SixteenFifty.Behaviours {
   using TileMap;
+  using UI;
   
   /**
   * \brief
@@ -41,6 +42,16 @@ namespace SixteenFifty.Behaviours {
 
     /**
      * \brief
+     * The event manager.
+     *
+     * Used to play scripted events.
+     */
+    public EventManager eventManager;
+
+    public InteractionMenu interactionMenu;
+
+    /**
+     * \brief
      * Proxies the loaded event from the current grid.
      */
     void OnMapReady(IMap map) => MapReady?.Invoke(map);
@@ -54,6 +65,19 @@ namespace SixteenFifty.Behaviours {
      */
     public PlayerController Player =>
       CurrentMap?.Player;
+
+    public void PresentInteractionsMenu(Interaction[] interactions) {
+      Debug.Log("Presenting: interactions menu!");
+      interactionMenu.Show(interactions, OnMenuInteracted);
+    }
+
+    void OnMenuInteracted(Interaction interaction) {
+      Debug.Log("hi");
+      interactionMenu.Interacted -= OnMenuInteracted;
+      if(interaction == null)
+        return;
+      eventManager.BeginScript(this, interaction.script.Compile());
+    }
 
     void Awake () {
       Debug.Assert(null != StateManager.Instance, "state manager exists");

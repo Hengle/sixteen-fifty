@@ -18,6 +18,8 @@ namespace SixteenFifty.Behaviours {
 
     private EventRunner currentEvent;
 
+    public bool IsEventRunning => currentEvent != null;
+
     public RectTransform RectTransform {
       get;
       private set;
@@ -34,6 +36,13 @@ namespace SixteenFifty.Behaviours {
     * The current interaction menu present in the game.
     */
     public InteractionMenu interactionMenu;
+
+    /**
+     * \brief
+     * Determines whether a UI is currently controlling the game.
+     * In this case, inputs should not be consumed by the map.
+     */
+    public bool IsUI => IsEventRunning || interactionMenu.gameObject.activeInHierarchy;
 
     /**
     * \brief

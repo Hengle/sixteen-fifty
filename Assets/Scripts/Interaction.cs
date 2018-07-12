@@ -21,6 +21,6 @@ namespace SixteenFifty {
      * \brief
      * The code that's executed when the interaction occurs.
      */
-    public ScriptedEvent script;
+    public BasicScriptedEvent script;
   }
 }

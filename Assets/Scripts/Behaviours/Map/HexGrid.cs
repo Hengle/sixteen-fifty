@@ -110,7 +110,11 @@ namespace SixteenFifty.Behaviours {
 
     [SerializeField] [HideInInspector]
     List<Interactable> interactables;
-    public List<Interactable> Interactables => interactables;
+    public IEnumerable<Interactable> Interactables => interactables;
+
+    public void AddInteractable(Interactable interactable) {
+      interactables.Add(interactable);
+    }
 
     public BasicMap Map => HexMap;
 

@@ -24,8 +24,13 @@ namespace SixteenFifty.UI {
     public event Action<Interaction> Interacted;
     private event Action InteractionChanged;
 
-    private Button button;
-    private Text text;
+    [SerializeField] [HideInInspector]
+    Button button;
+
+    public Button Button => button;
+
+    [SerializeField] [HideInInspector]
+    Text text;
 
     void Awake() {
       button = GetComponent<Button>();

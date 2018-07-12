@@ -7,6 +7,8 @@ namespace SixteenFifty.Behaviours {
    * objects.
    */
   public interface IHasInteractables {
-    List<Interactable> Interactables { get; }
+    IEnumerable<Interactable> Interactables { get; }
+
+    void AddInteractable(Interactable interactable);
   }
 }
