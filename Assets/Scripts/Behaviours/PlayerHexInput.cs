@@ -61,7 +61,7 @@ namespace SixteenFifty.Behaviours {
         return;
       }
       
-      if(Input.GetButtonUp("Jump"))
+      if(Input.GetButtonUp("Jump") || Input.GetButtonUp("Fire1"))
         SubmitPressed?.Invoke();
 
       var v = InputUtility.PrimaryAxis;
