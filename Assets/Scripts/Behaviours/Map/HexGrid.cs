@@ -138,8 +138,6 @@ namespace SixteenFifty.Behaviours {
         Instantiate(playerPrefab, transform)
         .GetComponent<PlayerController>();
       PlayerSpawned?.Invoke(this);
-      Camera.main.transform.position.MatchXY(
-        Player.transform.position);
       return Player;
     }
 

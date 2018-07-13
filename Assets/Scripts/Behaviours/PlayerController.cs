@@ -5,15 +5,21 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace SixteenFifty.Behaviours {
-  using Commands;
-  using TileMap;
-  using Variables;
+  using Serialization;
 
   [RequireComponent(typeof(HasInventory))]
-  public class PlayerController : MonoBehaviour {
+  public class PlayerController : SerializableBehaviour {
     public Character character;
 
+    [SerializeField] [HideInInspector]
+    public IPositioner positioner;
+
     void Awake() {
+      positioner = GetComponent(typeof(IPositioner))
+        as IPositioner;
+      Debug.Assert(
+        null != positioner,
+        "PlayerController is with an IPositioner.");
     }
 
     void OnEnable() {

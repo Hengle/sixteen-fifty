@@ -7,7 +7,7 @@ namespace SixteenFifty.Behaviours {
   using Variables;
   
   [RequireComponent(typeof(MapEntity))]
-  public class InitialPosition : MonoBehaviour {
+  public class InitialPosition : MonoBehaviour, IPositioner {
     public HexCoordinatesVariable destination;
 
     [SerializeField] [HideInInspector]
@@ -15,6 +15,8 @@ namespace SixteenFifty.Behaviours {
 
     [SerializeField] [HideInInspector]
     private MapEntity mapEntity;
+
+    public event Action Positioned;
     
     public void Awake() {
       hexGridManager = GetComponentInParent<HexGridManager>();
@@ -37,8 +39,10 @@ namespace SixteenFifty.Behaviours {
     }
 
     void OnMapReady(IMap map) {
-      if(null != destination)
+      if(null != destination) {
         mapEntity.Warp(destination.Value);
+        Positioned?.Invoke();
+      }
     }
   }
 }

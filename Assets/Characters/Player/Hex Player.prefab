@@ -24,8 +24,10 @@ GameObject:
   - component: {fileID: 114209836436637078}
   - component: {fileID: 114933590884988850}
   - component: {fileID: 114163526287482826}
-  - component: {fileID: 212201995614174652}
   - component: {fileID: 114058782643981978}
+  - component: {fileID: 114854044122683690}
+  - component: {fileID: 212201995614174652}
+  - component: {fileID: 114775013664323228}
   m_Layer: 0
   m_Name: Hex Player
   m_TagString: Player
@@ -69,14 +71,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 276c0e20cb48745c8acc5fe34bc11e54, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  objectFields:
+    keys: []
+    values: []
+    count: 0
+  dataFields:
+    keys: []
+    values: []
+    count: 0
   moveSpeed: 1
   progressSpeed: 3
   progress: 0
-  mapEntity: {fileID: 0}
   manager: {fileID: 0}
+  mapEntity: {fileID: 0}
   map: {fileID: 0}
   destination: {fileID: 0}
-  lastDirection: 0
+  direction: 0
+  hasDirection: 0
 --- !u!114 &114163526287482826
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -102,6 +113,31 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2accf4eba40d348499dadf3a0359bfae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &114775013664323228
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1813968912732676}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 954a072abbd3c4f0393b830f34cbacf1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  camera: {fileID: 0}
+--- !u!114 &114854044122683690
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1813968912732676}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9029d6ab36a154a0eb29c8657b1561c1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  manager: {fileID: 0}
+  active: 0
 --- !u!114 &114860618602737832
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -113,6 +149,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 19f788869593c4dc6a348d947fcdcd5b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  objectFields:
+    keys: []
+    values: []
+    count: 0
+  dataFields:
+    keys: []
+    values: []
+    count: 0
   character: {fileID: 11400000, guid: e04c6635bffc54805820a0954dd42cac, type: 2}
 --- !u!114 &114933590884988850
 MonoBehaviour:
@@ -168,7 +212,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 608742245
-  m_SortingLayer: 2
+  m_SortingLayer: 3
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300002, guid: 8f697b0d8aba94963bfa48f235225733, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
