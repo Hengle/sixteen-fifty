@@ -186,11 +186,11 @@ MonoBehaviour:
   DataVersion: 123
   CurrentSelection:
     OReference: {fileID: 0}
-    OType: 2
-    CPosition: {x: -2.6602387, y: 0.88761, z: -0.008056641}
-    CRotation: {x: 0, y: 0, z: 0, w: 1}
-    CSize: 1.8997353
-    COrtho: 1
+    OType: 0
+    CPosition: {x: 0, y: 0, z: 0}
+    CRotation: {x: 0, y: 0, z: 0, w: 0}
+    CSize: 0
+    COrtho: 0
   Back:
   - OReference: {fileID: 2800000, guid: d2ffb39f992ac417e9a6f0b85aa51cee, type: 3}
     OType: 1
@@ -413,43 +413,25 @@ MonoBehaviour:
     CRotation: {x: 0, y: 0, z: 0, w: 1}
     CSize: 1.425906
     COrtho: 1
-  - OReference: {fileID: 11400000, guid: 3ca39b68638b1400ca39cef4525b7e78, type: 2}
-    OType: 1
-    CPosition: {x: 1.4429579, y: 1.1054535, z: 0.18326376}
-    CRotation: {x: 0, y: 0, z: 0, w: 1}
-    CSize: 3.652197
-    COrtho: 1
-  - OReference: {fileID: 11400000, guid: d740385e4b58941b2967466143b25070, type: 2}
-    OType: 1
-    CPosition: {x: 1.4429579, y: 1.1054535, z: 0.18326376}
-    CRotation: {x: 0, y: 0, z: 0, w: 1}
-    CSize: 3.652197
-    COrtho: 1
-  - OReference: {fileID: 11400000, guid: 3ca39b68638b1400ca39cef4525b7e78, type: 2}
-    OType: 1
-    CPosition: {x: 1.4429579, y: 1.1054535, z: 0.18326376}
-    CRotation: {x: 0, y: 0, z: 0, w: 1}
-    CSize: 3.652197
-    COrtho: 1
-  - OReference: {fileID: 2800000, guid: c07c929d74572462b95f51df1585bd94, type: 3}
-    OType: 1
-    CPosition: {x: 1.4429579, y: 1.1054535, z: 0.18326376}
-    CRotation: {x: 0, y: 0, z: 0, w: 1}
-    CSize: 3.652197
-    COrtho: 1
-  - OReference: {fileID: 0}
-    OType: 2
-    CPosition: {x: -0.55480003, y: 1.1443202, z: 0.18310547}
-    CRotation: {x: 0, y: 0, z: 0, w: 1}
-    CSize: 3.652197
-    COrtho: 1
-  Forward:
-  - OReference: {fileID: 11400000, guid: 8f93fb368f27c4bf0bfd14420c3299f5, type: 2}
+  - OReference: {fileID: 11400000, guid: 61eb05b6133f446389a5e75f4101445d, type: 2}
     OType: 1
     CPosition: {x: -2.6602387, y: 0.88761, z: -0.008056641}
     CRotation: {x: 0, y: 0, z: 0, w: 1}
     CSize: 1.8997353
     COrtho: 1
+  - OReference: {fileID: 11400000, guid: 412fbf153bba5433a83d41acd0622061, type: 2}
+    OType: 1
+    CPosition: {x: -0.94006395, y: 1.430437, z: -0.038085938}
+    CRotation: {x: 0, y: 0, z: 0, w: 1}
+    CSize: 4.6202683
+    COrtho: 1
+  - OReference: {fileID: 11400000, guid: 564ce5cd62902448b9dde391ef449668, type: 2}
+    OType: 1
+    CPosition: {x: -0.94006395, y: 1.430437, z: -0.038085938}
+    CRotation: {x: 0, y: 0, z: 0, w: 1}
+    CSize: 4.6202683
+    COrtho: 1
+  Forward: []
 --- !u!4 &1663102393
 Transform:
   m_ObjectHideFlags: 19
