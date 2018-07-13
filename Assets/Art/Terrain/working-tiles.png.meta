@@ -19,6 +19,8 @@ TextureImporter:
     21300028: River ne-s-1 Sprite
     21300030: River ne-sw Sprite
     21300032: River se-s-sw Sprite
+    21300034: swamp se-sw
+    21300036: quebec city
   externalObjects: {}
   serializedVersion: 5
   mipmaps:
@@ -456,6 +458,46 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: 851072d8411a243179287983d96a9fa4
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: swamp se-sw
+      rect:
+        serializedVersion: 2
+        x: 201
+        y: 258
+        width: 65
+        height: 40
+      alignment: 6
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a015ddf455dcc4f9d9f19197bfd70eed
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: quebec city
+      rect:
+        serializedVersion: 2
+        x: 291
+        y: 258
+        width: 65
+        height: 42
+      alignment: 6
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6716079163cad4dfe919ef3b5d3ce1ee
       vertices: []
       indices: 
       edges: []
