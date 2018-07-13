@@ -1,23 +1,25 @@
+using System;
 using System.Linq;
 
 using UnityEngine;
 
 namespace SixteenFifty.Behaviours {
+  using Serialization;
+  
+  [RequireComponent(typeof(PlayerHexInput))]
   [RequireComponent(typeof(MapEntity))]
-  public class AxisHexMovement : MonoBehaviour {
+  public class AxisHexMovement : SerializableBehaviour {
     public float moveSpeed = 1;
     public float progressSpeed = 1;
 
     [Range(0f, 1f)]
     public float progress = 0;
   
-    bool Active => destination == null && map != null && !manager.eventManager.IsUI;
+    [SerializeField] [HideInInspector]
+    HexGridManager manager;
 
     [SerializeField] [HideInInspector]
     MapEntity mapEntity;
-
-    [SerializeField] [HideInInspector]
-    HexGridManager manager;
 
     [SerializeField] [HideInInspector]
     HexGrid map;
@@ -26,28 +28,43 @@ namespace SixteenFifty.Behaviours {
     HexCell destination;
 
     [SerializeField] [HideInInspector]
-    HexDirection lastDirection;
+    HexDirection direction;
+
+    [SerializeField] [HideInInspector]
+    bool hasDirection;
+
+    [SerializeField] [HideInInspector]
+    IHexInput hexInput;
 
     void Awake() {
       mapEntity = GetComponent<MapEntity>();
       Debug.Assert(
         null != mapEntity,
-        "AxisMovement is attached with a MapEntity.");
-      
+        "AxisHexMovement is attached with a MapEntity.");
+
       manager = GetComponentInParent<HexGridManager>();
       Debug.Assert(
         null != manager,
-        "AxisMovement is under a HexGridManager.");
+        "AxisHexMovement is under a HexGridManager.");
+
+      hexInput = GetComponent(typeof(IHexInput)) as IHexInput;
+      Debug.Assert(
+        null != hexInput,
+        "AxisHexMovement is attached with a IHexInput.");
     }
 
     void OnEnable() {
       manager.MapReady += OnMapReady;
       mapEntity.EndMove += OnEndMove;
+      hexInput.DirectionChanged += OnDirectionChanged;
+      hexInput.SubmitPressed += OnSubmitPressed;
     }
 
     void OnDisable() {
       manager.MapReady -= OnMapReady;
       mapEntity.EndMove -= OnEndMove;
+      hexInput.DirectionChanged -= OnDirectionChanged;
+      hexInput.SubmitPressed -= OnSubmitPressed;
     }
 
     void OnMapReady(IMap map) {
@@ -67,32 +84,22 @@ namespace SixteenFifty.Behaviours {
       return false;
     }
 
-    void Update() {
-      if(!Active)
-        return;
-      
-      var v = InputUtility.PrimaryAxis;
-      if(v.sqrMagnitude < 0.01) {
-        // stopped holding the stick
-        progress = 0;
-        return;
-      }
+    void OnDirectionChanged(Maybe<HexDirection> md) {
+      md.Eliminate(
+        () => hasDirection = false,
+        d => { direction = d; return hasDirection = true; } );
+    }
 
-      // you might wonder why we don't make AxisHexMovement implement
-      // INotifyDirectionChange and have it raise the relevant event
-      // here.
-      // The reason is simple: MapEntity already does that for us.
-      // We use MapEntity.MoveFollowingPath (for single-cell paths,
-      // which is somewhat of a degenerate case) and this method
-      // automatically detects direction changes while moving and
-      // fires DirectionChanged.
-      var theta = Mathf.Atan2(v.y, v.x);
-      if(theta < 0)
-        theta += 2 * Mathf.PI;
-      var d = TileMap.HexMetrics.DirectionFromAngle(theta);
-      if(d != lastDirection) {
+    void OnSubmitPressed() {
+      Debug.Log("hi");
+      var interactions = mapEntity.CurrentCell.TileInteractions.ToArray();
+      if(interactions.Length > 0)
+        manager.PresentInteractionsMenu(interactions);
+    }
+
+    void Update() {
+      if(!hasDirection) {
         progress = 0;
-        lastDirection = d;
         return;
       }
 
@@ -103,17 +110,19 @@ namespace SixteenFifty.Behaviours {
         // - otherwise, move there
 
         var destinationCoords =
-          mapEntity.CurrentCell.coordinates[lastDirection];
+          mapEntity.CurrentCell.coordinates[direction];
         destination = map[destinationCoords];
         if(destination != null) {
           if(destination.IsNonEmpty) {
-            var interactions = destination.Interactions.ToArray();
+            var interactions = destination.EntityInteractions.ToArray();
             if(interactions.Length > 0)
               manager.PresentInteractionsMenu(interactions);
             destination = null;
           }
           else
-            mapEntity.MoveFollowingPath(new [] { destination });
+            mapEntity.MoveFollowingPath(
+              new [] { destination },
+              moveSpeed: moveSpeed);
         }
       }
     }

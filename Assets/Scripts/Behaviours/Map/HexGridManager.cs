@@ -58,6 +58,16 @@ namespace SixteenFifty.Behaviours {
 
     /**
      * \brief
+     * Decides whether inputs should be used to move in the map.
+     *
+     * - There must be a map.
+     * - There must not be any UI running.
+     */
+    public bool IsMapInput =>
+      CurrentMap != null && !eventManager.IsUI;
+
+    /**
+     * \brief
      * Gets the player controller in the current map.
      *
      * \returns

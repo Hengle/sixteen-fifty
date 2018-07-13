@@ -89,13 +89,16 @@ namespace SixteenFifty.Behaviours {
      * \brief
      * Collects all interactions available in this cell.
      */
-    public IEnumerable<Interaction> Interactions =>
+    public IEnumerable<Interaction> EntityInteractions =>
       EntitiesHere
       .SelectWhere(
         me =>
         me.GetComponent<Interactable>().FromNull<Interactable>())
       .SelectMany(
         interactable => interactable.interactions);
+
+    public IEnumerable<Interaction> TileInteractions =>
+      Tile.interactions ?? Enumerable.Empty<Interaction>();
 
     /**
     * \brief
