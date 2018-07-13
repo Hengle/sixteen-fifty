@@ -14,6 +14,9 @@ namespace SixteenFifty.Editor {
 
       var interactable = obj.GetComponent<Interactable>();
 
+      if(interactable == null)
+        return;
+
       interactable.interactionRadius =
         Handles.RadiusHandle(
           Quaternion.identity,
