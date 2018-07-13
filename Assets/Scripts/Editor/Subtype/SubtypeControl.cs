@@ -87,8 +87,12 @@ namespace SixteenFifty.Editor {
       // with this, we can construct and draw the editor for the
       // target.
 
+      var wantsNoEditor = type.IsDefined(
+        typeof(NoEditorNeeded),
+        true);
+
       // if we don't need to worry about editors, then gtfo
-      if(!drawEditor)
+      if(!drawEditor || wantsNoEditor)
         return target;
 
       // if we have no editor, or the current editor is inappropriate,
