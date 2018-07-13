@@ -44,7 +44,7 @@ namespace SixteenFifty.Behaviours {
     }
 
     public void OnDrag(PointerEventData data) {
-      mainCamera.transform.position -= (1f / pixelsPerUnit.value) * data.delta.Upgrade();
+      mainCamera.transform.position -= (1f / pixelsPerUnit.Value) * data.delta.Upgrade();
     }
   }
 }

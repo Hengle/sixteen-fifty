@@ -31,17 +31,26 @@ namespace SixteenFifty.Variables {
 
     /**
      * \brief
+     * The raw value of the variable at runtime.
+     *
+     * `OnEnable` will assign `value` (the static value) to this
+     * value.
+     */
+    public T runtimeValue;
+
+    /**
+     * \brief
      * Access the value of the variable.
      *
      * Using the setter of this property will raise #Changed.
      */
     public T Value {
       get {
-        return value;
+        return runtimeValue;
       }
       set {
-        this.value = value;
-        Changed?.Invoke(value);
+        runtimeValue = value;
+        Changed?.Invoke(runtimeValue);
       }
     }
 
@@ -50,5 +59,9 @@ namespace SixteenFifty.Variables {
      * Raised when the value is changed.
      */
     public event Action<T> Changed;
+
+    void OnEnable() {
+      runtimeValue = value;
+    }
   }
 }
