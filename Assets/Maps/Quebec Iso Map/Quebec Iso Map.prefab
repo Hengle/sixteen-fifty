@@ -526,6 +526,7 @@ MonoBehaviour:
   interactions:
   - name: Exit to overworld
     script: {fileID: 11400000, guid: 3d0f5d7f7a3db4c9eb6017c1b886d59c, type: 2}
+    automatic: 1
   interactionRadius: 1
   focused: 0
 --- !u!114 &114357981691456318
@@ -542,6 +543,7 @@ MonoBehaviour:
   interactions:
   - name: Enter
     script: {fileID: 11400000, guid: 8a89d78182d244a7cb224b106336cd6a, type: 2}
+    automatic: 1
   interactionRadius: 0.3109703
   focused: 0
 --- !u!114 &114547738408146716
@@ -558,7 +560,6 @@ MonoBehaviour:
   playerPrefab: {fileID: 1106720459475756, guid: 0cb3a8630eda140ce8599a4fc166c8b3,
     type: 2}
   interactables: []
-  interactableFocus: {fileID: 0}
 --- !u!114 &114644215753547014
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -587,6 +588,7 @@ MonoBehaviour:
   interactions:
   - name: Exit to overworld
     script: {fileID: 11400000, guid: 3d0f5d7f7a3db4c9eb6017c1b886d59c, type: 2}
+    automatic: 1
   interactionRadius: 0.9156778
   focused: 0
 --- !u!212 &212227899517877662
@@ -667,7 +669,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -1011106459
-  m_SortingLayer: 5
+  m_SortingLayer: 4
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: d2ffb39f992ac417e9a6f0b85aa51cee, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}

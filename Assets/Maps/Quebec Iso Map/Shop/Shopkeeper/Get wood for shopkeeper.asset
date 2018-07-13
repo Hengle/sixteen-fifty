@@ -8,7 +8,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ecb2d97bfd4b644daa4ff03823edef51, type: 3}
-  m_Name: Player Iso Destination
+  m_Script: {fileID: 11500000, guid: bdaa8fb8b4b754e718288c977ad5eb37, type: 3}
+  m_Name: Get wood for shopkeeper
   m_EditorClassIdentifier: 
-  value: {x: 0.112, y: 2.1}
+  name: Get wood
+  progress: {fileID: 11400000, guid: f13bf6d97944e43f1b8c92d1af53dcd5, type: 2}
+  goals:
+  - description: Collect wood

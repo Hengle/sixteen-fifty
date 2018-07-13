@@ -8,7 +8,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ecb2d97bfd4b644daa4ff03823edef51, type: 3}
-  m_Name: Player Iso Destination
+  m_Script: {fileID: 11500000, guid: d0e0c69571af84867947822a409345b0, type: 3}
+  m_Name: Get wood progress
   m_EditorClassIdentifier: 
-  value: {x: 0.112, y: 2.1}
+  value: 0

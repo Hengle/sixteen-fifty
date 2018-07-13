@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Name: Quebec Iso Map
   m_EditorClassIdentifier: 
   prefab: {fileID: 1356293134649642, guid: aacb28800fa544420b4ebfd0a77178c6, type: 2}
-  skyboxColor: {r: 0.5613208, g: 0.840603, b: 1, a: 0}
+  backgroundColor: {r: 0.5613208, g: 0.8537737, b: 1, a: 1}
