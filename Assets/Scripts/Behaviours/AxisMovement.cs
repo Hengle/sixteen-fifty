@@ -13,6 +13,12 @@ namespace SixteenFifty.Behaviours {
   public class AxisMovement : MonoBehaviour, INotifyDirectionChange {
     public float moveSpeed = 1;
 
+    /**
+     * \brief
+     * The ratio `y/x` of the isometric world.
+     */
+    public const float isoRatio = 0.5f;
+
     [SerializeField] [HideInInspector]
     HexGridManager manager;
     
@@ -45,6 +51,7 @@ namespace SixteenFifty.Behaviours {
       }
 
       var v = InputUtility.PrimaryAxis;
+      v.y *= isoRatio;
       body.velocity = v * moveSpeed;
 
       // only bother updating direction if someone is listening for it,
