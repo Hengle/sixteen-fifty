@@ -307,6 +307,53 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   eventManager: {fileID: 0}
+--- !u!1001 &141751145
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 201364431}
+    m_Modifications:
+    - target: {fileID: 4719615787369254, guid: d3695e2556f2e4630bb9ecea7fd2405e, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4719615787369254, guid: d3695e2556f2e4630bb9ecea7fd2405e, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4719615787369254, guid: d3695e2556f2e4630bb9ecea7fd2405e, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4719615787369254, guid: d3695e2556f2e4630bb9ecea7fd2405e, type: 2}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4719615787369254, guid: d3695e2556f2e4630bb9ecea7fd2405e, type: 2}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4719615787369254, guid: d3695e2556f2e4630bb9ecea7fd2405e, type: 2}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4719615787369254, guid: d3695e2556f2e4630bb9ecea7fd2405e, type: 2}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4719615787369254, guid: d3695e2556f2e4630bb9ecea7fd2405e, type: 2}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 100100000, guid: d3695e2556f2e4630bb9ecea7fd2405e, type: 2}
+  m_IsPrefabParent: 0
+--- !u!4 &141751146 stripped
+Transform:
+  m_PrefabParentObject: {fileID: 4719615787369254, guid: d3695e2556f2e4630bb9ecea7fd2405e,
+    type: 2}
+  m_PrefabInternal: {fileID: 141751145}
 --- !u!1 &201364429
 GameObject:
   m_ObjectHideFlags: 0
@@ -335,7 +382,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d08a2e4a9876846e0994f58f66241ca3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  initialMap: {fileID: 11400000, guid: d8c98404550a344948866bfa0131ae69, type: 2}
+  initialMap: {fileID: 11400000, guid: f9eac97a658ec43089930980a04c9e1f, type: 2}
   eventManager: {fileID: 1138619147}
   interactionMenu: {fileID: 1757542721}
 --- !u!4 &201364431
@@ -347,7 +394,8 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
+  m_Children:
+  - {fileID: 141751146}
   m_Father: {fileID: 743335549}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

@@ -107,7 +107,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ad822e8b7ae84bd6b66b254817a7489, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  distanceFromPivot: -0.43
+  distanceFromPivot: 0
   gizmoXOffset: 0
 --- !u!114 &114035235496480384
 MonoBehaviour:

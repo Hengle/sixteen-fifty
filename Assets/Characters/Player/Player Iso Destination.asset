@@ -11,5 +11,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ecb2d97bfd4b644daa4ff03823edef51, type: 3}
   m_Name: Player Iso Destination
   m_EditorClassIdentifier: 
-  value: {x: 2.878, y: 1.2}
-  runtimeValue: {x: 2.878, y: 1.2}
+  value: {x: 2.878, y: 2.2}
+  runtimeValue: {x: 2.878, y: 2.2}
