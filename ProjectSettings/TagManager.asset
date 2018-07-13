@@ -50,9 +50,9 @@ TagManager:
   - name: Player
     uniqueID: 608742245
     locked: 0
-  - name: Dialogue
-    uniqueID: 504553401
-    locked: 0
   - name: iso foreground
     uniqueID: 3283860837
+    locked: 0
+  - name: Dialogue
+    uniqueID: 504553401
     locked: 0
