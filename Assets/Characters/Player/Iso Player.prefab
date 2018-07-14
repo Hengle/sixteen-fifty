@@ -189,7 +189,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e3493782b675417099fc2aa65044d21, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 3
+  moveSpeed: 6
   manager: {fileID: 0}
   body: {fileID: 0}
   lastDirection: 0

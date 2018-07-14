@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Name: Player Quest Log
   m_EditorClassIdentifier: 
   quests:
-  - {fileID: 11400000, guid: ae0ae44b4b1694ce8b0c1f50fb33d373, type: 2}
+  - {fileID: 11400000, guid: 61eb05b6133f446389a5e75f4101445d, type: 2}

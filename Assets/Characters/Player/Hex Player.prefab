@@ -80,7 +80,7 @@ MonoBehaviour:
     values: []
     count: 0
   moveSpeed: 1
-  progressSpeed: 3
+  progressSpeed: 5
   progress: 0
   manager: {fileID: 0}
   mapEntity: {fileID: 0}

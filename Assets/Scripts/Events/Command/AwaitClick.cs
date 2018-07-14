@@ -25,7 +25,7 @@ namespace SixteenFifty {
       public override IEnumerator GetCoroutine() {
         runner.Manager.MainPanelClicked += OnClick;
         while(!clicked) {
-          if(Input.GetButtonUp("Jump"))
+          if(Input.GetButtonUp("Jump") || Input.GetButtonUp("Fire1"))
             break;
           yield return null;
         }

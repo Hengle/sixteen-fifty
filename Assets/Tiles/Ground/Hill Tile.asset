@@ -14,3 +14,7 @@ MonoBehaviour:
   sprite: {fileID: 21300004, guid: 851b492a6f016465ebd55cf150ad8db5, type: 3}
   movementCost: 0
   tileName: hill
+  interactions:
+  - name: Chop wood
+    script: {fileID: 11400000, guid: 8619e750c80b74253a0dcd41af886b49, type: 2}
+    automatic: 0
