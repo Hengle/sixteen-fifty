@@ -25,6 +25,7 @@ namespace SixteenFifty.Editor {
         null != target,
         "GiveQuestEditor target is GiveQuest.");
 
+      RecordChange("Set quest log");
       target.questLog =
         EditorGUILayout.ObjectField(
           "Quest Log",
@@ -33,13 +34,19 @@ namespace SixteenFifty.Editor {
           false)
         as QuestLog;
 
+      RecordChange("Set quest");
+      var oldQuest = target.quest;
       target.quest =
         EditorGUILayout.ObjectField(
           "Quest",
-          target.quest,
+          oldQuest,
           typeof(Quest),
           false)
         as Quest;
+      if(oldQuest != target.quest) {
+        Debug.Log("change happened");
+        ChangeHappened();
+      }
     }
   }
 }

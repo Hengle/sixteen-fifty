@@ -7,7 +7,7 @@ namespace SixteenFifty.Behaviours {
   using Variables;
   
   [RequireComponent(typeof(MapEntity))]
-  public class InitialPosition : MonoBehaviour, IPositioner {
+  public class HexPositioner : MonoBehaviour, IPositioner {
     public HexCoordinatesVariable destination;
 
     [SerializeField] [HideInInspector]
@@ -17,6 +17,11 @@ namespace SixteenFifty.Behaviours {
     private MapEntity mapEntity;
 
     public event Action Positioned;
+
+    public void Reposition() {
+      mapEntity.Warp(destination.Value);
+      Positioned?.Invoke();
+    }
     
     public void Awake() {
       hexGridManager = GetComponentInParent<HexGridManager>();
@@ -24,10 +29,10 @@ namespace SixteenFifty.Behaviours {
 
       Debug.Assert(
         null != hexGridManager,
-        "InitialPosition exists within a map context.");
+        "HexPositioner exists within a map context.");
       Debug.Assert(
         null != mapEntity,
-        "InitialPosition is attached with a MapEntity.");
+        "HexPositioner is attached with a MapEntity.");
     }
 
     public void OnEnable() {
@@ -40,9 +45,12 @@ namespace SixteenFifty.Behaviours {
 
     void OnMapReady(IMap map) {
       if(null != destination) {
-        mapEntity.Warp(destination.Value);
-        Positioned?.Invoke();
+        Reposition();
       }
+      else
+        Debug.LogWarningFormat(
+          "HexPositioner failed: {0} has no destination.",
+          name);
     }
   }
 }

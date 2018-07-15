@@ -172,9 +172,16 @@ namespace SixteenFifty.Editor {
      * The editor instance, or null if there is none for the given
      * type.
      */
-    public ISubtypeEditor<S> GetEditor<S>() where S : T =>
-      GetEditorClass<S>()
-      ?.Construct<SubtypeSelectorContext<T>, ISubtypeEditor<S>>(this);
+    public ISubtypeEditor<S> GetEditor<S>() where S : T {
+      var cls = GetEditorClass<S>();
+      // tries the single-argument constructor and then the
+      // no-argument constructor
+      var obj =
+        cls?.Construct<SubtypeSelectorContext<T>, ISubtypeEditor<S>>(this)
+        ??
+        cls?.Construct<ISubtypeEditor<S>>();
+      return obj;
+    }
 
     /**
      * \brief
@@ -184,9 +191,14 @@ namespace SixteenFifty.Editor {
      * The editor instance, or null if there is none for the given
      * type.
      */
-    public ISubtypeEditor<T> GetEditor(Type t) =>
-      GetEditorClass(t)
-      ?.Construct<SubtypeSelectorContext<T>, ISubtypeEditor<T>>(this);
+    public ISubtypeEditor<T> GetEditor(Type t) {
+      var cls = GetEditorClass(t);
+      var obj =
+        cls?.Construct<SubtypeSelectorContext<T>, ISubtypeEditor<T>>(this)
+        ??
+        cls?.Construct<ISubtypeEditor<T>>();
+      return obj;
+    }
 
     /**
      * \brief

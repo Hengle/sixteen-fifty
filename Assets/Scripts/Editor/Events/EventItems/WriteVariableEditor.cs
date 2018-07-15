@@ -33,6 +33,7 @@ namespace SixteenFifty.Editor {
         null != target,
         "Target of WriteVariableEditor is of type WriteVariable.");
 
+      RecordChange("set variable to write to");
       target.destination =
         EditorGUILayout.ObjectField(
           "Variable",
@@ -42,9 +43,12 @@ namespace SixteenFifty.Editor {
         as ScriptableObject;
 
       // we don't even bother drawing the expression unless a variable
-      // is selected
-      if(target.destination == null)
+      // is selected; in fact if we *deselect* the variable, then we
+      // should null out the expression.
+      if(target.destination == null) {
+        target.expression = null;
         return;
+      }
 
       // if a variable *is* selected, then we need to get out the type
       // of its contents in order to construct the appropriate
@@ -59,6 +63,7 @@ namespace SixteenFifty.Editor {
         null != expressionControl,
         "There is an appropriate expression control.");
 
+      RecordChange("set expression to write");
       var expressionControlType = expressionControl.GetType();
       target.expression = expressionControlType.GetMethod("Draw").Invoke(
         expressionControl,

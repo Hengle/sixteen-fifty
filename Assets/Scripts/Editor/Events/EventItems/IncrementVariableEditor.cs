@@ -23,6 +23,7 @@ namespace SixteenFifty.Editor {
         null != target,
         "IncrementVariableEditor target is IncrementVariable.");
 
+      RecordChange("set variable to increment");
       target.target =
         EditorGUILayout.ObjectField(
           "Target",

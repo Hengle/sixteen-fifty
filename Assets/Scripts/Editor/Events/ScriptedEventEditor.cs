@@ -11,10 +11,15 @@ namespace SixteenFifty.Editor {
 
   [CustomEditor(typeof(ScriptedEvent))]
   public class ScriptedEventEditor : UnityEditor.Editor {
+    /**
+     * \brief
+     * Used by child controls to record changes for undo / automatic
+     * saving.
+     */
+    public static ScriptedEvent target;
+    
     [SerializeField]
     EventItemControl control;
-
-    new ScriptedEvent target;
 
     SubtypeSelectorContext<IScript> context;
     

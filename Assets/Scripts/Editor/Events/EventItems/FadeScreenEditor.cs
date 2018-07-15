@@ -20,6 +20,7 @@ namespace SixteenFifty.Editor {
         _target != null,
         "FadeScreenEditor target is FadeScreen.");
 
+      RecordChange("set fade screen direction");
       target.direction =
         (FadeDirection)
         EditorGUILayout.EnumPopup(

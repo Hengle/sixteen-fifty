@@ -23,6 +23,7 @@ namespace SixteenFifty.Editor {
         null != target,
         "Target of DebugMessageEditor is of type DebugMessage.");
 
+      RecordChange("Set debug message");
       target.message = EditorGUILayout.DelayedTextField(
         "message",
         target.message);

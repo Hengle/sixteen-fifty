@@ -24,6 +24,7 @@ namespace SixteenFifty.Editor {
         null != target,
         "Target of GiveItemEditor is of type GiveItem.");
 
+      RecordChange("set item to give");
       target.item =
         EditorGUILayout.ObjectField(
           "Item type",
@@ -32,11 +33,13 @@ namespace SixteenFifty.Editor {
           false)
         as Item;
 
+      RecordChange("set count to give");
       target.count =
         EditorGUILayout.IntField(
           "Count",
           target.count);
 
+      RecordChange("set target inventory");
       target.target =
         EditorGUILayout.ObjectField(
           "Target inventory",

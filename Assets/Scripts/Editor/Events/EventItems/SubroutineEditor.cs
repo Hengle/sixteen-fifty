@@ -21,6 +21,8 @@ namespace SixteenFifty.Editor {
       Debug.Assert(
         null != target,
         "Target of SubroutineEditor is of type Subroutine.");
+
+      // RecordChange("set target script");
       target.target =
         EditorGUILayout.ObjectField(
           "Target",

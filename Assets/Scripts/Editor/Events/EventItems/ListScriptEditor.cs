@@ -68,8 +68,10 @@ namespace SixteenFifty.Editor {
       var newSize = EditorGUILayout.DelayedIntField(
         "Size",
         oldSize);
-      if(newSize != oldSize)
+      if(newSize != oldSize) {
+        RecordChange("resize sequence of events");
         target.scripts.Resize(newSize);
+      }
     }
 
     void DrawElementControls() {
@@ -87,6 +89,7 @@ namespace SixteenFifty.Editor {
 
         if(foldout.Draw()) {
           EditorGUI.indentLevel++;
+          RecordChange("set target script in sequence");
           target.scripts[i] = itemControl.Draw(target.scripts[i]);
           EditorGUI.indentLevel--;
         }

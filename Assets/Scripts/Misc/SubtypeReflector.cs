@@ -268,12 +268,12 @@ namespace SixteenFifty.Reflection {
      * If the constructed value is not assignable to type `T`, a
      * TypeMismatch error is raised.
      */
-    public static T Construct<T>(this Type t) {
+    public static T Construct<T>(this Type t) where T : class {
       Debug.Assert(
         null != t,
         "Type to instantiate must be not null.");
       Typecheck(typeof(T), t);
-      return (T)t.GetConstructor(Type.EmptyTypes).Invoke(null);
+      return (T)t.GetConstructor(Type.EmptyTypes)?.Invoke(null);
     }
 
     /**
@@ -287,18 +287,15 @@ namespace SixteenFifty.Reflection {
      * \exception TypeMismatch
      * This exception is raised if the type `t` is not assignable to type `T`.
      */
-    public static T Construct<T>(this Type t, object obj) {
+    public static T Construct<T>(this Type t, object obj) where T : class {
       Typecheck(typeof(T), t);
-      return (T)t.GetConstructor(new [] { obj.GetType() }).Invoke(new [] { obj });
+      return (T)t.GetConstructor(new [] { obj.GetType() })?.Invoke(new [] { obj });
     }
 
-    public static T Construct<S, T>(this Type t, S s) {
+    public static T Construct<S, T>(this Type t, S s) where T : class {
       Typecheck(typeof(T), t);
       var ctor = t.GetConstructor(new [] { typeof(S) });
-      Debug.Assert(
-        null != ctor,
-        "The constructor exists.");
-      return (T)ctor.Invoke(new object[] { s });
+      return (T)ctor?.Invoke(new object[] { s });
     }
 
     /**

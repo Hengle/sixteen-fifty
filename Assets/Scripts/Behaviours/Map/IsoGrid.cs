@@ -7,7 +7,6 @@ using UnityEngine.EventSystems;
 namespace SixteenFifty.Behaviours {
   using TileMap;
   
-  [RequireComponent(typeof(InteractableFocus))]
   public class IsoGrid : MonoBehaviour, IMap {
     /**
      * The prefab to use to spawn the player in this map type.
