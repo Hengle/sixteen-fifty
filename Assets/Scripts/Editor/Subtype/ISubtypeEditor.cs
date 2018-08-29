@@ -13,8 +13,15 @@ namespace SixteenFifty.Editor {
     /**
      * \brief
      * Draws the editor for the given target object.
+     *
+     * Modifies the target in-place or assigns to it if a new target
+     * must be constructed.
+     *
+     * \returns
+     * Whether the object was changed, either by assigning a new
+     * value, or by modification of subproperties.
      */
-    void Draw(T target);
+    bool Draw(ref T target);
 
     /**
      * \brief
