@@ -8,7 +8,7 @@ namespace SixteenFifty.EventItems {
   
   [Serializable]
   [SelectableSubtype(friendlyName = "Set Variable")]
-  public class WriteVariable : ImmediateScript {
+  public class WriteVariable : ImmediateScript, IEquatable<WriteVariable> {
     public ScriptableObject destination;
     public object expression;
 
@@ -92,5 +92,12 @@ namespace SixteenFifty.EventItems {
 
       valueProp.SetValue(destination, result);
     }
+
+    public bool Equals(WriteVariable that) =>
+      destination == that.destination &&
+      expression.Equals(that.expression);
+
+    public override bool Equals(IScript that) =>
+      IEquatableExt.Equals(this, that);
   }
 }

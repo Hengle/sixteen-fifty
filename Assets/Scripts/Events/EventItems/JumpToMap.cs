@@ -10,13 +10,17 @@ namespace SixteenFifty.EventItems {
 
   [Serializable]
   [SelectableSubtype(friendlyName = "Jump to Map")]
-  public class JumpToMap : ImmediateScript {
+  public class JumpToMap : ImmediateScript, IEquatable<JumpToMap> {
     public BasicMap map;
 
-
     public override void Call(EventRunner runner) {
-      var hexGridManager = runner.GridManager;
-      hexGridManager.LoadMap(map);
+      runner.GridManager.LoadMap(map);
     }
+
+    public bool Equals(JumpToMap that) =>
+      map == that.map;
+
+    public override bool Equals(IScript that) =>
+      IEquatableExt.Equals(this, that);
   }
 }

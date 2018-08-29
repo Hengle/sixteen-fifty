@@ -4,7 +4,7 @@ using System.Linq;
 namespace SixteenFifty.EventItems.Expressions {
   [Serializable]
   [SelectableSubtype(friendlyName = "Item count")]
-  public class ItemCount : IExpression<int> {
+  public class ItemCount : IExpression<int>, IEquatable<ItemCount> {
     public Inventory inventory;
     public Item item;
 
@@ -18,5 +18,12 @@ namespace SixteenFifty.EventItems.Expressions {
           ns => ns.value.count)
         .Sum();
     }
+
+    public bool Equals(ItemCount that) =>
+      inventory == that.inventory &&
+      item == that.item;
+
+    public bool Equals(IExpression<int> that) =>
+      IEquatableExt.Equals(this, that);
   }
 }

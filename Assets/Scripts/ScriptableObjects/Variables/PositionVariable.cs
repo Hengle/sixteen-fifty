@@ -30,5 +30,10 @@ namespace SixteenFifty.Variables {
      */
     public void RequestReposition() =>
       RepositionRequested?.Invoke();
+
+    public bool Equals(IPositionVariable _that) {
+      var that = _that as Variable<T>;
+      return Equals(that);
+    }
   }
 }

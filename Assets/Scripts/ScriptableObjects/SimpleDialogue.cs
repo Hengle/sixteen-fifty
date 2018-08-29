@@ -19,15 +19,21 @@ namespace SixteenFifty.EventItems {
    * and the speakers disappear.
    */
   [CreateAssetMenu(menuName = "1650/Simple Dialogue")]
-  public class SimpleDialogue : BasicScriptedEvent {
+  public class SimpleDialogue : BasicScriptedEvent, IEquatable<SimpleDialogue> {
     public SpeakerConfiguration[] speakerConfigurations;
     public string[] messages;
 
     public override IScript Compile() =>
       new SimpleDialogueScript(speakerConfigurations, messages);
+
+    public bool Equals(SimpleDialogue that) =>
+      that != null &&
+      this.speakerConfigurations.SequenceEqual(that.speakerConfigurations) &&
+      this.messages.SequenceEqual(that.messages);
   }
 
-  public class SimpleDialogueScript : IScript {
+  [SelectableSubtype(friendlyName = "Simple dialogue (inline)")]
+  public class SimpleDialogueScript : IScript, IEquatable<SimpleDialogueScript> {
     public SpeakerConfiguration[] speakerConfigurations;
     public string[] messages;
 
@@ -37,6 +43,14 @@ namespace SixteenFifty.EventItems {
       this.speakerConfigurations = speakerConfigurations;
       this.messages = messages;
     }
+
+    public bool Equals(SimpleDialogueScript that) =>
+      that != null &&
+      this.speakerConfigurations.SequenceEqual(that.speakerConfigurations) &&
+      this.messages.SequenceEqual(that.messages);
+
+    public bool Equals(IScript that) =>
+      IEquatableExt.Equals(this, that);
     
     public Command<object> GetScript(EventRunner runner) {
       var manager = runner.Manager;

@@ -17,5 +17,7 @@ namespace SixteenFifty.EventItems {
     }
 
     public abstract void Call(EventRunner runner);
+
+    public abstract bool Equals(IScript that);
   }
 }

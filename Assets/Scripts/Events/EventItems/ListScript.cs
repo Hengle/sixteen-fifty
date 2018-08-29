@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 using UnityEngine;
 
@@ -8,7 +9,7 @@ namespace SixteenFifty.EventItems {
 
   [Serializable]
   [SelectableSubtype(friendlyName = "Event Sequence")]
-  public class ListScript : IScript {
+  public class ListScript : IScript, IEquatable<ListScript> {
     public List<IScript> scripts;
 
     public Command<object> GetScript(EventRunner runner) {
@@ -21,6 +22,14 @@ namespace SixteenFifty.EventItems {
           cmd = cmd.Then(_ => s.GetScript(runner));
       }
       return cmd;
+    }
+
+    public bool Equals(ListScript that) =>
+      scripts?.SequenceEqual(that.scripts) ?? false;
+
+    public bool Equals(IScript _that) {
+      var that = _that as ListScript;
+      return null != that && Equals(that);
     }
   }
 }

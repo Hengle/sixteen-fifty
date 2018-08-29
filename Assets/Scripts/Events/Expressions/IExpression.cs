@@ -1,3 +1,5 @@
+using System;
+
 namespace SixteenFifty.EventItems.Expressions {
   /**
    * \brief
@@ -5,7 +7,7 @@ namespace SixteenFifty.EventItems.Expressions {
    *
    * This is used by the scripted events system.
    */
-  public interface IExpression<T> {
+  public interface IExpression<T> : IEquatable<IExpression<T>> {
     T Compute(EventRunner runner);
   }
 }

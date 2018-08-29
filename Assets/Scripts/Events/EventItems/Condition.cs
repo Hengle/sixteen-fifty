@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace SixteenFifty.EventItems {
   using Commands;
@@ -6,7 +7,7 @@ namespace SixteenFifty.EventItems {
   
   [Serializable]
   [SelectableSubtype(friendlyName = "Condition")]
-  public class Condition : IScript {
+  public class Condition : IScript, IEquatable<Condition> {
     public IExpression<bool> condition;
 
     public IScript ifTrue;
@@ -18,5 +19,20 @@ namespace SixteenFifty.EventItems {
       .Branch(
         ifTrue.GetScript(runner),
         ifFalse.GetScript(runner));
+
+    public bool Equals(Condition that) {
+      var cmp1 = EqualityComparer<IExpression<bool>>.Default;
+      var cmp2 = EqualityComparer<IScript>.Default;
+      return
+        cmp1.Equals(condition, that.condition) &&
+        cmp2.Equals(ifTrue, that.ifTrue) &&
+        cmp2.Equals(ifFalse, that.ifFalse);
+    }
+
+    public bool Equals(IScript _that) {
+      var that = _that as Condition;
+      return
+        null != that && Equals(that);
+    }
   }
 }

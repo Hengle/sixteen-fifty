@@ -1,3 +1,5 @@
+using System;
+
 namespace SixteenFifty.EventItems {
   using Commands;
 
@@ -8,9 +10,7 @@ namespace SixteenFifty.EventItems {
    * This code is compiled into the Command monad, and ultimately
    * executed as a coroutine.
    */
-  public interface IScript {
+  public interface IScript : IEquatable<IScript> {
     Command<object> GetScript(EventRunner runner);
-
-    // T Accept<T>(ScriptVisitor<T> visitor);
   }
 }
