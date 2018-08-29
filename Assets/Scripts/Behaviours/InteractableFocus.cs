@@ -31,7 +31,7 @@ namespace SixteenFifty.Behaviours {
 
     void OnPlayerSpawned(IMap _grid) {
       Debug.Assert(
-        _grid == grid,
+        System.Object.ReferenceEquals(_grid, grid),
         "Grid that fired in the same as grid we registered on.");
       player = grid.Player;
     }

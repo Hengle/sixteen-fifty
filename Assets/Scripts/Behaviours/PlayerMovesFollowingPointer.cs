@@ -39,7 +39,7 @@ namespace SixteenFifty.Behaviours {
 
     void OnPlayerSpawned(IMap _map) {
       Debug.Assert(
-        _map == map,
+        System.Object.ReferenceEquals(_map, map),
         "Triggering map is the same as registered map.");
 
       player = map.Player;

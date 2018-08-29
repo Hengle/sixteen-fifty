@@ -32,12 +32,6 @@ namespace SixteenFifty.Behaviours {
     [SerializeField] [HideInInspector]
     HexGridManager manager;
 
-    [SerializeField] [HideInInspector]
-    bool active = false;
-
-    [SerializeField] [HideInInspector]
-    HexDirection? lastDirection = null;
-
     bool firedOnce = false;
 
     void Awake() {

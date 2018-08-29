@@ -9,7 +9,7 @@ namespace SixteenFifty.Behaviours {
    */
   public class CameraFollows : MonoBehaviour {
     [SerializeField] [HideInInspector]
-    Camera camera;
+    new Camera camera;
     
     void Awake() {
       camera = Camera.main;
