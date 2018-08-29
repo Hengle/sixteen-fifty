@@ -79,16 +79,10 @@ namespace SixteenFifty.Reflection {
      *   pattern matches against `dst`.
      */
     public static Type AssignableInstantiationOf(this Type dst, Type generic) {
-      var b = generic == typeof(EventItems.Expressions.Constant<>);
-      if(b)
-        Debug.Log("yoloo");
-
       // `generic` must be a generic type definition, so that we can
       // form instantiations.
       if(!generic.IsGenericTypeDefinition)
         return null;
-
-      if(b) Debug.Log("generic is GTD");
 
       var interfaces = generic.GetInterfaces();
 
@@ -114,39 +108,17 @@ namespace SixteenFifty.Reflection {
      * This is a helper function for #AssignableInstantiationOf.
      */
     static Type FormAssignableInstantiation(Type dst, Type iface, Type generic) {
-      var b = false;
-        // generic == typeof(EventItems.Expressions.Constant<>);
-
-      if(b)
-        Debug.LogFormat(
-          "Trying interface {0} : {1} <- {2}.",
-          dst,
-          iface,
-          generic);
-
       var sub = new Dictionary<int, Type>();
       // the pattern matching must succeed
-      if(!dst.PatternMatchGenerics(iface, sub, b)) {
-        if(b)
-          Debug.Log("pattern matching failed.");
+      if(!dst.PatternMatchGenerics(iface, sub)) {
         return null;
       }
 
       var l = generic.GetGenericArguments().Length;
 
-      if(b) {
-        sub.DebugLog();
-        Debug.LogFormat(
-          "Substitution count: {0}\nParameter count: {1}",
-          sub.Count,
-          l);
-      }
-
       // the substitution must be grounding
-      if(sub.Count != l) {
-        Debug.Log("substitution is not grounding");
+      if(sub.Count != l)
         return null;
-      }
       var substitution = sub.ToIndexList<Type>().ToArray();
 
       // try to form the instantiation:
@@ -348,22 +320,10 @@ namespace SixteenFifty.Reflection {
      * complete substitution.
      */
     public static bool PatternMatchGenerics(
-      this Type self, Type against, IDictionary<int, Type> sub, bool b = false) {
-      if(b)
-        Debug.LogFormat(
-          "Pattern matching {0} ~=~ {1}.",
-          self, against);
-
+      this Type self, Type against, IDictionary<int, Type> sub) {
       // base case: self is a variable
       if(against.IsGenericParameter) {
         var i = against.GenericParameterPosition;
-
-        if(b)
-          Debug.LogFormat(
-            "Matching variable {0} ({1}) -> {2}",
-            self,
-            i,
-            against);
 
         if(sub.ContainsKey(i)) {
           if(sub[i] != self)
@@ -378,8 +338,6 @@ namespace SixteenFifty.Reflection {
         self.IsGenericType && against.IsGenericType
         && self.GetGenericTypeDefinition()
         == against.GetGenericTypeDefinition()) {
-        if(b)
-          Debug.Log("Heads match. Recursing.");
 
         // now we need to recurse
         Type[] left = self.GetGenericArguments();
@@ -391,14 +349,12 @@ namespace SixteenFifty.Reflection {
         foreach(
           var argt in Enumerable.Zip(left, right, Tuple.Create)) {
           // if any of the sub-matches fails, then we also fail.
-          if(!argt.Item1.PatternMatchGenerics(argt.Item2, sub, b))
+          if(!argt.Item1.PatternMatchGenerics(argt.Item2, sub))
             return false;
         }
         // otherwise we did it!
       }
       else {
-        if(b)
-          Debug.Log("Heads don't match.");
         return false;
       }
 
