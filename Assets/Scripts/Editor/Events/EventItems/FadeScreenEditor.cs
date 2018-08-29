@@ -7,25 +7,27 @@ namespace SixteenFifty.Editor {
   using EventItems;
 
   [SubtypeEditorFor(target = typeof(FadeScreen))]
-  public class FadeScreenEditor : ScriptedEventItemEditor {
+  public class FadeScreenEditor : ISubtypeEditor<IScript> {
     public FadeScreenEditor(SubtypeSelectorContext<IScript> context) {
     }
     
-    public override bool CanEdit(Type type) =>
+    public bool CanEdit(Type type) =>
       type == typeof(FadeScreen);
 
-    public override void Draw(IScript _target) {
+    public bool Draw(IScript _target) {
       var target = _target as FadeScreen;
       Debug.Assert(
         _target != null,
         "FadeScreenEditor target is FadeScreen.");
 
-      RecordChange("set fade screen direction");
-      target.direction =
-        (FadeDirection)
-        EditorGUILayout.EnumPopup(
-          "Direction",
-          target.direction);
+      var old = target.direction;
+      return
+        old !=
+        (target.direction =
+         (FadeDirection)
+         EditorGUILayout.EnumPopup(
+           "Direction",
+           target.direction));
     }
   }
 }

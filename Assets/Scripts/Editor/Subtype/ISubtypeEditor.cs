@@ -21,7 +21,7 @@ namespace SixteenFifty.Editor {
      * Whether the object was changed, either by assigning a new
      * value, or by modification of subproperties.
      */
-    bool Draw(ref T target);
+    bool Draw(T target);
 
     /**
      * \brief

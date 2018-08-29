@@ -7,29 +7,30 @@ namespace SixteenFifty.Editor {
   using EventItems;
   
   [SubtypeEditorFor(target = typeof(Subroutine))]
-  public class SubroutineEditor : ScriptedEventItemEditor {
+  public class SubroutineEditor : ISubtypeEditor<IScript> {
     Subroutine target;
 
     public SubroutineEditor(SubtypeSelectorContext<IScript> context) {
     }
     
-    public override bool CanEdit(Type type) =>
+    public bool CanEdit(Type type) =>
       type == typeof(Subroutine);
 
-    public override void Draw(IScript _target) {
+    public bool Draw(IScript _target) {
       target = _target as Subroutine;
       Debug.Assert(
         null != target,
         "Target of SubroutineEditor is of type Subroutine.");
-
-      // RecordChange("set target script");
-      target.target =
-        EditorGUILayout.ObjectField(
-          "Target",
-          target.target,
-          typeof(BasicScriptedEvent),
-          false)
-        as BasicScriptedEvent;
+      var old = target.target;
+      return
+        old !=
+        (target.target =
+         EditorGUILayout.ObjectField(
+           "Target",
+           old,
+           typeof(BasicScriptedEvent),
+           false)
+         as BasicScriptedEvent);
     }
   }
 }

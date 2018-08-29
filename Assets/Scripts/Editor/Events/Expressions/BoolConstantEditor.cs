@@ -14,11 +14,14 @@ namespace SixteenFifty.Editor {
     base(context) {
     }
 
-    public override void Draw(IExpression<bool> _target) {
+    public override bool Draw(IExpression<bool> _target) {
       // sets well-typed target
       base.Draw(_target);
 
-      target.value = EditorGUILayout.Toggle("value", target.value);
+      var old = target.value;
+      return
+        old !=
+        (target.value = EditorGUILayout.Toggle("value", target.value));
     }
   }
 }

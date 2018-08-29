@@ -13,11 +13,14 @@ namespace SixteenFifty.Editor {
     public IntConstantEditor(SubtypeSelectorContext<IExpression<int>> context) :
     base(context) {
     }
-    public override void Draw(IExpression<int> _target) {
+    public override bool Draw(IExpression<int> _target) {
       // sets well-typed target
       base.Draw(_target);
 
-      target.value = EditorGUILayout.DelayedIntField("Value", target.value);
+      var old = target.value;
+      return
+        old !=
+        (target.value = EditorGUILayout.DelayedIntField("Value", target.value));
     }
   }
 }

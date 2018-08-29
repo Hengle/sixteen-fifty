@@ -9,26 +9,29 @@ namespace SixteenFifty.Editor {
 
   [Serializable]
   [SubtypeEditorFor(target = typeof(JumpToMap))]
-  public class JumpToMapEditor : ScriptedEventItemEditor {
+  public class JumpToMapEditor : ISubtypeEditor<IScript> {
     public JumpToMapEditor(SubtypeSelectorContext<IScript> context) {
     }
     
-    public override bool CanEdit(Type type) =>
+    public bool CanEdit(Type type) =>
       type == typeof(JumpToMap);
 
-    public override void Draw(IScript _target) {
+    public bool Draw(IScript _target) {
       var target = _target as JumpToMap;
       Debug.Assert(
         null != target,
         "JumpToMapEditor target is JumpToMap.");
 
-      target.map =
-        EditorGUILayout.ObjectField(
-          "Destination",
-          target.map,
-          typeof(BasicMap),
-          false)
-        as BasicMap;
+      var old = target.map;
+      return
+        old !=
+        (target.map =
+         EditorGUILayout.ObjectField(
+           "Destination",
+           target.map,
+           typeof(BasicMap),
+           false)
+         as BasicMap);
     }
   }
 }

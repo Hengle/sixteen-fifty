@@ -14,17 +14,22 @@ namespace SixteenFifty.Editor {
 
     public bool CanEdit(Type type) => type == typeof(ItemCount);
 
-    public void Draw(IExpression<int> _target) {
+    public bool Draw(IExpression<int> _target) {
       var target = _target as ItemCount;
 
+      var b = false;
+
+      var old1 = target.inventory;
       target.inventory =
         EditorGUILayout.ObjectField(
           "Inventory",
-          target.inventory,
+          old1,
           typeof(Inventory),
           false)
         as Inventory;
+      b = b || old1 != target.inventory;
 
+      var old2 = target.item;
       target.item =
         EditorGUILayout.ObjectField(
           "Item",
@@ -32,6 +37,9 @@ namespace SixteenFifty.Editor {
           typeof(Item),
           false)
         as Item;
+      b = b || old2 != target.item;
+
+      return b;
     }
   }
 }

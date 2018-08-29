@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace SixteenFifty.TileMap {
   [Serializable]
-  public struct HexCoordinates {
+  public struct HexCoordinates : IEquatable<HexCoordinates> {
 
     public delegate int Transformation(int coord);
 
@@ -154,5 +154,8 @@ namespace SixteenFifty.TileMap {
         .Select(t => t.Item1)
         .FirstOrDefault();
     }
+
+    public bool Equals(HexCoordinates other) =>
+      this.x == other.x && this.y == other.y;
   }
 }

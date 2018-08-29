@@ -18,27 +18,35 @@ namespace SixteenFifty.Editor {
 
     public bool CanEdit(Type type) => type == typeof(HasQuest);
 
-    public void Draw(IExpression<bool> _target) {
+    public bool Draw(IExpression<bool> _target) {
       target = _target as HasQuest;
       Debug.Assert(
         null != target,
         "HasQuestEditor target is HasQuest.");
 
+      var b = false;
+
+      var old1 = target.questLog;
       target.questLog =
         EditorGUILayout.ObjectField(
           "Quest Log",
-          target.questLog,
+          old1,
           typeof(QuestLog),
           false)
         as QuestLog;
+      b = b || old1 != target.questLog;
 
+      var old2 = target.quest;
       target.quest =
         EditorGUILayout.ObjectField(
           "Quest",
-          target.quest,
+          old2,
           typeof(Quest),
           false)
         as Quest;
+      b = b || old2 != target.quest;
+
+      return b;
     }
   }
 }

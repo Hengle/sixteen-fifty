@@ -18,19 +18,22 @@ namespace SixteenFifty.Editor {
     
     public bool CanEdit(Type type) => type == typeof(ReadVariable<T>);
 
-    public void Draw(IExpression<T> _target) {
+    public bool Draw(IExpression<T> _target) {
       target = _target as ReadVariable<T>;
       Debug.Assert(
         null != target,
         "ReadVariableEditor<T> target is a Variable<T>.");
 
+      var old = target.variable;
       target.variable =
         EditorGUILayout.ObjectField(
           "Variable",
-          target.variable,
+          old,
           typeof(Variable<T>),
           false)
         as Variable<T>;
+
+      return old != target.variable;
     }
   }
 }

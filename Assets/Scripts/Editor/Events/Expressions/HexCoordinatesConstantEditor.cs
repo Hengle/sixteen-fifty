@@ -16,11 +16,13 @@ namespace SixteenFifty.Editor {
     base(context) {
     }
 
-    public override void Draw(IExpression<HexCoordinates> _target) {
+    public override bool Draw(IExpression<HexCoordinates> _target) {
       var target = _target as Constant<HexCoordinates>;
       Debug.Assert(
         null != target,
         "HexCoordinatesConstantEditor target is Constant<HexCoordinates>.");
+
+      var old = target.value;
 
       var x = EditorGUILayout.IntField(
         "X", target.value.X);
@@ -31,6 +33,8 @@ namespace SixteenFifty.Editor {
       EditorGUILayout.LabelField(
         "Coordinates",
         target.value.ToString());
+
+      return !target.value.Equals(old);
     }
   }
 }

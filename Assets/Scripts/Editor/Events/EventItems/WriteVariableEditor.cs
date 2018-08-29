@@ -11,7 +11,7 @@ namespace SixteenFifty.Editor {
 
   [Serializable]
   [SubtypeEditorFor(target = typeof(WriteVariable))]
-  public class WriteVariableEditor : ScriptedEventItemEditor {
+  public class WriteVariableEditor : ISubtypeEditor<IScript> {
     [SerializeField]
     WriteVariable target;
 
@@ -23,31 +23,33 @@ namespace SixteenFifty.Editor {
     public WriteVariableEditor(SubtypeSelectorContext<IScript> context) {
     }
 
-    public override bool CanEdit(Type type) =>
+    public bool CanEdit(Type type) =>
       type == typeof(WriteVariable);
 
-    public override void Draw(IScript _target) {
+    public bool Draw(IScript _target) {
       target = _target as WriteVariable;
 
       Debug.Assert(
         null != target,
         "Target of WriteVariableEditor is of type WriteVariable.");
 
-      RecordChange("set variable to write to");
-      target.destination =
-        EditorGUILayout.ObjectField(
-          "Variable",
-          target.destination,
-          typeof(AnyVariable),
-          false)
-        as ScriptableObject;
+      var old1 = target.destination;
+      var b1 =
+        old1 !=
+        (target.destination =
+         EditorGUILayout.ObjectField(
+           "Variable",
+           old1,
+           typeof(AnyVariable),
+           false)
+         as ScriptableObject);
 
       // we don't even bother drawing the expression unless a variable
       // is selected; in fact if we *deselect* the variable, then we
       // should null out the expression.
       if(target.destination == null) {
         target.expression = null;
-        return;
+        return b1;
       }
 
       // if a variable *is* selected, then we need to get out the type
@@ -63,11 +65,14 @@ namespace SixteenFifty.Editor {
         null != expressionControl,
         "There is an appropriate expression control.");
 
-      RecordChange("set expression to write");
       var expressionControlType = expressionControl.GetType();
-      target.expression = expressionControlType.GetMethod("Draw").Invoke(
-        expressionControl,
-        new [] { target.expression });
+      var old2 = target.expression;
+      var b2 =
+        old2 !=
+        (target.expression = expressionControlType.GetMethod("Draw").Invoke(
+          expressionControl,
+          new [] { target.expression }));
+      return b1 || b2;
     }
 
     private Type GetExpressionControlTypeFor(Type contentsType) =>

@@ -24,7 +24,7 @@ namespace SixteenFifty.Editor {
 
     public bool CanEdit(Type type) => type == typeof(Arithmetic);
 
-    public void Draw(IExpression<int> _target) {
+    public bool Draw(IExpression<int> _target) {
       target = _target as Arithmetic;
       Debug.Assert(
         null != target,
@@ -32,12 +32,21 @@ namespace SixteenFifty.Editor {
 
       InstantiateSelectors();
 
-      target.operation =
-        operationSelector.Draw(target.operation);
-      target.left =
-        leftSelector.Draw(target.left);
-      target.right =
-        rightSelector.Draw(target.right);
+      var b = false;
+
+      var op = target.operation;
+      b = b || operationSelector.Draw(ref op);
+      target.operation = op;
+
+      var left = target.left;
+      b = b || leftSelector.Draw(ref left);
+      target.left = left;
+
+      var right = target.right;
+      b = b || rightSelector.Draw(ref right);
+      target.right = right;
+
+      return b;
     }
 
     void InstantiateSelectors() {

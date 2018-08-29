@@ -10,7 +10,7 @@ namespace SixteenFifty.Editor {
   using Reflection;
 
   [SubtypeEditorFor(target = typeof(ListScript))]
-  public class ListScriptEditor : ScriptedEventItemEditor {
+  public class ListScriptEditor : ISubtypeEditor<IScript> {
     [SerializeField]
     ListScript target;
 
@@ -27,11 +27,11 @@ namespace SixteenFifty.Editor {
       this.context = context;
     }
 
-    public override bool CanEdit(Type type) {
+    public bool CanEdit(Type type) {
       return type == typeof(ListScript);
     }
 
-    public override void Draw(IScript _target) {
+    public bool Draw(IScript _target) {
       target = _target as ListScript;
       Debug.Assert(
         null != target,
@@ -41,11 +41,12 @@ namespace SixteenFifty.Editor {
         target.scripts = new List<IScript>();
 
       // updates the size of the target's scripts list
-      DrawSizeControl();
+      var b1 = DrawSizeControl();
       // matches the size of itemControls list to the target's scripts list
       UpdateItemControls();
       // draws the EventItemControls
-      DrawElementControls();
+      var b2 = DrawElementControls();
+      return b1 || b2;
     }
 
     /**
@@ -63,24 +64,26 @@ namespace SixteenFifty.Editor {
         new FoldoutControl(String.Format("Item {0}", i)));
     }
 
-    void DrawSizeControl() {
+    bool DrawSizeControl() {
       var oldSize = target.scripts.Count;
       var newSize = EditorGUILayout.DelayedIntField(
         "Size",
         oldSize);
-      if(newSize != oldSize) {
-        RecordChange("resize sequence of events");
+      var b = newSize != oldSize;
+      if(b)
         target.scripts.Resize(newSize);
-      }
+      return b;
     }
 
-    void DrawElementControls() {
+    bool DrawElementControls() {
       Debug.Assert(
         itemControls.Count == target.scripts.Count,
         "Selector count matches target scripts count.");
       Debug.Assert(
         foldouts.Count == target.scripts.Count,
         "Foldout count matches target scripts count.");
+
+      var any = false;
 
       for(var i = 0; i < itemControls.Count; i++) {
         var itemControl = itemControls[i];
@@ -89,11 +92,14 @@ namespace SixteenFifty.Editor {
 
         if(foldout.Draw()) {
           EditorGUI.indentLevel++;
-          RecordChange("set target script in sequence");
-          target.scripts[i] = itemControl.Draw(target.scripts[i]);
+          var old = target.scripts[i];
+          any = any || itemControl.Draw(ref old);
+          target.scripts[i] = old;
           EditorGUI.indentLevel--;
         }
       }
+
+      return any;
     }
   }
 }

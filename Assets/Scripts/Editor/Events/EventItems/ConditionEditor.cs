@@ -8,7 +8,7 @@ namespace SixteenFifty.Editor {
   
   [Serializable]
   [SubtypeEditorFor(target = typeof(Condition))]
-  public class ConditionEditor : ScriptedEventItemEditor {
+  public class ConditionEditor : ISubtypeEditor<IScript> {
     [SerializeField]
     ExpressionControl<bool> expressionControl;
 
@@ -28,7 +28,7 @@ namespace SixteenFifty.Editor {
       this.context = context;
     }
 
-    public override void Draw(IScript _target) {
+    public bool Draw(IScript _target) {
       // set up controls if they don't exist.
       ifTrueControl = ifTrueControl ?? new EventItemControl("True", context);
       ifFalseControl = ifFalseControl ?? new EventItemControl("False", context);
@@ -42,12 +42,22 @@ namespace SixteenFifty.Editor {
         null != target,
         "ConditionEditor target is a Condition.");
 
-      target.condition = expressionControl.Draw(target.condition);
-      target.ifTrue = ifTrueControl.Draw(target.ifTrue);
-      target.ifFalse = ifFalseControl.Draw(target.ifFalse);
+      var tc = target.condition;
+      var tt = target.ifTrue;
+      var tf = target.ifFalse;
+
+      var b1 = expressionControl.Draw(ref tc);
+      var b2 = ifTrueControl.Draw(ref tt);
+      var b3 = ifFalseControl.Draw(ref tf);
+
+      target.condition = tc;
+      target.ifTrue = tt;
+      target.ifFalse = tf;
+
+      return b1 || b2 || b3;
     }
 
-    public override bool CanEdit(Type type) =>
+    public bool CanEdit(Type type) =>
       type == typeof(Condition);
   }
 }

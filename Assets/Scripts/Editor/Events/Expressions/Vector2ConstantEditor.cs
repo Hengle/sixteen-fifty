@@ -13,10 +13,14 @@ namespace SixteenFifty.Editor {
     base(context) {
     }
 
-    public override void Draw(IExpression<Vector2> _target) {
+    public override bool Draw(IExpression<Vector2> _target) {
       base.Draw(_target);
 
-      target.value = EditorGUILayout.Vector2Field("Value", target.value);
+      var old = target.value;
+
+      return
+        old !=
+        (target.value = EditorGUILayout.Vector2Field("Value", target.value));
     }
   }
 }

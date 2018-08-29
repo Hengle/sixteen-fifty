@@ -9,44 +9,45 @@ namespace SixteenFifty.Editor {
 
   [Serializable]
   [SubtypeEditorFor(target = typeof(GiveQuest))]
-  public class GiveQuestEditor : ScriptedEventItemEditor {
+  public class GiveQuestEditor : ISubtypeEditor<IScript> {
     [SerializeField]
     GiveQuest target;
 
     public GiveQuestEditor(SubtypeSelectorContext<IScript> context) {
     }
 
-    public override bool CanEdit(Type type) =>
+    public bool CanEdit(Type type) =>
       type == typeof(GiveQuest);
 
-    public override void Draw(IScript _target) {
+    public bool Draw(IScript _target) {
       target = _target as GiveQuest;
       Debug.Assert(
         null != target,
         "GiveQuestEditor target is GiveQuest.");
 
-      RecordChange("Set quest log");
+      var b = false;
+
+      var old1 = target.questLog;
       target.questLog =
         EditorGUILayout.ObjectField(
           "Quest Log",
-          target.questLog,
+          old1,
           typeof(QuestLog),
           false)
         as QuestLog;
+      b = b || old1 != target.questLog;
 
-      RecordChange("Set quest");
-      var oldQuest = target.quest;
+      var old2 = target.quest;
       target.quest =
         EditorGUILayout.ObjectField(
           "Quest",
-          oldQuest,
+          old2,
           typeof(Quest),
           false)
         as Quest;
-      if(oldQuest != target.quest) {
-        Debug.Log("change happened");
-        ChangeHappened();
-      }
+      b = b || old2 != target.quest;
+
+      return b;
     }
   }
 }

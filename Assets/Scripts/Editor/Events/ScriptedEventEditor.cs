@@ -16,7 +16,9 @@ namespace SixteenFifty.Editor {
      * Used by child controls to record changes for undo / automatic
      * saving.
      */
-    public static ScriptedEvent target;
+    new public static ScriptedEvent target;
+
+    private static EqualityComparer<IScript> cmp = EqualityComparer<IScript>.Default;
     
     [SerializeField]
     EventItemControl control;
@@ -43,11 +45,17 @@ namespace SixteenFifty.Editor {
         null != target,
         "ScriptedEventEditor target is a ScriptedEvent.");
 
-      if(GUILayout.Button("Mark Changed")) {
+      // if(GUILayout.Button("Mark Changed")) {
+      //   EditorUtility.SetDirty(target);
+      // }
+
+      Undo.RegisterCompleteObjectUndo(target, "modify scripted event");
+      var root = target.root;
+      if(control.Draw(ref root)) {
+        Debug.Log("changed!");
+        target.root = root;
         EditorUtility.SetDirty(target);
       }
-
-      target.root = control.Draw(target.root);
     }
   }
 }

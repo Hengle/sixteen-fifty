@@ -21,11 +21,13 @@ namespace SixteenFifty.Editor {
 
     public bool CanEdit(Type type) => type == typeof(Constant<T>);
 
-    public virtual void Draw(IExpression<T> _target) {
+    public virtual bool Draw(IExpression<T> _target) {
       target = _target as Constant<T>;
       Debug.Assert(
         null != target,
         "ConstantEditor<T> target is a Constant<T>.");
+
+      return false;
     }
   }
 }

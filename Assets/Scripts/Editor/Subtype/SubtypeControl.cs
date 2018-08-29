@@ -47,26 +47,25 @@ namespace SixteenFifty.Editor {
      * new target object will be instantiated and returned.
      * Otherwise, the input object will be returned.
      */
-    public T Draw(T script) {
+    public bool Draw(ref T target) {
       if(null == selector)
         selector = new SubtypeSelectorControl<T>(selectorLabel, context);
 
-      T target = script;
       var type = target?.GetType();
 
       // make the selector select the right thing.
       selector.Update(type);
 
-      // if the selection has changed, or there is no editor, or the
-      // current editor cannot edit the target script, then we need to
-      // instantiate a new editor, but only if we *should* instantiate
-      // one.
+      var changed = false;
+
+      // if the selection has changed, then we need to instantiate a
+      // new editor, but only if we *should* instantiate one.
       if(selector.Draw()) {
         // if there is no selected type, then the event item is
         // dead.
         var selectedType = selector.SelectedType;
         if(selectedType == null) {
-          return null;
+          return true;
         }
 
         if(selectedType != type) {
@@ -76,9 +75,13 @@ namespace SixteenFifty.Editor {
             "Target object exists after default construction.");
           type = selectedType;
         }
+
+        changed = true;
       }
+      // if there was no change in selection, and there is no current
+      // selection, then there has been no change
       else if(type == null)
-        return null;
+        return false;
 
       // from here on, we're sure that:
       // - type is not null
@@ -92,8 +95,11 @@ namespace SixteenFifty.Editor {
         true);
 
       // if we don't need to worry about editors, then gtfo
+      // Either the target type can say "I don't need an editor" or
+      // the code drawing this control can request that no editor be
+      // drawn.
       if(!drawEditor || wantsNoEditor)
-        return target;
+        return changed;
 
       // if we have no editor, or the current editor is inappropriate,
       if(editor == null || !editor.CanEdit(type)) {
@@ -105,7 +111,7 @@ namespace SixteenFifty.Editor {
           EditorGUILayout.LabelField(
             String.Format(
               "No editor for type {0}.", type));
-          return target;
+          return changed;
         }
 
         Debug.Assert(
@@ -119,9 +125,9 @@ namespace SixteenFifty.Editor {
 
       // finally we can edit the target, and return it.
       EditorGUI.indentLevel++;
-      editor.Draw(target);
+      changed = changed || editor.Draw(target);
       EditorGUI.indentLevel--;
-      return target;
+      return changed;
     }
   }
 }
