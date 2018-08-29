@@ -14,12 +14,12 @@ namespace SixteenFifty.Serialization {
       object _obj,
       SerializationInfo info,
       StreamingContext context) {
-      var obj = (Vector2)_obj;
       Debug.Assert(
-        _obj == null || obj != null,
+        _obj is Vector2,
         String.Format(
           "Vector2Surrogate's target `{0}` is a Vector2.",
           _obj));
+      var obj = (Vector2)_obj;
 
       info.AddValue("x", obj.x);
       info.AddValue("y", obj.y);
