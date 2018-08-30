@@ -10,6 +10,14 @@ namespace SixteenFifty.Behaviours {
 
     public event Action Positioned;
 
+    void OnEnable() {
+      destination.RepositionRequested += Reposition;
+    }
+
+    void OnDisable() {
+      destination.RepositionRequested -= Reposition;
+    }
+
     public void Reposition() {
       if(null == destination)
         return;
