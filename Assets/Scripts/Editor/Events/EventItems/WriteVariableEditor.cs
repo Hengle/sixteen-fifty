@@ -33,8 +33,10 @@ namespace SixteenFifty.Editor {
         null != target,
         "Target of WriteVariableEditor is of type WriteVariable.");
 
+      var b = false;
+
       var old1 = target.destination;
-      var b1 =
+      b = b ||
         old1 !=
         (target.destination =
          EditorGUILayout.ObjectField(
@@ -49,7 +51,7 @@ namespace SixteenFifty.Editor {
       // should null out the expression.
       if(target.destination == null) {
         target.expression = null;
-        return b1;
+        return b;
       }
 
       // if a variable *is* selected, then we need to get out the type
@@ -66,13 +68,14 @@ namespace SixteenFifty.Editor {
         "There is an appropriate expression control.");
 
       var expressionControlType = expressionControl.GetType();
-      var old2 = target.expression;
-      var b2 =
-        old2 !=
-        (target.expression = expressionControlType.GetMethod("Draw").Invoke(
+      var args = new object[] { target.expression };
+      b = b ||
+        (bool)expressionControlType.GetMethod("Draw").Invoke(
           expressionControl,
-          new [] { target.expression }));
-      return b1 || b2;
+          args);
+      target.expression = args[0];
+
+      return b;
     }
 
     private Type GetExpressionControlTypeFor(Type contentsType) =>
