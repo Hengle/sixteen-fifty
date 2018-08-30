@@ -26,7 +26,7 @@ namespace SixteenFifty.EventItems {
       var destinationType = destination.GetType();
       var ifaces = destinationType.GetInterfaces();
       foreach(var iface in ifaces) {
-        if(iface.GetGenericTypeDefinition() == typeof(IVariable<>)) {
+        if(iface.IsGenericType && iface.GetGenericTypeDefinition() == typeof(IVariable<>)) {
           return iface.GetGenericArguments()[0];
         }
       }
