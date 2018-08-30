@@ -9,7 +9,9 @@ namespace SixteenFifty.EventItems {
     public FadeDirection direction;
 
     public Command<object> GetScript(EventRunner runner) =>
-      Lerp.FadeImage(runner.Manager.fadeToBlackPanel, direction);
+      Lerp.FadeImage(
+        runner.Manager.fadeToBlackPanel,
+        direction.Inverse());
 
     public bool Equals(FadeScreen that) =>
       direction == that.direction;
